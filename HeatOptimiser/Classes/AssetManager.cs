@@ -58,10 +58,6 @@ namespace HeatOptimiser
     {
         private List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
-        public AssetManager()
-        {
-            _productionAssets = LoadUnits("ProductionAssets.json");
-        }
         public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {
             if (name != null && image != null && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(image))
@@ -88,33 +84,42 @@ namespace HeatOptimiser
             _productionAssets.Remove(_productionAssets.Find(x => x.ID == ID)!);
             _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
         }
-        public void EditUnit(Guid ID, int index, string value)
+        public void EditUnit(Guid ID, int index, string stringValue)
         {
             switch (index)
             {
                 case 0:
-                    _productionAssets.Find(x => x.ID == ID)!.Name = value;
+                    _productionAssets.Find(x => x.ID == ID)!.Name = stringValue;
                     break;
                 case 1:
-                    _productionAssets.Find(x => x.ID == ID)!.Image = value;
-                    break;
-                case 2:
-                    _productionAssets.Find(x => x.ID == ID)!.Heat = Convert.ToDouble(value);
-                    break;
-                case 3:
-                    _productionAssets.Find(x => x.ID == ID)!.Electricity = Convert.ToDouble(value);
-                    break;
-                case 4:
-                    _productionAssets.Find(x => x.ID == ID)!.Energy = Convert.ToDouble(value);
-                    break;
-                case 5:
-                    _productionAssets.Find(x => x.ID == ID)!.Cost = Convert.ToDouble(value);
-                    break;
-                case 6:
-                    _productionAssets.Find(x => x.ID == ID)!.CarbonDioxide = Convert.ToDouble(value);
+                    _productionAssets.Find(x => x.ID == ID)!.Image = stringValue;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("Index out of range");
+                    throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
+            }
+            _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
+        }
+        public void EditUnit(Guid ID, int index, double doubleValue)
+        {
+            switch (index)
+            {
+                case 2:
+                    _productionAssets.Find(x => x.ID == ID)!.Heat = doubleValue;
+                    break;
+                case 3:
+                    _productionAssets.Find(x => x.ID == ID)!.Electricity = doubleValue;
+                    break;
+                case 4:
+                    _productionAssets.Find(x => x.ID == ID)!.Energy = doubleValue;
+                    break;
+                case 5:
+                    _productionAssets.Find(x => x.ID == ID)!.Cost = doubleValue;
+                    break;
+                case 6:
+                    _productionAssets.Find(x => x.ID == ID)!.CarbonDioxide = doubleValue;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
         }

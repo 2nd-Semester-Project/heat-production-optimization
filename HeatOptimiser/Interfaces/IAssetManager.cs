@@ -8,7 +8,7 @@ namespace HeatOptimiser
         void SaveUnits(List<ProductionAsset> AllAssets, string fileName);
         List<ProductionAsset> LoadUnits(string fileName);
         List<ProductionAsset> GetAllUnits();
-        List<ProductionAsset> SearchUnits();
+        List<ProductionAsset> SearchUnits(string name);
     }
     public interface IAssetStorage
     {

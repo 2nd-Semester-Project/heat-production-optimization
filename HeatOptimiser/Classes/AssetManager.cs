@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace HeatOptimiser
 {
     public class ProductionAsset
@@ -17,7 +19,7 @@ namespace HeatOptimiser
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
         public AssetManager()
         {
-            _productionAssets = LoadUnits();
+            _productionAssets = LoadUnits("ProductionAssets.json");
         }
         public void AddUnit(string name, string imgae, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {
@@ -35,16 +37,13 @@ namespace HeatOptimiser
         {
             throw new System.NotImplementedException();
         }
-        public List<ProductionAsset> LoadUnits()
+        public List<ProductionAsset> LoadUnits(string fileName)
         {
-            // Implement checking for valid data
-            //_jsonAssetStorage.LoadUnits();
-            throw new System.NotImplementedException();
+            return _jsonAssetStorage.LoadUnits(fileName);
         }
-        public void SaveUnits(List<ProductionAsset> AllAssets)
+        public void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
         {
-            // Implement check for null
-            _jsonAssetStorage.SaveUnits(AllAssets, "ProductionAssets.json");
+            _jsonAssetStorage.SaveUnits(AllAssets, fileName);
         }
         public List<ProductionAsset> SearchUnits()
         {
@@ -55,11 +54,29 @@ namespace HeatOptimiser
     {
         public List<ProductionAsset> LoadUnits(string fileName)
         {
-            throw new System.NotImplementedException();
+            if (File.Exists(fileName) && new FileInfo(fileName).Length > 2)
+            {
+                string jsonString = File.ReadAllText(fileName);
+                try
+                {
+                    var info = JsonSerializer.Deserialize<List<ProductionAsset>>(jsonString)!;
+                    return info;
+                }
+                catch (JsonException e)
+                {
+                    Console.WriteLine($"Error: {e.Message}");
+                    return new List<ProductionAsset>();
+                }
+            }
+            else
+            {
+                return new List<ProductionAsset>();
+            }
         }
         public void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
         {
-            throw new System.NotImplementedException();
+            string jsonString = JsonSerializer.Serialize(AllAssets);
+            File.WriteAllText(fileName, jsonString);
         }
     }
 }

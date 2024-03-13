@@ -2,7 +2,6 @@ namespace HeatOptimiser
 {
     public interface ISourceDataManager
     {
-        List<String> SummerData (string? filePath); 
-        List<String> WinterData (string? filePath);
+        public List<SourceData> LoadXLSXFile(string filePath, int rowStartd, int columnStart);
     }
 }

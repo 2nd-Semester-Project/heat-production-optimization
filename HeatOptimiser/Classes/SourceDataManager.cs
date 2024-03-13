@@ -1,3 +1,5 @@
+using OfficeOpenXml;
+
 using Microsoft.Office.Interop.Excel;
 
 namespace HeatOptimiser
@@ -13,8 +15,29 @@ namespace HeatOptimiser
     {
         public List<SourceData> LoadXLSXFile(string file, int rowStart, int columnStart)
         {
+            var sourceList = new List<SourceData>();
 
-            List<SourceData> DataRows = new List<SourceData>();
+            using (var package = new ExcelPackage(new FileInfo(file)))
+            {
+                var worksheet = package.Workbook.Worksheets[0];
+
+                for (int row = rowStart; row <= worksheet.Dimension.End.Row; row++)
+                {
+                    var sourceData = new SourceData
+                    {
+                        TimeFrom = DateTime.Parse(worksheet.Cells[row, columnStart].Value.ToString()!),
+                        TimeTo = DateTime.Parse(worksheet.Cells[row, columnStart + 1].Value.ToString()!),
+                        HeatDemand = double.Parse(worksheet.Cells[row, columnStart + 2].Value.ToString()!),
+                        ElectricityPrice = double.Parse(worksheet.Cells[row, columnStart + 3].Value.ToString()!)
+                    };
+
+                    sourceList.Add(sourceData);
+                }
+            }
+
+            return sourceList; // Install-Package EPPlus
+
+            /*List<SourceData> DataRows = new List<SourceData>();
             Application excelApp = new Application();
             Workbook excelWB = excelApp.Workbooks.Open(file);
             _Worksheet excelWS = (_Worksheet)excelWB.Sheets[1];
@@ -65,7 +88,7 @@ namespace HeatOptimiser
                 };
                 }
             }
-            return DataRows;
+            return DataRows; */
         }
     }
 }

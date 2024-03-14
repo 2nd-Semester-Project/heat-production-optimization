@@ -1,8 +1,6 @@
 using OfficeOpenXml; // dotnet add package EPPlus
 using System.Globalization;
 
-using Microsoft.Office.Interop.Excel; // dotnet add package Microsoft.Office.Interop.Excel
-
 namespace HeatOptimiser
 {
     public class SourceDataPoint

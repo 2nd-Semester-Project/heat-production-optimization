@@ -56,6 +56,7 @@ namespace HeatOptimiser
     }
     public class AssetManager: IAssetManager
     {
+        public string saveFileName = "ProductionAssets.json";
         private List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
         public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
@@ -72,7 +73,7 @@ namespace HeatOptimiser
                     Cost = cost,
                     CarbonDioxide = carbonDioxide
                 });
-                _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is up for debate, I just want to auto save, and they likely wont have thousands of production units, that could cause a performance issue.
+                _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is up for debate, I just want to auto save, and they likely wont have thousands of production units, that could cause a performance issue.
             }
             else
             {
@@ -82,7 +83,7 @@ namespace HeatOptimiser
         public void DeleteUnit(Guid ID)
         {
             _productionAssets.Remove(_productionAssets.Find(x => x.ID == ID)!);
-            _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
+            _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
         public void EditUnit(Guid ID, int index, string stringValue)
         {
@@ -97,7 +98,7 @@ namespace HeatOptimiser
                 default:
                     throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
             }
-            _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
+            _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
         public void EditUnit(Guid ID, int index, double doubleValue)
         {
@@ -121,7 +122,7 @@ namespace HeatOptimiser
                 default:
                     throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
             }
-            _jsonAssetStorage.SaveUnits(_productionAssets, "ProductionAssets.json"); // this is also up for debate, just like on AddUnit.
+            _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
         public List<ProductionAsset> GetAllUnits()
         {
@@ -139,6 +140,10 @@ namespace HeatOptimiser
         public List<ProductionAsset> SearchUnits(string name)
         {
             return _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
+        }
+        public void SetSaveFile(string fileName)
+        {
+            saveFileName = fileName;
         }
     }
     public class JsonAssetStorage: IAssetStorage

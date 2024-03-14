@@ -91,5 +91,19 @@ namespace HeatOptimiser.Tests
             Assert.Equal(40.5, units[0].Cost);
             Assert.Equal(50.5, units[0].CarbonDioxide);
         }
+        [Fact]
+        public void TestAssetManagerSetSaveFile()
+        {
+            // Arrange
+            var assetManager = new AssetManager();
+
+            // Act
+            assetManager.SetSaveFile("TestUnits.json");
+            var saveFileName = assetManager.saveFileName;
+
+            // Assert
+            Assert.NotNull(assetManager);
+            Assert.Equal("TestUnits.json", saveFileName);
+        }
     }
 }

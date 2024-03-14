@@ -10,6 +10,7 @@ namespace HeatOptimiser
         List<ProductionAsset> LoadUnits(string fileName);
         List<ProductionAsset> GetAllUnits();
         List<ProductionAsset> SearchUnits(string name);
+        void SetSaveFile(string fileName);
     }
     public interface IAssetStorage
     {

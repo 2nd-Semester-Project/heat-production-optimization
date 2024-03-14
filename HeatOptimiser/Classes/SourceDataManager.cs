@@ -30,7 +30,14 @@ namespace HeatOptimiser
 
             using (var package = new ExcelPackage(new FileInfo(file)))
             {
-                var worksheet = package.Workbook.Worksheets[workSheetNumber];
+                ExcelWorksheet? worksheet = null;
+                try {
+                    worksheet = package.Workbook.Worksheets[workSheetNumber];
+                }
+                catch (Exception e) {
+                    Console.WriteLine($"Worksheet not found: {e}");
+                    return sourceList;
+                }
 
                 if (worksheet.Dimension == null)
                 {

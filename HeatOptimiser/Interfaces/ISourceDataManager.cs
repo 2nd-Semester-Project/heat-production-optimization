@@ -2,6 +2,6 @@ namespace HeatOptimiser
 {
     public interface ISourceDataManager
     {
-        //Lizard do you see this
+        public List<SourceDataPoint> LoadXLSXFile(string filePath, int rowStartd, int columnStart, int workSheetNumber);
     }
 }

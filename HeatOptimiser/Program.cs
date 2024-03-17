@@ -15,20 +15,23 @@
             DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             Schedule optimisedData = optimiser.Optimise(startDate, endDate);
 
-            foreach (ScheduleHour hour in optimisedData.schedule)
-            {
-                Console.WriteLine(hour.Hour);
-                foreach (ProductionAsset asset in hour.Assets)
-                {
-                    Console.Write($"{asset.Name} ");
-                }
-                Console.WriteLine();
-                foreach (double demand in hour.Demands)
-                {
-                    Console.Write($"{demand} ");
-                }
-                Console.WriteLine("\n");
-            }
+
+            // Example on visualizing the data
+            
+            // foreach (ScheduleHour hour in optimisedData.schedule)
+            // {
+            //     Console.WriteLine(hour.Hour);
+            //     foreach (ProductionAsset asset in hour.Assets)
+            //     {
+            //         Console.Write($"{asset.Name} ");
+            //     }
+            //     Console.WriteLine();
+            //     foreach (double demand in hour.Demands)
+            //     {
+            //         Console.Write($"{demand} ");
+            //     }
+            //     Console.WriteLine("\n");
+            // }
 
             new TextBasedUI().example();
         }

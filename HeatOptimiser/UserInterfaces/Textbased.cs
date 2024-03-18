@@ -6,10 +6,12 @@ namespace HeatOptimiser
     {
         private readonly SourceDataManager sourceDataManager;
         private readonly Optimiser optimiser;
+        private readonly SourceData sourceData;
 
          public TextBasedUI()
         {
             sourceDataManager = new SourceDataManager();
+            sourceData = new SourceData();
             optimiser = new Optimiser(sourceDataManager, this);
         }
         public void Interface()

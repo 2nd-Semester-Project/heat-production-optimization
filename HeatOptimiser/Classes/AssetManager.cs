@@ -80,11 +80,23 @@ namespace HeatOptimiser
                 throw new ArgumentNullException("Name and Image cannot be null");
             }
         }
+
+        public void AddUnit()
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteUnit(Guid ID)
         {
             _productionAssets.Remove(_productionAssets.Find(x => x.ID == ID)!);
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
+
+        public void DeleteUnit()
+        {
+            throw new NotImplementedException();
+        }
+
         public void EditUnit(Guid ID, int index, string stringValue)
         {
             switch (index)
@@ -124,6 +136,12 @@ namespace HeatOptimiser
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
+
+        public void EditUnit()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ProductionAsset> GetAllUnits()
         {
             return _productionAssets;
@@ -137,6 +155,12 @@ namespace HeatOptimiser
         {
             _jsonAssetStorage.SaveUnits(AllAssets, fileName);
         }
+
+        public void SaveUnits()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ProductionAsset> SearchUnits(string name)
         {
             return _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();

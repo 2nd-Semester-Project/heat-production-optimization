@@ -1,6 +1,7 @@
 namespace HeatOptimiser
 {
     public interface IUserInterface {
-        public void example() {}
+        public void AddUnit(){}
+        
     }
 }

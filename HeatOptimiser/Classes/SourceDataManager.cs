@@ -67,5 +67,40 @@ namespace HeatOptimiser
 
             return sourceList; 
         }
+        public List<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
+        {
+            DateTime winterEnd = DateTime.ParseExact("31/03/2023", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            bool rangeExists = false;
+            int startIndex = 0;
+            List<SourceDataPoint> dataCollection = startDate.Date < winterEnd.Date ? data.SummerData : data.WinterData;
+            foreach (SourceDataPoint point in dataCollection)
+            {
+                if (point.TimeFrom.HasValue)
+                {
+                    DateTime dt = (DateTime)point.TimeFrom;
+                    if (dt.Date == startDate.Date)
+                    {
+                        rangeExists = true;
+                        break;
+                    }
+                    startIndex++;
+                }
+            }
+            int endIndex = startIndex;
+            if (rangeExists)
+            {
+                foreach (SourceDataPoint point in dataCollection.GetRange(startIndex, dataCollection.Count - startIndex))
+                {
+                    endIndex++;
+                    DateTime dt = (DateTime)point.TimeTo;
+                    if (dt.Date > endDate.Date)
+                    {
+                        break;
+                    }
+                }
+                return dataCollection.GetRange(startIndex, endIndex-startIndex);
+            }
+            return [];
+        }
     }
 }

@@ -3,7 +3,7 @@
     class Program {
         public static void Main()
         {
-            new TextBasedUI().Interface();
-        }
+            new TextBasedUI().example();
+        }   
     }
 }

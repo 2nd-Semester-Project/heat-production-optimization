@@ -1,22 +1,22 @@
-using System;
-using System.Collections.Generic;
 namespace HeatOptimiser
 {
-        public class TextBasedUI : AssetManager
+    public class TextBasedUI
     {
         private readonly SourceDataManager sourceDataManager;
         private readonly Optimiser optimiser;
         private readonly SourceData sourceData;
+        public AssetManager assetManager;
+
 
          public TextBasedUI()
         {
             sourceDataManager = new SourceDataManager();
             sourceData = new SourceData();
-            optimiser = new Optimiser(sourceDataManager, this);
+            assetManager = new AssetManager();
+            optimiser = new Optimiser(sourceDataManager, assetManager);
         }
         public void Interface()
         {
-            AssetManager assetManager = new AssetManager();
 
             while (true)
             {
@@ -100,12 +100,12 @@ namespace HeatOptimiser
                         }
                 
                         Console.WriteLine("Enter new value:");
-                        string value = Console.ReadLine();
+                        string? value = Console.ReadLine();
                         try
                         {
                             if(index >= 0 && index <= 1)
                             {
-                                assetManager.EditUnit(id , index , value);
+                                assetManager.EditUnit(id , index , value!);
                             }
                             else if (index >=2 && index <= 6)
                             {
@@ -145,10 +145,10 @@ namespace HeatOptimiser
                     case "4": 
                     Console.WriteLine("Selected: Save Units");
                     Console.WriteLine("Enter file name to save units:");
-                    string fileName = Console.ReadLine();
+                    string? fileName = Console.ReadLine();
                     try
                     {
-                        assetManager.SaveUnits(assetManager.GetAllUnits(), fileName);
+                        assetManager.SaveUnits(assetManager.GetAllUnits(), fileName!);
                         Console.WriteLine("Units saved successfully.");
                     }
                     catch (Exception ex)

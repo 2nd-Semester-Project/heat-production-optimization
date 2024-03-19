@@ -7,8 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.0.10" />
-  </ItemGroup>
-
 </Project>

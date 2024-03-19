@@ -33,7 +33,7 @@
             //     Console.WriteLine("\n");
             // }
 
-            new TextBasedUI().example();
+            new TextBasedUI().Interface();
         }
     }
 }

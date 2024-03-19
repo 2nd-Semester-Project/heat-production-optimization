@@ -189,7 +189,7 @@ namespace HeatOptimiser
             Console.WriteLine("Optimised Schedule:");
             foreach (var hour in schedule.schedule)
             {
-                Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets)}, Demands: {string.Join(",", hour.Demands)}");
+                Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
             }
                 }
 }

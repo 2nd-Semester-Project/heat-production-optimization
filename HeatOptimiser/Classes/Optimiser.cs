@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace HeatOptimiser
 {
     public class Schedule
@@ -55,8 +53,8 @@ namespace HeatOptimiser
                 }
                 else
                 {
-                    double gasCapacity = (double)gasBoiler.Heat;
-                    double hourDemand = (double)hour.HeatDemand;
+                    double gasCapacity = (double)gasBoiler.Heat!;
+                    double hourDemand = (double)hour.HeatDemand!;
                     double oilDemand = hourDemand - gasCapacity;
                     schedule.AddHour(hour.TimeFrom, [gasBoiler, oilBoiler], [gasCapacity, oilDemand]);
                 }

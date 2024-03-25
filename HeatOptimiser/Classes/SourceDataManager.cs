@@ -92,7 +92,7 @@ namespace HeatOptimiser
                 foreach (SourceDataPoint point in dataCollection.GetRange(startIndex, dataCollection.Count - startIndex))
                 {
                     endIndex++;
-                    DateTime dt = (DateTime)point.TimeTo;
+                    DateTime dt = (DateTime)point.TimeTo!;
                     if (dt.Date > endDate.Date)
                     {
                         break;

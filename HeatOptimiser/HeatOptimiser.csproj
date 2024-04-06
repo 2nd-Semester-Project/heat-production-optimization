@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.0.10" />
+    <ProjectReference Include="/Users/timadam/Desktop/Semester_Project_2/Code/heat-production-optimization/HeatOptimiser/UserInterfaces/UserInterface/UserInterface.csproj" />
   </ItemGroup>
 
 </Project>

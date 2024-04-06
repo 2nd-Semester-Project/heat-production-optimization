@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:UserInterface.ViewModels.AssetManagerViewModel"
+             xmlns:views="clr-namespace:UserInterface.ViewModels" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UserInterface.Views.AssetManagerView"
+             x:DataType="views:AssetManagerViewModel"> <!-- maybe change this when working with a specific ViewModel -->
+  
+  <UserControl.Styles>
+        <Style Selector="TextBox#Type1Textbox:hover /template/ ContentPresenter#PART_ContentPresenter:focus">
+            <Setter Property="Background" Value="#a11d33" />
+        </Style>
+    </UserControl.Styles>
+  
+  <StackPanel Margin="20" Spacing="10">
+      <Grid>
+          <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left">
+      <TextBox Text="{Binding AssetNameNew}" Watermark="Enter Assets Name"/>
+      <TextBox Text="{Binding AssetHeatNew}" Watermark="Enter Heat Production"/>
+      <TextBox Text="{Binding AssetElectricityNew}" Watermark="Enter Electricity"/>
+      <TextBox Text="{Binding AssetEnergyNew}" Watermark="Enter Energy"/>
+      <TextBox Text="{Binding AssetCostNew}" Watermark="Enter Costs"/>
+      <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
+      <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}"/>
+      </StackPanel>
+      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" Width="300">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding }"/>
+                </StackPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+    </Grid>
+  </StackPanel>
+
+</UserControl>

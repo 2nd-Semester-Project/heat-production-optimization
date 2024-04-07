@@ -14,7 +14,7 @@
         </Style>
     </UserControl.Styles>
   
-  <StackPanel Margin="20" Spacing="10">
+  <StackPanel Margin="30" Spacing="10">
       <Grid>
           <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left">
       <TextBox Text="{Binding AssetNameNew}" Watermark="Enter Assets Name"/>
@@ -24,8 +24,13 @@
       <TextBox Text="{Binding AssetCostNew}" Watermark="Enter Costs"/>
       <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
       <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}"/>
+      <TextBox Width="200" HorizontalAlignment="Left" Watermark="Enter Asset Name to edit" Margin="0,20,0,0"/>
+      <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center"/>
+
+      
+      
       </StackPanel>
-      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" Width="300">
+      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" Width="300" Margin="40,0,0,0">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">

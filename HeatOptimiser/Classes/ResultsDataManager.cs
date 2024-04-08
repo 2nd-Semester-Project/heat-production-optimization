@@ -32,7 +32,10 @@ namespace HeatOptimiser
                 {
                     newLine += $"{hour.Assets[i].ID}/";
                     producedHeat += hour.Assets[i].Heat * hour.Demands[i];
-                    consumedElectricity += hour.Assets[i].Electricity * hour.Demands[i];
+                    if (hour.Assets[i].Electricity > 0)
+                        producedElectricity += hour.Assets[i].Electricity * hour.Demands[i];
+                    else
+                        consumedElectricity += hour.Assets[i].Electricity * hour.Demands[i];
                     productionCosts += hour.Assets[i].Cost * hour.Demands[i];
                     energyConsumption += hour.Assets[i].Energy * hour.Demands[i];
                     producedCarbonDioxide += hour.Assets[i].CarbonDioxide * hour.Demands[i];
@@ -52,7 +55,22 @@ namespace HeatOptimiser
         }
         public void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
+            List<string> lines = File.ReadAllLines(filePath).ToList();
+            List<int> removableIndexes = [];
+            int counter = 0;
+            foreach (string line in lines)
+            {
+                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
+                DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
+                {
+                    removableIndexes.Add(counter);
+                }
+                counter++;
+            }
+            List<string> newLines = lines.GetRange(0, removableIndexes[0]);
+            newLines.AddRange(lines.GetRange(removableIndexes[1] + 1, lines.Count - (removableIndexes[1] + 1)));
 
+            File.WriteAllLines(filePath, newLines);
         }
         public Schedule Load(DateOnly dateFrom, DateOnly dateTo)
         {

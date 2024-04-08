@@ -8,9 +8,5 @@
              x:DataType="views:SourceDataManagerViewModel">
   
   
-  <Grid>
-  <TextBlock Margin="20" Text="Source Data Manager" GridColumn="0"/>
-  <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Margin="280,300,0,0" Width="130" HorizontalAlignment="Left" GridColumn="1"/>
-    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Margin="440,300,0,0" Width="130" GridColumn="2"/>
-</Grid>
+ 
 </UserControl>

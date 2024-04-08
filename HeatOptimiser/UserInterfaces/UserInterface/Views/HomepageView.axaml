@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:UserInterface.ViewModels.HomepageViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="UserInterface.Views.HomepageView">
+
+<Grid Margin="30" >
+<Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+
+<TextBlock Text="Heat Production Optimisation" FontSize="30"
+           FontWeight="Bold" Foreground="#a11d33" HorizontalAlignment="Center"
+           Grid.ColumnSpan="3"
+           Margin="0,0,0,30"/>
+<StackPanel Grid.Column="0" Grid.Row="1" Margin="0,150,0,0">
+  <TextBlock  Text="No Source Data loaded" 
+              HorizontalAlignment="Center"
+              FontSize="14"
+              Foreground="Black"/>
+ </StackPanel> 
+<StackPanel Grid.Column="1" Grid.Row="1" Margin="0,150,0,0">
+    <TextBlock  Text="Currently you have 0 Production Assets" 
+                HorizontalAlignment="Center"
+                FontSize="14"
+                Foreground="Black"/>
+ </StackPanel> 
+
+</Grid>
+</UserControl>

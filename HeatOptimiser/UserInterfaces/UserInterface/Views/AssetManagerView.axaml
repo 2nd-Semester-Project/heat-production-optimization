@@ -15,8 +15,12 @@
     </UserControl.Styles>
   
   <StackPanel Margin="30" Spacing="10">
+    
+    <TextBlock Text="Asset Manager" HorizontalAlignment="Left" Margin="0,0,0,20" FontSize="30" Foreground="#a11d33"/>
+      
       <Grid>
           <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left">
+    
       <TextBox Text="{Binding AssetNameNew}" Watermark="Enter Assets Name"/>
       <TextBox Text="{Binding AssetHeatNew}" Watermark="Enter Heat Production"/>
       <TextBox Text="{Binding AssetElectricityNew}" Watermark="Enter Electricity"/>
@@ -36,8 +40,8 @@
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
-    <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Grid.Column="2" Grid.Row="1"/>
-    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Grid.Column="2" Grid.Row="2"/>
+      <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Margin="280,300,0,0" Width="130" HorizontalAlignment="Left" />
+    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Margin="440,300,0,0" Width="130"/>
     
     </Grid>
   </StackPanel>

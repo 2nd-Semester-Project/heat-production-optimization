@@ -19,13 +19,13 @@ public class MainWindowViewModel : ViewModelBase
         get => _paneStatus;
         set     {
                 this.RaiseAndSetIfChanged(ref _paneStatus, value);
-                ButtonWidth = _paneStatus ? 170 : 50;
+                ButtonWidth = _paneStatus ? 200 : 50;
                 ButtonTextOpacity = _paneStatus ? 1.0 : 0.0;
                 }
         
         
     }
-    private double _buttonWidth = 170;
+    private double _buttonWidth = 200;
     public double ButtonWidth
     {
         get => _buttonWidth;
@@ -47,12 +47,14 @@ public ReactiveObject CurrentView {
 public ReactiveCommand<Unit, bool> PaneCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenAssetManagerCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataManagerCommand {get;}
+public ReactiveCommand<Unit, ReactiveObject> OpenHomepageCommand {get;}
 
 public MainWindowViewModel()
 {   
     PaneCommand=ReactiveCommand.Create(()=> PaneStatus=!PaneStatus);
     OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
     OpenSourceDataManagerCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataManagerViewModel());
+    OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());
     
 }
 

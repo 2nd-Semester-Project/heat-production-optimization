@@ -14,6 +14,9 @@ using System.Collections.Generic;
 namespace UserInterface.ViewModels;
 
 
+
+    
+
 public class NewAsset : ViewModelBase
 {
     public string _assetName;
@@ -52,7 +55,9 @@ public class NewAsset : ViewModelBase
 }
 public class AssetManagerViewModel : ViewModelBase
 {
+    //public AssetManager assetManager;
     
+    //public ProductionAsset productionAsset;
     public string _assetNameNew;
     public string AssetNameNew{get =>_assetNameNew;
     set=> this.RaiseAndSetIfChanged(ref _assetNameNew, value);
@@ -78,8 +83,9 @@ public class AssetManagerViewModel : ViewModelBase
     set=> this.RaiseAndSetIfChanged(ref _assetCarbonNew, value);
     }
     public int Testindex=0;
-    ObservableCollection<NewAsset> Assets {get;} = new();
+    ObservableCollection<NewAsset> Assets {get;set;}
     //public List<string> TestList {get;}=new(){"ItemNumber1"};
+    
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
 
     public string _assetEdit;
@@ -91,8 +97,9 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void AddAsset()
     {
-        Assets.Add(new NewAsset(AssetNameNew, AssetHeatNew, AssetElectricityNew, AssetEnergyNew, AssetCostNew, AssetCarbonNew));
-        Console.WriteLine(Assets[Testindex].AssetName);
+       string DDDefault="test";
+        //assetManager.AddUnit(AssetNameNew,DDDefault,Convert.ToDouble(AssetHeatNew), Convert.ToDouble(AssetElectricityNew), Convert.ToDouble(AssetEnergyNew), Convert.ToDouble(AssetCostNew), Convert.ToDouble(AssetCarbonNew));
+        //Console.WriteLine(Assets[Testindex].AssetName);
     }
     public void DeleteAsset()
     {
@@ -102,7 +109,7 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public AssetManagerViewModel()
     {
-        
+        //Assets = new ObservableCollection<ProductionAsset>(assetManager.LoadUnits("ProductionAssets.json"));
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         
     }

@@ -57,7 +57,7 @@ namespace HeatOptimiser
     public class AssetManager: IAssetManager
     {
         public string saveFileName = "ProductionAssets.json";
-        private List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
+        public List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
         public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {

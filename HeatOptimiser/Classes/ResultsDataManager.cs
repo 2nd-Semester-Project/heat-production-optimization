@@ -14,7 +14,7 @@ namespace HeatOptimiser
             filePath = passedFilePath;
             am = assetManager;
         }
-        public void Save(Schedule schedule)
+        public void Save(Schedule schedule, string? fileName)
         {
             var csv = new StringBuilder();
             foreach (ScheduleHour hour in schedule.schedule)

@@ -6,14 +6,22 @@ namespace HeatOptimiser
         private readonly Optimiser optimiser;
         private readonly SourceData sourceData;
         public AssetManager assetManager;
+        private readonly ResultsDataManager resultsDataManager;
+        private readonly string filePath = "your_file_path.csv";
+        private DateTime startDate = DateTime.MinValue;
+        private DateTime endDate = DateTime.MinValue;
+        private Schedule schedule;
 
 
          public TextBasedUI()
         {
+            this.filePath = string.IsNullOrWhiteSpace(filePath) ? "default_file_path.csv" : filePath;
             sourceDataManager = new SourceDataManager();
             sourceData = new SourceData();
             assetManager = new AssetManager();
             optimiser = new Optimiser(sourceDataManager, assetManager);
+            resultsDataManager = new ResultsDataManager(filePath, assetManager);
+            
         }
         public void Interface()
         {
@@ -159,22 +167,35 @@ namespace HeatOptimiser
                     case "5":
                         Console.WriteLine("Selected: Optimise Schedule");
                         Console.WriteLine("Enter start date (dd/MM/yyyy):");
-                        DateTime startDate;
                         while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out startDate))
                         {
                             Console.WriteLine("Invalid input. Please enter a valid date (dd/MM/yyyy):");
                         }
                         Console.WriteLine("Enter end date (dd/MM/yyyy):");
-                        DateTime endDate;
                         while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out endDate))
                         {
                             Console.WriteLine("Invalid input. Please enter a valid date (dd/MM/yyyy):");
                         }
-                        Schedule schedule = optimiser.Optimise(startDate, endDate);
+                        schedule = optimiser.Optimise(startDate, endDate);
                         DisplaySchedule(schedule);
                         break;
-
                     case "6":
+                    Console.WriteLine("Selected: Save Data Results");
+                    try
+                    {
+                        Console.WriteLine("Enter file name to save results:");
+                        string userFileName = Console.ReadLine();
+                        Schedule optimizedSchedule = optimiser.Optimise(startDate, endDate);
+                        string resultFileName = $"results_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}.csv";
+                        resultsDataManager.Save(optimizedSchedule, userFileName);
+                        Console.WriteLine($"Data results saved successfully to '{resultFileName}'.");
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
+                        break;
+                    case "8":
                         Console.WriteLine("Exiting...");
                         return; 
                     default:

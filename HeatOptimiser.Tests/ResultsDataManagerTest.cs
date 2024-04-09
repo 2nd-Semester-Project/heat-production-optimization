@@ -1,85 +1,99 @@
 using Xunit;
 
-namespace HeatOptimiser.Tests {
-    public class ResultsDataManagerTests
+namespace HeatOptimiser.Tests
+{
+    public class ResultsDataManagerTest
     {
-        private ResultsDataManager manager;
-
-        public ResultsDataManagerTests()
-        {
-            manager = new ResultsDataManager();
-        }
-
         [Fact]
-        public void Add_Schedule_SuccessfullyAddsSchedule()
-        {
+        public void TestResultsManagerSave() {
             // Arrange
-            var startDate = DateTime.Now;
-            var endDate = startDate.AddDays(1);
-            var schedule = new Schedule(startDate, endDate); // Directly instantiate Schedule
+            AssetManager assetManager = new AssetManager();
+            assetManager.AddUnit("GB", "none", 5.0, 0, 1.1, 500, 215);
+            assetManager.AddUnit("OB", "none", 4.0, 0, 1.2, 700, 265);
+
+            SourceDataManager sourceManager = new SourceDataManager();
+            string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
+            var data = sourceManager.LoadXLSXFile(file, 4, 2);
+
+            Optimiser optimiser = new Optimiser(sourceManager, assetManager);
+            string startDateStr = "12/02/2023";
+            string endDateStr = "25/02/2023";
+            DateTime startDate = DateTime.ParseExact(startDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            Schedule schedule = optimiser.Optimise(startDate, endDate);
+
+            string resFile = Path.Combine(projectDirectory, "resultdata.csv");
+            ResultsDataManager resultsManager = new(resFile, assetManager);
 
             // Act
-            manager.Add(schedule);
+            resultsManager.Save(schedule);
 
             // Assert
-            Assert.Contains(schedule, manager.Schedules); // Assuming there's a way to access schedules
+            Assert.True(File.Exists(resFile));
         }
-
         [Fact]
-        public void Edit_Schedule_RecalculatesAndUpdatesSchedule()
-        {
+        public void TestResultsManagerRemove() {
             // Arrange
-            var startDate = DateTime.Now;
-            var endDate = startDate.AddDays(1);
-            var originalSchedule = new Schedule(startDate, endDate);
-            manager.Add(originalSchedule);
-            
-            var newEndDate = endDate.AddDays(2);
-            var updatedSchedule = new Schedule(startDate, newEndDate); // This represents the updated details
-            
-            // Act
-            manager.Edit(originalSchedule, updatedSchedule); // Assuming Edit updates the schedule by use of Optimiser
+            AssetManager assetManager = new AssetManager();
+            assetManager.AddUnit("GB", "none", 5.0, 0, 1.1, 500, 215);
+            assetManager.AddUnit("OB", "none", 4.0, 0, 1.2, 700, 265);
 
-            // Assert
-            Assert.DoesNotContain(originalSchedule, manager.Schedules);
-            var existingSchedule = manager.Schedules.FirstOrDefault(s => s.startDate == startDate && s.endDate == newEndDate);
-            Assert.NotNull(existingSchedule); // Verify the updated schedule exists
-        }
+            SourceDataManager sourceManager = new SourceDataManager();
+            string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
+            var data = sourceManager.LoadXLSXFile(file, 4, 2);
 
-        [Fact]
-        public void Remove_ScheduleWithoutDate_RemovesAllSchedules()
-        {
-            // Arrange
-            var scheduleOne = new Schedule(DateTime.Now, DateTime.Now.AddDays(1));
-            var scheduleTwo = new Schedule(DateTime.Now.AddDays(2), DateTime.Now.AddDays(3));
-            manager.Add(scheduleOne);
-            manager.Add(scheduleTwo);
+            Optimiser optimiser = new Optimiser(sourceManager, assetManager);
+            string startDateStr = "12/02/2023";
+            string endDateStr = "25/02/2023";
+            DateTime startDate = DateTime.ParseExact(startDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            Schedule schedule = optimiser.Optimise(startDate, endDate);
+
+            string resFile = Path.Combine(projectDirectory, "resultdata.csv");
+            ResultsDataManager resultsManager = new(resFile, assetManager);
 
             // Act
-            manager.Remove(); // Assuming Remove() without parameters clears all schedules
+            resultsManager.Save(schedule);
+            resultsManager.Remove(DateOnly.FromDateTime(startDate), DateOnly.FromDateTime(endDate));
 
             // Assert
-            Assert.Empty(manager.Schedules);
+            Assert.Empty(File.ReadAllLines(resFile));
         }
-
         [Fact]
-        public void Remove_ScheduleWithDateRange_RemovesSchedulesWithinRange()
-        {
+        public void TestResultsManagerLoad() {
             // Arrange
-            var scheduleOne = new Schedule(DateTime.Now, DateTime.Now.AddDays(1));
-            var scheduleTwo = new Schedule(DateTime.Now.AddDays(2), DateTime.Now.AddDays(3));
-            var scheduleThree = new Schedule(DateTime.Now.AddDays(4), DateTime.Now.AddDays(5));
-            manager.Add(scheduleOne);
-            manager.Add(scheduleTwo);
-            manager.Add(scheduleThree);
-            
+            AssetManager assetManager = new AssetManager();
+            assetManager.AddUnit("GB", "none", 5.0, 0, 1.1, 500, 215);
+            assetManager.AddUnit("OB", "none", 4.0, 0, 1.2, 700, 265);
+
+            SourceDataManager sourceManager = new SourceDataManager();
+            string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
+            var data = sourceManager.LoadXLSXFile(file, 4, 2);
+
+            Optimiser optimiser = new Optimiser(sourceManager, assetManager);
+            string startDateStr = "12/02/2023";
+            string endDateStr = "25/02/2023";
+            DateTime startDate = DateTime.ParseExact(startDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            Schedule schedule = optimiser.Optimise(startDate, endDate);
+
+            string resFile = Path.Combine(projectDirectory, "resultdata.csv");
+            ResultsDataManager resultsManager = new(resFile, assetManager);
+
             // Act
-            manager.Remove(DateTime.Now.AddDays(1), DateTime.Now.AddDays(4)); // Removes schedules overlapping with this range
+            resultsManager.Save(schedule);
+            Schedule loadedSchedule = resultsManager.Load(DateOnly.FromDateTime(startDate), DateOnly.FromDateTime(endDate));
 
             // Assert
-            Assert.DoesNotContain(scheduleOne, manager.Schedules);
-            Assert.DoesNotContain(scheduleTwo, manager.Schedules);
-            Assert.Contains(scheduleThree, manager.Schedules); // Only scheduleThree should remain
+            Assert.NotNull(loadedSchedule);
+            Assert.Equal(startDate, loadedSchedule.startDate);
+            Assert.Equal(endDate, loadedSchedule.endDate);
         }
     }
 }

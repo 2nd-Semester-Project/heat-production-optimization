@@ -11,7 +11,6 @@ namespace HeatOptimiser.Tests
             SourceDataManager sourceManager = new SourceDataManager();
             string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
             string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
-            Console.WriteLine(file);
 
             // Act
             var result = sourceManager.LoadXLSXFile(file, 4, 2);

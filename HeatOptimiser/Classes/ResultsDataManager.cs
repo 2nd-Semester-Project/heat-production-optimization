@@ -19,7 +19,7 @@ namespace HeatOptimiser
             var csv = new StringBuilder();
             foreach (ScheduleHour hour in schedule.schedule)
             {
-                string l = hour.Hour.Value.ToString("dd/MM/yyyy HH:mm");
+                string l = hour.Hour!.Value.ToString("dd/MM/yyyy HH:mm");
                 string newLine = $"{l}, ";
                 double? producedHeat = 0;
                 double? producedElectricity = 0;
@@ -28,10 +28,10 @@ namespace HeatOptimiser
                 double? energyConsumption = 0;
                 double? producedCarbonDioxide = 0;
                 
-                for (int i = 0; i < hour.Assets.Count; i++)
+                for (int i = 0; i < hour.Assets!.Count; i++)
                 {
                     newLine += $"{hour.Assets[i].ID}/";
-                    producedHeat += hour.Assets[i].Heat * hour.Demands[i];
+                    producedHeat += hour.Assets[i].Heat * hour.Demands![i];
                     if (hour.Assets[i].Electricity > 0)
                         producedElectricity += hour.Assets[i].Electricity * hour.Demands[i];
                     else
@@ -42,7 +42,7 @@ namespace HeatOptimiser
                 }
                 newLine = newLine.TrimEnd('/') + ", ";
 
-                for (int i = 0; i < hour.Demands.Count; i++)
+                for (int i = 0; i < hour.Demands!.Count; i++)
                 {
                     newLine += $"{hour.Demands[i]}/";
                 }
@@ -56,19 +56,25 @@ namespace HeatOptimiser
         public void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
             List<string> lines = File.ReadAllLines(filePath).ToList();
-            List<int> removableIndexes = [];
+            List<int> removableIndexes = new List<int>();
             int counter = 0;
             foreach (string line in lines)
             {
                 if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
-                DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
+                    DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
                 {
                     removableIndexes.Add(counter);
                 }
                 counter++;
             }
-            List<string> newLines = lines.GetRange(0, removableIndexes[0]);
-            newLines.AddRange(lines.GetRange(removableIndexes[1] + 1, lines.Count - (removableIndexes[1] + 1)));
+            List<string> newLines = new List<string>();
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!removableIndexes.Contains(i))
+                {
+                    newLines.Add(lines[i]);
+                }
+            }
 
             File.WriteAllLines(filePath, newLines);
         }
@@ -102,7 +108,11 @@ namespace HeatOptimiser
                     List<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        assets.Add(am.GetAllUnits().Find(x => x.ID.ToString() == assetID));
+                        var asset = am.GetAllUnits().Find(x => x.ID!.ToString() == assetID);
+                        if (asset != null)
+                        {
+                            assets.Add(asset);
+                        }
                     }
                     foreach(string demand in line[2].Split('/'))
                     {

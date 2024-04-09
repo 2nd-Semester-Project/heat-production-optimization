@@ -108,10 +108,10 @@ namespace HeatOptimiser
                     List<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        var asset = am.GetAllUnits().Find(x => x.ID!.ToString() == assetID);
-                        if (asset != null)
+                        var unit = am.GetAllUnits().Find(x => x.ID.ToString() == assetID);
+                        if (unit != null)
                         {
-                            assets.Add(asset);
+                            assets.Add(unit);
                         }
                     }
                     foreach(string demand in line[2].Split('/'))

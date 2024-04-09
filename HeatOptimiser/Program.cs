@@ -18,19 +18,22 @@
             ResultsDataManager resDataManager = new("data/resultdata.csv", assets);
             resDataManager.Save(optimisedData);
 
-            Schedule readData = resDataManager.Load(DateOnly.ParseExact("10/02/2023", "dd/MM/yyyy"), DateOnly.ParseExact("13/02/2023", "dd/MM/yyyy"));
+            Schedule readData = resDataManager.Load(
+            DateOnly.ParseExact("10/02/2023", "dd/MM/yyyy"),
+            DateOnly.ParseExact("13/02/2023", "dd/MM/yyyy")
+            );
 
             // Example on visualizing the data
             
             foreach (ScheduleHour hour in readData.schedule)
             {
                 Console.WriteLine(hour.Hour);
-                foreach (ProductionAsset asset in hour.Assets)
+                foreach (ProductionAsset asset in hour.Assets!)
                 {
                     Console.Write($"{asset.Name} ");
                 }
                 Console.WriteLine();
-                foreach (double demand in hour.Demands)
+                foreach (double demand in hour.Demands!)
                 {
                     Console.Write($"{demand} ");
                 }

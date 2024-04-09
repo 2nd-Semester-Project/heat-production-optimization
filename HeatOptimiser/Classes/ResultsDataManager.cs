@@ -60,8 +60,8 @@ namespace HeatOptimiser
             int counter = 0;
             foreach (string line in lines)
             {
-                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
-                    DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
+                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
+                    DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
                 {
                     removableIndexes.Add(counter);
                 }
@@ -89,21 +89,22 @@ namespace HeatOptimiser
             using var csvReader = new CsvReader(streamReader, csvConfig);
 
             bool reading = false;
+            Schedule schedule = new Schedule(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
 
-            Schedule schedule = new(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
-
+        
             while (csvReader.Read())
             {
-                List<string> line = [];
+                List<string> line = new List<string>();
                 for (int i = 0; csvReader.TryGetField<string>(i, out string value); i++)
                 {
                     line.Add(value);
                 }
-                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
-                        reading = !reading;
+                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
+                    reading = !reading;
                 if(reading)
                 {
-                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture);
+                
                     List<ProductionAsset> assets = [];
                     List<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))

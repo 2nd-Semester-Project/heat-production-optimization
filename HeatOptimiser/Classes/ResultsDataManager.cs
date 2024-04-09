@@ -72,23 +72,23 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
-        public Schedule Load(DateOnly dateFrom, DateOnly dateTo)
+        public Schedule Load(DateOnly dateFrom, DateOnly dateTo, string fileNameToLoad)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 HasHeaderRecord = false
             };
 
-            using var streamReader = File.OpenText(filePath);
+            using var streamReader = File.OpenText(fileNameToLoad);
             using var csvReader = new CsvReader(streamReader, csvConfig);
 
             bool reading = false;
+            Schedule schedule = new Schedule(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
 
-            Schedule schedule = new(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
-
+        
             while (csvReader.Read())
             {
-                List<string> line = [];
+                List<string> line = new List<string>();
                 for (int i = 0; csvReader.TryGetField<string>(i, out string value); i++)
                 {
                     line.Add(value);
@@ -113,6 +113,16 @@ namespace HeatOptimiser
             }
                 
             return schedule;
+        }
+
+        internal Schedule Load(string? fileNameToLoad)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Schedule Load(DateOnly dateOnly1, DateOnly dateOnly2)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -194,8 +194,51 @@ namespace HeatOptimiser
                     {
                         Console.WriteLine($"An error occurred: {ex.Message}");
                     }
+                    break;
+                    case "7":
+                    {
+                        Console.WriteLine("Selected: Load File Results:");
+                        try
+                        {
+                            Console.WriteLine("Enter file name to load results:");
+                            string fileNameToLoad = Console.ReadLine();
+
+                            Console.WriteLine("Enter start date (dd/MM/yyyy):");
+                            DateOnly startDate = DateOnly.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                            Console.WriteLine("Enter end date (dd/MM/yyyy):");
+                            DateOnly endDate = DateOnly.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+
+                            Schedule loadedSchedule = resultsDataManager.Load(startDate, endDate, fileNameToLoad);
+
+                            DisplaySchedule(loadedSchedule);
+                            Console.WriteLine("Data results loaded successfully");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"An error ocurred: {ex.Message}");
+                        }
                         break;
+                    }
                     case "8":
+                    {
+                        Console.WriteLine("Selected: Remove Data Results");
+                        try
+                        {
+                            Console.WriteLine("Enter start date (dd/MM/yyyy):");
+                            DateOnly startDate = DateOnly.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+                            Console.WriteLine("Enter end date (dd/MM/yyyy):");
+                            DateOnly endDate = DateOnly.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+
+                            resultsDataManager.Remove(startDate, endDate);
+                             Console.WriteLine("Data results removed successfully");
+                        }
+                         catch (Exception ex)
+                        {
+                            Console.WriteLine($"An error occurred: {ex.Message}");
+                        }
+                         break;
+                    }
+                    case "9":
                         Console.WriteLine("Exiting...");
                         return; 
                     default:

@@ -53,25 +53,35 @@ namespace HeatOptimiser
             }
             File.WriteAllText(filePath, csv.ToString());
         }
-        public void Remove(DateOnly dateFrom, DateOnly dateTo)
+       public void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
-            List<string> lines = File.ReadAllLines(filePath).ToList();
-            List<int> removableIndexes = [];
-            int counter = 0;
-            foreach (string line in lines)
+        List<string> lines = File.ReadAllLines(filePath).ToList();
+        List<int> removableIndexes = new List<int>(); // Initialize the list explicitly
+        int counter = 0;
+        foreach (string line in lines)
+        {
+            if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
+            DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
             {
-                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
-                DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
-                {
-                    removableIndexes.Add(counter);
-                }
-                counter++;
+                removableIndexes.Add(counter);
             }
+            counter++;
+        }
+         // Check if removableIndexes has at least two elements before accessing them
+        if (removableIndexes.Count >= 2)
+        {
             List<string> newLines = lines.GetRange(0, removableIndexes[0]);
             newLines.AddRange(lines.GetRange(removableIndexes[1] + 1, lines.Count - (removableIndexes[1] + 1)));
 
             File.WriteAllLines(filePath, newLines);
         }
+        else
+        {
+            // Handle the case where removableIndexes doesn't have enough elements
+            Console.WriteLine("Unable to remove lines: Not enough indexes found.");
+        }
+        }
+
         public Schedule Load(DateOnly dateFrom, DateOnly dateTo, string fileNameToLoad)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
@@ -113,16 +123,6 @@ namespace HeatOptimiser
             }
                 
             return schedule;
-        }
-
-        internal Schedule Load(string? fileNameToLoad)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Schedule Load(DateOnly dateOnly1, DateOnly dateOnly2)
-        {
-            throw new NotImplementedException();
         }
     }
 }

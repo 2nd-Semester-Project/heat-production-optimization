@@ -35,7 +35,10 @@ namespace HeatOptimiser
                 Console.WriteLine("3. Delete Unit");
                 Console.WriteLine("4. Save Units");
                 Console.WriteLine("5. Optimise Schedule");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. Save Data");
+                Console.WriteLine("7. Load Data");
+                Console.WriteLine("8. Remove Data");
+                Console.WriteLine("9. Exit");
 
                 string? userInput = Console.ReadLine();
      

@@ -18,7 +18,11 @@
             ResultsDataManager resDataManager = new("data/resultdata.csv", assets);
             resDataManager.Save(optimisedData, "resultdata.csv");
 
-            Schedule readData = resDataManager.Load(DateOnly.ParseExact("10/02/2023", "dd/MM/yyyy"), DateOnly.ParseExact("13/02/2023", "dd/MM/yyyy"));
+            Schedule readData = resDataManager.Load(
+            DateOnly.ParseExact("10/02/2023", "dd/MM/yyyy"),
+            DateOnly.ParseExact("13/02/2023", "dd/MM/yyyy"),
+            "data/resultdata.csv"
+            );
 
             // Example on visualizing the data
             

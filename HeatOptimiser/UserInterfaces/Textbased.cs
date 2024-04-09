@@ -6,14 +6,22 @@ namespace HeatOptimiser
         private readonly Optimiser optimiser;
         private readonly SourceData sourceData;
         public AssetManager assetManager;
+        private readonly ResultsDataManager resultsDataManager;
+        private readonly string filePath = "your_file_path.csv";
+        private DateTime startDate = DateTime.MinValue;
+        private DateTime endDate = DateTime.MinValue;
+        private Schedule? schedule;
 
 
-         public TextBasedUI()
+        public TextBasedUI()
         {
+            this.filePath = string.IsNullOrWhiteSpace(filePath) ? "default_file_path.csv" : filePath;
             sourceDataManager = new SourceDataManager();
             sourceData = new SourceData();
             assetManager = new AssetManager();
             optimiser = new Optimiser(sourceDataManager, assetManager);
+            resultsDataManager = new ResultsDataManager(filePath, assetManager);
+            
         }
         public void Interface()
         {
@@ -27,7 +35,10 @@ namespace HeatOptimiser
                 Console.WriteLine("3. Delete Unit");
                 Console.WriteLine("4. Save Units");
                 Console.WriteLine("5. Optimise Schedule");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. Save Data");
+                Console.WriteLine("7. Load Data");
+                Console.WriteLine("8. Remove Data");
+                Console.WriteLine("9. Exit");
 
                 string? userInput = Console.ReadLine();
      
@@ -159,22 +170,78 @@ namespace HeatOptimiser
                     case "5":
                         Console.WriteLine("Selected: Optimise Schedule");
                         Console.WriteLine("Enter start date (dd/MM/yyyy):");
-                        DateTime startDate;
                         while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out startDate))
                         {
                             Console.WriteLine("Invalid input. Please enter a valid date (dd/MM/yyyy):");
                         }
                         Console.WriteLine("Enter end date (dd/MM/yyyy):");
-                        DateTime endDate;
                         while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out endDate))
                         {
                             Console.WriteLine("Invalid input. Please enter a valid date (dd/MM/yyyy):");
                         }
-                        Schedule schedule = optimiser.Optimise(startDate, endDate);
+                        schedule = optimiser.Optimise(startDate, endDate);
                         DisplaySchedule(schedule);
                         break;
-
                     case "6":
+                    Console.WriteLine("Selected: Save Data Results");
+                    try
+                    {
+                        Console.WriteLine("Enter file name to save results:");
+                        string userFileName = Console.ReadLine()!;
+                        Schedule optimizedSchedule = optimiser.Optimise(startDate, endDate);
+                        string resultFileName = $"results_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}.csv";
+                        resultsDataManager.Save(optimizedSchedule);
+                        Console.WriteLine($"Data results saved successfully to '{resultFileName}'.");
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"An error occurred: {ex.Message}");
+                    }
+                    break;
+                    case "7":
+                    {
+                        Console.WriteLine("Selected: Load File Results:");
+                        try
+                        {
+                            Console.WriteLine("Enter file name to load results:");
+                            string fileNameToLoad = Console.ReadLine()!;
+
+                            Console.WriteLine("Enter start date (dd/MM/yyyy):");
+                            DateOnly startDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+                            Console.WriteLine("Enter end date (dd/MM/yyyy):");
+                            DateOnly endDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+
+                            Schedule loadedSchedule = resultsDataManager.Load(startDate, endDate);
+
+                            DisplaySchedule(loadedSchedule);
+                            Console.WriteLine("Data results loaded successfully");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"An error ocurred: {ex.Message}");
+                        }
+                        break;
+                    }
+                    case "8":
+                    {
+                        Console.WriteLine("Selected: Remove Data Results");
+                        try
+                        {
+                            Console.WriteLine("Enter start date (dd/MM/yyyy):");
+                            DateOnly startDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+                            Console.WriteLine("Enter end date (dd/MM/yyyy):");
+                            DateOnly endDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+
+                            resultsDataManager.Remove(startDate, endDate);
+                             Console.WriteLine("Data results removed successfully");
+                        }
+                         catch (Exception ex)
+                        {
+                            Console.WriteLine($"An error occurred: {ex.Message}");
+                        }
+                         break;
+                    }
+                    case "9":
                         Console.WriteLine("Exiting...");
                         return; 
                     default:

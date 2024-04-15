@@ -8,5 +8,8 @@
              x:DataType="views:SourceDataManagerViewModel">
   
   
- 
+ <StackPanel Margin="30">
+        <TextBlock Text="Source Data" HorizontalAlignment="Left" Margin="0,0,0,20" FontSize="30" Foreground="#a11d33"/>
+
+    </StackPanel>
 </UserControl>

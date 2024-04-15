@@ -5,6 +5,8 @@
              xmlns:vm="clr-namespace:UserInterface.ViewModels.HomepageViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UserInterface.Views.HomepageView">
+             
+             
 
 <Grid Margin="30" >
 <Grid.ColumnDefinitions>
@@ -24,10 +26,20 @@
               Foreground="Black"/>
  </StackPanel> 
 <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,150,0,0">
-    <TextBlock  Text="Currently you have 0 Production Assets" 
+        <StackPanel Orientation="Horizontal">
+            <TextBlock  Text="Currently you have " 
                 HorizontalAlignment="Center"
                 FontSize="14"
                 Foreground="Black"/>
+                <TextBlock Text=" 0 "
+                HorizontalAlignment="Center"
+                FontSize="14"
+                Foreground="Black"/>
+                <TextBlock Text="Production Assets"
+                HorizontalAlignment="Center"
+                FontSize="14"
+                Foreground="Black"/>
+        </StackPanel>
  </StackPanel> 
 
 </Grid>

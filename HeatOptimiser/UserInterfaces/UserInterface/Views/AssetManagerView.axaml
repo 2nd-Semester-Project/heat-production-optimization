@@ -14,12 +14,12 @@
         </Style>
     </UserControl.Styles>
   
-  <StackPanel Margin="30" Spacing="10">
+  <StackPanel Grid.Column="0" Margin="30" Spacing="10">
     
     <TextBlock Text="Asset Manager" HorizontalAlignment="Left" Margin="0,0,0,20" FontSize="30" Foreground="#a11d33"/>
       
       <Grid>
-          <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left">
+          <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left" Margin="0,0,20,0">
     
       <TextBox Text="{Binding AssetNameNew}" Watermark="Enter Assets Name"/>
       <TextBox Text="{Binding AssetHeatNew}" Watermark="Enter Heat Production"/>
@@ -27,23 +27,35 @@
       <TextBox Text="{Binding AssetEnergyNew}" Watermark="Enter Energy"/>
       <TextBox Text="{Binding AssetCostNew}" Watermark="Enter Costs"/>
       <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
-      <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}"/>
+      <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
 
       </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding TestList}" Width="300" Margin="40,0,0,40">
+      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" CornerRadius="10" Width="520" Height="400" Margin="0,0,10,5" HorizontalAlignment="Right">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding }"/>
+                <StackPanel Orientation="Vertical" Background="#a11d33" Spacing="10">
+                  <StackPanel Margin="5" Orientation="Horizontal">
+                    <TextBlock FontSize="20" Text="{Binding AssetName}" Margin="10"/>
+                    <CheckBox IsChecked="{Binding IsSelected}" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    
+                    <StackPanel Margin="5,5,5,5" Orientation="Horizontal">
+                    <TextBlock Text="Heat: "/><TextBlock Text="{Binding AssetHeat}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBlock Text="{Binding AssetElectricity}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Energy: "/><TextBlock Text="{Binding AssetEnergy}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Cost: "/><TextBlock Text="{Binding AssetCost}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Carbon: "/><TextBlock Text="{Binding AssetCarbon}"/>
+                    </StackPanel>
                 </StackPanel>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
-      <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Width="130" HorizontalAlignment="Left" />
-    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Width="130"/>
-    </StackPanel>
     </Grid>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,20,150">
+    <Button Content="Edit Asset" CornerRadius="25" Background="#a11d33" Width="130" HorizontalAlignment="Left" Margin="0,0,20,0"/>
+    <Button Content="Delete Assets" CornerRadius="25" Background="#a11d33" Width="130" Command="{Binding DeleteAssetCommand}"/>
+    </StackPanel>
   </StackPanel>
 
 </UserControl>

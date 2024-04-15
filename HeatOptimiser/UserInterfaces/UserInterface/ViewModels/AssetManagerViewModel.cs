@@ -27,6 +27,13 @@ public class NewAsset : ViewModelBase
     public string _assetEnergy;
     public string _assetCost;
     public string _assetCarbon;
+    public bool _isSelected;
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set => this.RaiseAndSetIfChanged(ref _isSelected, value);
+    }
+    
     public string AssetName{get =>_assetName;
     set=> this.RaiseAndSetIfChanged(ref _assetName, value);
     }
@@ -53,6 +60,7 @@ public class NewAsset : ViewModelBase
         AssetEnergy=ener;
         AssetCost=cost;
         AssetCarbon=carbon;
+        IsSelected=false;
     }
 }
 public class AssetManagerViewModel : ViewModelBase
@@ -84,12 +92,16 @@ public class AssetManagerViewModel : ViewModelBase
     public string AssetCarbonNew{get =>_assetCarbonNew;
     set=> this.RaiseAndSetIfChanged(ref _assetCarbonNew, value);
     }
-    public int Testindex=0;
-    ObservableCollection<NewAsset> Assets {get;set;}
-    ObservableCollection<string> TestList {get;set;}
+    public int _assetCount;
+    public int AssetCount
+    {
+        get => Assets.Count();
+    }
+    public ObservableCollection<NewAsset> Assets {get;} = new();
     
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteAssetCommand { get; }
 
     public string _assetEdit;
 
@@ -101,7 +113,7 @@ public class AssetManagerViewModel : ViewModelBase
     public void AddAsset()
     {
 
-       TestList.Add(AssetNameNew);
+       Assets.Add(new NewAsset(AssetNameNew, AssetHeatNew, AssetElectricityNew, AssetEnergyNew, AssetCostNew, AssetCarbonNew));
        AssetNameNew=string.Empty;
        AssetHeatNew=string.Empty;
        AssetElectricityNew=string.Empty;
@@ -113,6 +125,11 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void DeleteAsset()
     {
+        var selectedAsset = Assets.Where(x => x.IsSelected).ToList(); 
+        foreach (var task in selectedAsset)
+        {
+            Assets.Remove(task);
+        }
     }
     public void EditAsset()
     {   
@@ -121,6 +138,7 @@ public class AssetManagerViewModel : ViewModelBase
     {
         //Assets = new ObservableCollection<ProductionAsset>(assetManager.LoadUnits("ProductionAssets.json"));
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
+        DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         
     }
 

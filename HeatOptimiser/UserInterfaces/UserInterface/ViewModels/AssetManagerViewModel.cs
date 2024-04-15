@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 
 
+
 namespace UserInterface.ViewModels;
 
 
@@ -85,7 +86,8 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public int Testindex=0;
     ObservableCollection<NewAsset> Assets {get;set;}
-    //public List<string> TestList {get;}=new(){"ItemNumber1"};
+    ObservableCollection<string> TestList {get;set;}
+    
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
 
@@ -98,7 +100,14 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void AddAsset()
     {
-       string DDDefault="test";
+
+       TestList.Add(AssetNameNew);
+       AssetNameNew=string.Empty;
+       AssetHeatNew=string.Empty;
+       AssetElectricityNew=string.Empty;
+       AssetEnergyNew=string.Empty;
+       AssetCostNew=string.Empty;
+       AssetCarbonNew=string.Empty;
         //assetManager.AddUnit(AssetNameNew,DDDefault,Convert.ToDouble(AssetHeatNew), Convert.ToDouble(AssetElectricityNew), Convert.ToDouble(AssetEnergyNew), Convert.ToDouble(AssetCostNew), Convert.ToDouble(AssetCarbonNew));
         //Console.WriteLine(Assets[Testindex].AssetName);
     }

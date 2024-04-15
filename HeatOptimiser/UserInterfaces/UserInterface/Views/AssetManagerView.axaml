@@ -31,7 +31,7 @@
 
       </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" Width="300" Margin="40,0,0,40">
+      <ListBox Grid.Column="1" ItemsSource="{Binding TestList}" Width="300" Margin="40,0,0,40">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal">
@@ -40,9 +40,9 @@
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
-      <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Margin="280,300,0,0" Width="130" HorizontalAlignment="Left" />
-    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Margin="440,300,0,0" Width="130"/>
-    
+      <Button Content="Edit Asset" CornerRadius="50" Background="#a11d33" Width="130" HorizontalAlignment="Left" />
+    <Button Content="Delete Assets" CornerRadius="50" Background="#a11d33" Width="130"/>
+    </StackPanel>
     </Grid>
   </StackPanel>
 

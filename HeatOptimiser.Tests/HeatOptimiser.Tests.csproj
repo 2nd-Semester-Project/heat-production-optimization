@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HeatOptimiser\HeatOptimiser.csproj" />
+    <ProjectReference Include="..\HeatOptimiser\UserInterface.csproj" />
   </ItemGroup>
 
 </Project>

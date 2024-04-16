@@ -52,6 +52,7 @@ public ReactiveCommand<Unit, ReactiveObject> OpenOptimiserCommand {get;}
 
 public MainWindowViewModel()
 {   
+    CurrentView=new HomepageViewModel();
     PaneCommand=ReactiveCommand.Create(()=> PaneStatus=!PaneStatus);
     OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
     OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());

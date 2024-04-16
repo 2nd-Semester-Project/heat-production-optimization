@@ -133,6 +133,7 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void EditAsset()
     {   
+        
     }
     public AssetManagerViewModel()
     {

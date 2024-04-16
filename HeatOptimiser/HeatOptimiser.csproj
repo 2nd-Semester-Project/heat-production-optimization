@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.0.10" />
-    <ProjectReference Include="/heat-production-optimization/GUI/UserInterface" />
+    <ProjectReference Include="../GUI/UserInterface/UserInterface.csproj" />
   </ItemGroup>
 
 </Project>

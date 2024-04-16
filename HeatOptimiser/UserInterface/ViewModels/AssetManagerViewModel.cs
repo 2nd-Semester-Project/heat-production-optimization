@@ -129,6 +129,7 @@ public class AssetManagerViewModel : ViewModelBase
         foreach (var task in selectedAsset)
         {
             Assets.Remove(task);
+            
         }
     }
     public void EditAsset()

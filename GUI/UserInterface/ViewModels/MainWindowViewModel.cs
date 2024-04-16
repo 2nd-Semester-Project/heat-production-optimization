@@ -48,14 +48,14 @@ public ReactiveCommand<Unit, bool> PaneCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenAssetManagerCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataManagerCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenHomepageCommand {get;}
+public ReactiveCommand<Unit, ReactiveObject> OpenOptimiserCommand {get;}
 
 public MainWindowViewModel()
 {   
     PaneCommand=ReactiveCommand.Create(()=> PaneStatus=!PaneStatus);
     OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
-    OpenSourceDataManagerCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataManagerViewModel());
     OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());
-    
+    OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
 }
 
 

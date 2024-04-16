@@ -5,10 +5,6 @@ namespace UserInterface.ViewModels;
 
 public class HomepageViewModel : ViewModelBase
 {
-    public int AssetCount
-    {
-        get => Assets.Count;
-    }
     public HomepageViewModel()
     {
         

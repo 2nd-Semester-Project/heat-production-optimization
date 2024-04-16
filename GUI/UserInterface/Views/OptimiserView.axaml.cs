@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace UserInterface.Views;
 
-public partial class SourceDataManagerView : UserControl
+public partial class OptimiserView : UserControl
 {
-    public SourceDataManagerView()
+    public OptimiserView()
     {
         InitializeComponent();
     }

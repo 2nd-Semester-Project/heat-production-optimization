@@ -6,5 +6,5 @@ namespace UserInterface.ViewModels;
 
 public class ViewModelBase : ReactiveObject
 {
-        public ObservableCollection<NewAsset> Assets {get;} = new();
+        
 }

@@ -33,8 +33,8 @@
                 <Button HorizontalAlignment="Left" Command="{Binding OpenAssetManagerCommand}" Height="40" Width="{Binding ButtonWidth}">
                 <TextBlock Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
-                <Button Command="{Binding OpenSourceDataManagerCommand}" Height="40" Width="{Binding ButtonWidth}">
-                    <TextBlock Text="Source Data" Opacity="{Binding ButtonTextOpacity}"/>
+                <Button Command="{Binding OpenOptimiserCommand}" Height="40" Width="{Binding ButtonWidth}">
+                    <TextBlock Text="Optimiser" Opacity="{Binding ButtonTextOpacity}"/>
                     </Button>
                 <Button Height="40" Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
                     <TextBlock Text="Results" Opacity="{Binding ButtonTextOpacity}"/>

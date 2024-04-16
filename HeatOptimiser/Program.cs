@@ -42,7 +42,7 @@
 
             resDataManager.Remove(DateOnly.ParseExact("10/02/2023", "dd/MM/yyyy"), DateOnly.ParseExact("11/02/2023", "dd/MM/yyyy"));
 
-            new TextBasedUI().Interface();
+            //new TextBasedUI().Interface();
         }
     }
 }

@@ -41,23 +41,33 @@ namespace HeatOptimiser
         {
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
-            ProductionAsset gasBoiler = am.SearchUnits("GB")[0];
-            ProductionAsset oilBoiler = am.SearchUnits("OB")[0];
+
+            List<ProductionAsset> assets = am.GetAllUnits();
+
+            for (int i = 0; i < assets.Count; i++)
+            {
+                for (int j = 0; j > assets.Count - i; i++)
+                {
+                    if (assets[i].Cost > assets[j].Cost)
+                    {
+                        (assets[i], assets[j]) = (assets[j], assets[i]);
+                    }
+                }
+            }
 
             foreach (SourceDataPoint hour in sd.GetDataInRange(data, startDate, endDate))
             {
-                if (hour.HeatDemand <= gasBoiler.Heat)
+                double producedHeat = 0;
+                int index = 0;
+                List<ProductionAsset> assetsUsed = [];
+                List<double> assetDemands = [];
+                while (producedHeat < hour.HeatDemand)
                 {
-                    double gasDemand = (double)hour.HeatDemand;
-                    schedule.AddHour(hour.TimeFrom, [gasBoiler], [gasDemand]);
+                    assetsUsed.Add(assets[index]);
+                    assetDemands.Add((double)assets[index].Heat!);
+                    index += 1;
                 }
-                else
-                {
-                    double gasCapacity = (double)gasBoiler.Heat!;
-                    double hourDemand = (double)hour.HeatDemand!;
-                    double oilDemand = hourDemand - gasCapacity;
-                    schedule.AddHour(hour.TimeFrom, [gasBoiler, oilBoiler], [gasCapacity, oilDemand]);
-                }
+                schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
             }
             return schedule;
         }

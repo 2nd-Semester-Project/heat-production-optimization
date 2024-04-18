@@ -49,6 +49,7 @@ public ReactiveCommand<Unit, ReactiveObject> OpenAssetManagerCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataManagerCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenHomepageCommand {get;}
 public ReactiveCommand<Unit, ReactiveObject> OpenOptimiserCommand {get;}
+public ReactiveCommand<Unit, ReactiveObject> OpenResultsCommand {get;}
 
 public MainWindowViewModel()
 {   
@@ -57,6 +58,7 @@ public MainWindowViewModel()
     OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
     OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());
     OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
+    OpenResultsCommand=ReactiveCommand.Create(()=> CurrentView= new ResultsViewModel());
 }
 
 

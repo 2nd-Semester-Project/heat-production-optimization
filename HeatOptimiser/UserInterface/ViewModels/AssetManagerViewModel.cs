@@ -16,7 +16,6 @@ using System.Collections.Generic;
 namespace UserInterface.ViewModels;
 
 
-
     
 
 public class NewAsset : ViewModelBase

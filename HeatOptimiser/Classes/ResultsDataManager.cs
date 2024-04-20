@@ -99,11 +99,11 @@ namespace HeatOptimiser
                 {
                     line.Add(value);
                 }
-                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
+                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
                     reading = !reading;
                 if(reading)
                 {
-                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture);
+                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
                 
                     List<ProductionAsset> assets = [];
                     List<double> demands = [];

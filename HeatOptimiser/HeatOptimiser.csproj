@@ -17,7 +17,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
     <PackageReference Include="ReactiveUI" Version="19.5.72" />
     <PackageReference Include="EPPlus" Version="7.0.10" />
-    <ProjectReference Include="../GUI/UserInterface/UserInterface.csproj" />
+    
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,8 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
     <PackageReference Include="ReactiveUI" Version="19.5.72" />
-    <ProjectReference Include="..\HeatOptimiser.csproj" />
+    <PackageReference Include="EPPlus" Version="7.1.1" />
+    <ProjectReference Include="../heat-production-optimization/HeatOptimiser/HeatOptimiser.csproj" />
 
     
   </ItemGroup>

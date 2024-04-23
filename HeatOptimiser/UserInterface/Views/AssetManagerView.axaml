@@ -48,7 +48,7 @@
 
       </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" CornerRadius="20" Width="400" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
+      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" CornerRadius="20" Width="500" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Vertical" Background="#a11d33" Spacing="10">

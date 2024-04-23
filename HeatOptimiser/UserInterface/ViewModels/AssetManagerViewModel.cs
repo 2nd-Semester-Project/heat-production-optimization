@@ -188,7 +188,7 @@ public class AssetManagerViewModel : ViewModelBase
             AssetEnergyNew=string.Empty;
             AssetCostNew=string.Empty;
             AssetCarbonNew=string.Empty;
-            assetManager.AddUnit(AssetNameNew,"test",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
+            //assetManager.AddUnit(AssetNameNew,"test",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
             }
        
         

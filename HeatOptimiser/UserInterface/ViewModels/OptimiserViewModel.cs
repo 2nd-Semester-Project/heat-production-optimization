@@ -49,6 +49,6 @@ public class OptimiserViewModel : ViewModelBase
 
     public OptimiserViewModel()
     {
-        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(StartingDate,EndingDate));
+        //OptimiseCommand=ReactiveCommand.Create(()=> Optimise(StartingDate,EndingDate)); needs to be fixed
     }
 }

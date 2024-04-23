@@ -188,10 +188,10 @@ public class AssetManagerViewModel : ViewModelBase
             AssetEnergyNew=string.Empty;
             AssetCostNew=string.Empty;
             AssetCarbonNew=string.Empty;
+            assetManager.AddUnit(AssetNameNew,"test",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
             }
        
-        //assetManager.AddUnit(AssetNameNew,DDDefault,Convert.ToDouble(AssetHeatNew), Convert.ToDouble(AssetElectricityNew), Convert.ToDouble(AssetEnergyNew), Convert.ToDouble(AssetCostNew), Convert.ToDouble(AssetCarbonNew));
-        //Console.WriteLine(Assets[Testindex].AssetName);
+        
     }
     public void DeleteAsset()
     {

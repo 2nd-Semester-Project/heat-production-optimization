@@ -66,7 +66,7 @@ public class NewAsset : ViewModelBase
 }
 public class AssetManagerViewModel : ViewModelBase
 {
-    public AssetManager assetManager;
+    public AssetManager assetManager = new();
     public JsonAssetStorage jsonAssetStorage;
     
     //public ProductionAsset productionAsset;
@@ -217,7 +217,7 @@ public class AssetManagerViewModel : ViewModelBase
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
-        //ProductionAssets=assetManager.LoadUnits(assetManager.saveFileName);
+        ProductionAssets=assetManager.LoadUnits(assetManager.saveFileName);
     }
 
 }

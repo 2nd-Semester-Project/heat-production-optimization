@@ -3,14 +3,14 @@ using ReactiveUI;
 using System;
 using Avalonia.Controls;
 using System.Reactive;
+using System.Data.SqlTypes;
 
 namespace UserInterface.ViewModels;
 
 public class OptimiserViewModel : ViewModelBase
 {
     
-    public SourceDataManager sd;
-    public AssetManager am;
+    
     public SourceData sourcedata;
     public Optimiser optimiser;
     

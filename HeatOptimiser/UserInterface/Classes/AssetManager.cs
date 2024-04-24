@@ -3,6 +3,9 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.ObjectModel;
+using ReactiveUI;
+using System.Reactive;
 
 namespace HeatOptimiser
 {
@@ -60,7 +63,7 @@ namespace HeatOptimiser
     }
     public class AssetManager: IAssetManager
     {
-        public string saveFileName = "ProductionAssets.json";
+        public string saveFileName = "ProductionAssets.json"; 
         public List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
         public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)

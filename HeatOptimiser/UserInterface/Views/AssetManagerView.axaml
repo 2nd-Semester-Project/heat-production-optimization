@@ -48,21 +48,21 @@
 
       </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding Assets}" CornerRadius="20" Width="500" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
+      <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="20" Width="500" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Vertical" Background="#a11d33" Spacing="10">
                   <StackPanel Margin="5" Orientation="Horizontal">
-                    <TextBlock FontSize="20" Text="{Binding AssetName}" Margin="10"/>
-                    <CheckBox IsChecked="{Binding IsSelected}" HorizontalAlignment="Right"/>
+                    <TextBlock FontSize="20" Text="{Binding Name}" Margin="10"/>
+                    <CheckBox HorizontalAlignment="Right"/>
                     </StackPanel>
                     
                     <StackPanel Margin="5,5,5,5" Orientation="Horizontal">
-                    <TextBlock Text="Heat: "/><TextBlock Text="{Binding AssetHeat}"/>
-                    <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBlock Text="{Binding AssetElectricity}"/>
-                    <TextBlock Margin="15,0,0,0" Text="Energy: "/><TextBlock Text="{Binding AssetEnergy}"/>
-                    <TextBlock Margin="15,0,0,0" Text="Cost: "/><TextBlock Text="{Binding AssetCost}"/>
-                    <TextBlock Margin="15,0,0,0" Text="Carbon: "/><TextBlock Text="{Binding AssetCarbon}"/>
+                    <TextBlock Text="Heat: "/><TextBlock Text="{Binding Heat}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBlock Text="{Binding Electricity}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Energy: "/><TextBlock Text="{Binding Energy}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Cost: "/><TextBlock Text="{Binding Cost}"/>
+                    <TextBlock Margin="15,0,0,0" Text="Carbon: "/><TextBlock Text="{Binding CarbonDioxide}"/>
                     </StackPanel>
                 </StackPanel>
             </DataTemplate>

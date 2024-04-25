@@ -3,8 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:UserInterface.ViewModels.HomepageViewModel"
+             xmlns:views="clr-namespace:UserInterface.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="UserInterface.Views.HomepageView">
+             x:Class="UserInterface.Views.HomepageView"
+             x:DataType="views:HomepageViewModel">
              
              
 
@@ -20,26 +22,30 @@
            Grid.ColumnSpan="3"
            Margin="0,0,0,30"/>
 <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,150,0,0">
-  <TextBlock  Text="No Source Data loaded" 
+  <TextBlock  Text="Source Data loaded" 
               HorizontalAlignment="Center"
-              FontSize="14"
+              FontSize="18"
               Foreground="Black"/>
  </StackPanel> 
 <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,150,0,0">
         <StackPanel Orientation="Horizontal">
             <TextBlock  Text="Currently you have " 
                 HorizontalAlignment="Center"
-                FontSize="14"
+                FontSize="18"
                 Foreground="Black"/>
-                <TextBlock Text=" 0 "
+                <TextBlock Text="{Binding AssetCount}"
                 HorizontalAlignment="Center"
-                FontSize="14"
-                Foreground="Black"/>
+                FontSize="22"
+                FontWeight="Bold"
+                Foreground="Black"
+                Margin="15,0,15,0"
+                VerticalAlignment="Top"/>
                 <TextBlock Text="Production Assets"
                 HorizontalAlignment="Center"
-                FontSize="14"
+                FontSize="18"
                 Foreground="Black"/>
         </StackPanel>
+        
  </StackPanel> 
 
 </Grid>

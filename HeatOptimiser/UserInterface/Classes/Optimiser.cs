@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace HeatOptimiser
 {
@@ -18,7 +19,7 @@ namespace HeatOptimiser
             endDate = end;
             schedule = [];
         }
-        public void AddHour(DateTime? dateTime, List<ProductionAsset> assets, List<double> demands)
+        public void AddHour(DateTime? dateTime, ObservableCollection<ProductionAsset> assets, List<double> demands)
         {
             schedule.Add(new ScheduleHour
             {
@@ -31,7 +32,7 @@ namespace HeatOptimiser
     public class ScheduleHour
     {
         public DateTime? Hour { get; set; }
-        public List<ProductionAsset>? Assets { get; set; }
+        public ObservableCollection<ProductionAsset>? Assets { get; set; }
         public List<double>? Demands { get; set; }
     }
     public class Optimiser: IOptimiserModule

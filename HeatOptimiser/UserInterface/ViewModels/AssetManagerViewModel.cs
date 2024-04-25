@@ -165,7 +165,7 @@ public class AssetManagerViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _errorText, value);
     }
     public ObservableCollection<NewAsset> Assets {get;} = new();
-    public List<ProductionAsset> ProductionAssets{get; set;} = new();
+    public ObservableCollection<ProductionAsset> ProductionAssets{get; set;} = new();
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteAssetCommand { get; }
@@ -179,27 +179,25 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void AddAsset()
     {
-        if (double.TryParse(AssetHeatNew, out double AssetHeat)&&double.TryParse(AssetElectricityNew, out double AssetElectricity) &&double.TryParse(AssetEnergyNew, out double AssetEnergy) &&double.TryParse(AssetCostNew, out double AssetCost) &&double.TryParse(AssetCarbonNew, out double AssetCarbon))
+        if (AssetNameNew!= null && double.TryParse(AssetHeatNew, out double AssetHeat)&&double.TryParse(AssetElectricityNew, out double AssetElectricity) &&double.TryParse(AssetEnergyNew, out double AssetEnergy) &&double.TryParse(AssetCostNew, out double AssetCost) &&double.TryParse(AssetCarbonNew, out double AssetCarbon))
             {
-            Assets.Add(new NewAsset(AssetNameNew, AssetHeatNew, AssetElectricityNew, AssetEnergyNew, AssetCostNew, AssetCarbonNew));
+            assetManager.AddUnit(AssetNameNew,"none",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
             AssetNameNew=string.Empty;
             AssetHeatNew=string.Empty;
             AssetElectricityNew=string.Empty;
             AssetEnergyNew=string.Empty;
             AssetCostNew=string.Empty;
             AssetCarbonNew=string.Empty;
-            //assetManager.AddUnit(AssetNameNew,"test",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
             }
        
         
     }
     public void DeleteAsset()
     {
-        var selectedAsset = Assets.Where(x => x.IsSelected).ToList(); 
-        foreach (var task in selectedAsset)
+        var selectedAsset = ProductionAssets.Where(x => x.IsSelected == true).ToList(); 
+        foreach (var asset in selectedAsset)
         {
-            Assets.Remove(task);
-            
+            assetManager.DeleteUnit(asset.ID);
         }
     }
     public void EditAsset()

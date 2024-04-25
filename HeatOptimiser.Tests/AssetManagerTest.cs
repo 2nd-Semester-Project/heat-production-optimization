@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Xunit;
 
 namespace HeatOptimiser.Tests
@@ -12,7 +13,7 @@ namespace HeatOptimiser.Tests
 
             // Act
             assetManager.AddUnit("Asset Name", "Asset Image", 100.5, 200.0, 300.0, 400.0, 500.0);
-            List<ProductionAsset> units = assetManager.GetAllUnits();
+            ObservableCollection<ProductionAsset> units = assetManager.GetAllUnits();
 
             // Assert
             Assert.NotNull(assetManager);

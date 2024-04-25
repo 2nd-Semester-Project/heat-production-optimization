@@ -30,14 +30,20 @@ public class OptimiserViewModel : ViewModelBase
 
     public void Optimise(DateTime start, DateTime end )//also add which category to optimise from later
         {
-            Schedule schedule = optimiser.Optimise(start, end);
-            Console.WriteLine("Optimised Schedule:");
-            foreach (var hour in schedule.schedule)
-            {
-                Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
-            }
-                }
-            //return schedule;
+            Console.WriteLine("Testing");
+            SourceDataManager sdm = new();
+        AssetManager am = new();
+        am.AddUnit("GB", "none", 5.0, 0, 1.1, 500, 215);
+        am.AddUnit("OB", "none", 4.0, 0, 1.2, 700, 265);
+        Optimiser optimiser = new(sdm, am);
+        Schedule optimisedData = optimiser.Optimise(start, end);
+        Console.WriteLine(StartingDate);
+        Console.WriteLine("Optimised Schedule:");
+        foreach (var hour in optimisedData.schedule)
+        {
+            Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
+        }
+        }
             
         
         
@@ -49,6 +55,6 @@ public class OptimiserViewModel : ViewModelBase
 
     public OptimiserViewModel()
     {
-        //OptimiseCommand=ReactiveCommand.Create(()=> Optimise(StartingDate,EndingDate)); needs to be fixed
+        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(StartingDate,EndingDate)); 
     }
 }

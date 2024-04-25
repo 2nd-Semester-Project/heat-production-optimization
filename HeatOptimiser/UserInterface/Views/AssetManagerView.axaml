@@ -54,7 +54,7 @@
                 <StackPanel Orientation="Vertical" Background="#a11d33" Spacing="10">
                   <StackPanel Margin="5" Orientation="Horizontal">
                     <TextBlock FontSize="20" Text="{Binding Name}" Margin="10"/>
-                    <CheckBox HorizontalAlignment="Right"/>
+                    <CheckBox HorizontalAlignment="Right" IsChecked="{Binding IsSelected}"/>
                     </StackPanel>
                     
                     <StackPanel Margin="5,5,5,5" Orientation="Horizontal">

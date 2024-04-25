@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace HeatOptimiser
 {
@@ -9,15 +10,15 @@ namespace HeatOptimiser
         void EditUnit(Guid ID, int index, string stringValue);
         void EditUnit(Guid ID, int index, double doubleValue);
         void DeleteUnit(Guid ID);
-        void SaveUnits(List<ProductionAsset> AllAssets, string fileName);
-        List<ProductionAsset> LoadUnits(string fileName);
-        List<ProductionAsset> GetAllUnits();
-        List<ProductionAsset> SearchUnits(string name);
+        void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName);
+        ObservableCollection<ProductionAsset> LoadUnits(string fileName);
+        ObservableCollection<ProductionAsset> GetAllUnits();
+        ObservableCollection<ProductionAsset> SearchUnits(string name);
         void SetSaveFile(string fileName);
     }
     public interface IAssetStorage
     {
-        void SaveUnits(List<ProductionAsset> AllAssets, string fileName);
-        List<ProductionAsset> LoadUnits(string fileName);
+        void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName);
+        ObservableCollection<ProductionAsset> LoadUnits(string fileName);
     }
 }

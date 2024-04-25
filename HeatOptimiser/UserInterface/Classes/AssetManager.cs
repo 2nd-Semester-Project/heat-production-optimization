@@ -6,10 +6,11 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using ReactiveUI;
 using System.Reactive;
+using UserInterface.ViewModels;
 
 namespace HeatOptimiser
 {
-    public class ProductionAsset
+    public class ProductionAsset : ViewModelBase 
     {
         public Guid ID { get; } = Guid.NewGuid();
         private string? _name;
@@ -60,11 +61,17 @@ namespace HeatOptimiser
             get { return _carbonDioxide; }
             set { _carbonDioxide = value; }
         }
+        public bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => this.RaiseAndSetIfChanged(ref _isSelected, value);
+        }
     }
     public class AssetManager: IAssetManager
     {
         public string saveFileName = "ProductionAssets.json"; 
-        public List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
+        public ObservableCollection<ProductionAsset> _productionAssets = new ObservableCollection<ProductionAsset>();
         private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
         public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {
@@ -78,7 +85,8 @@ namespace HeatOptimiser
                     Electricity = electricity,
                     Energy = energy,
                     Cost = cost,
-                    CarbonDioxide = carbonDioxide
+                    CarbonDioxide = carbonDioxide,
+                    IsSelected = false
                 });
                 _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is up for debate, I just want to auto save, and they likely wont have thousands of production units, that could cause a performance issue.
             }
@@ -89,7 +97,7 @@ namespace HeatOptimiser
         }
         public void DeleteUnit(Guid ID)
         {
-            _productionAssets.Remove(_productionAssets.Find(x => x.ID == ID)!);
+            _productionAssets.Remove(_productionAssets.FirstOrDefault(x => x.ID == ID)!);
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
         public void EditUnit(Guid ID, int index, string stringValue)
@@ -97,10 +105,10 @@ namespace HeatOptimiser
             switch (index)
             {
                 case 0:
-                    _productionAssets.Find(x => x.ID == ID)!.Name = stringValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Name = stringValue;
                     break;
                 case 1:
-                    _productionAssets.Find(x => x.ID == ID)!.Image = stringValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Image = stringValue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
@@ -112,41 +120,43 @@ namespace HeatOptimiser
             switch (index)
             {
                 case 2:
-                    _productionAssets.Find(x => x.ID == ID)!.Heat = doubleValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Heat = doubleValue;
                     break;
                 case 3:
-                    _productionAssets.Find(x => x.ID == ID)!.Electricity = doubleValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Electricity = doubleValue;
                     break;
                 case 4:
-                    _productionAssets.Find(x => x.ID == ID)!.Energy = doubleValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Energy = doubleValue;
                     break;
                 case 5:
-                    _productionAssets.Find(x => x.ID == ID)!.Cost = doubleValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.Cost = doubleValue;
                     break;
                 case 6:
-                    _productionAssets.Find(x => x.ID == ID)!.CarbonDioxide = doubleValue;
+                    _productionAssets.FirstOrDefault(x => x.ID == ID)!.CarbonDioxide = doubleValue;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("Index out of range or wrong type used");
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public List<ProductionAsset> GetAllUnits()
+        public ObservableCollection<ProductionAsset> GetAllUnits()
         {
             return _productionAssets;
         }
-        public List<ProductionAsset> LoadUnits(string fileName)
+        public ObservableCollection<ProductionAsset> LoadUnits(string fileName)
         {
             _productionAssets = _jsonAssetStorage.LoadUnits(fileName);
             return _productionAssets;
         }
-        public void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
+        public void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName)
         {
             _jsonAssetStorage.SaveUnits(AllAssets, fileName);
         }
-        public List<ProductionAsset> SearchUnits(string name)
+        public ObservableCollection<ProductionAsset> SearchUnits(string name)
         {
-            return _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
+            var selection = _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
+            ObservableCollection<ProductionAsset> selected = [.. selection];
+            return selected;
         }
         public void SetSaveFile(string fileName)
         {
@@ -155,14 +165,14 @@ namespace HeatOptimiser
     }
     public class JsonAssetStorage: IAssetStorage
     {
-        public List<ProductionAsset> LoadUnits(string fileName)
+        public ObservableCollection<ProductionAsset> LoadUnits(string fileName)
         {
             if (File.Exists(fileName) && new FileInfo(fileName).Length > 2)
             {
                 string jsonString = File.ReadAllText(fileName);
                 try
                 {
-                    var info = JsonSerializer.Deserialize<List<ProductionAsset>>(jsonString)!;
+                    var info = JsonSerializer.Deserialize<ObservableCollection<ProductionAsset>>(jsonString)!;
                     return info;
                 }
                 catch (JsonException e)
@@ -172,10 +182,10 @@ namespace HeatOptimiser
             }
             else
             {
-                return new List<ProductionAsset>();
+                return new ObservableCollection<ProductionAsset>();
             }
         }
-        public void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
+        public void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName)
         {
             string jsonString = JsonSerializer.Serialize(AllAssets);
             File.WriteAllText(fileName, jsonString);

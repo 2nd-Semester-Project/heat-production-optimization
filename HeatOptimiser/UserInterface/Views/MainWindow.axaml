@@ -22,26 +22,36 @@
                 PaneBackground="#a11d33"
                 Background="#cccccc">
         <SplitView.Pane>
-            <StackPanel Spacing="15"
-                        Margin="20">
-                <Button Height="40" Width="50" Command="{Binding PaneCommand}" Background="#85182a">
+            <StackPanel Spacing="15" Margin="20">
+                <Button Height="40" 
+                        Width="50" 
+                        Command="{Binding PaneCommand}" 
+                        Background="#85182a">
                     <PathIcon Data="{StaticResource line_horizontal_3_regular}"/>
-                    </Button>
-                <Button Height="40" Width="{Binding ButtonWidth}" Command="{Binding OpenHomepageCommand}">  <!--Command Binding is still missing, no view yet-->
-                    <TextBlock Text="Home" Opacity="{Binding ButtonTextOpacity}"/>
-                    </Button>
-                <Button HorizontalAlignment="Left" Command="{Binding OpenAssetManagerCommand}" Height="40" Width="{Binding ButtonWidth}">
-                <TextBlock Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
-                <Button Command="{Binding OpenOptimiserCommand}" Height="40" Width="{Binding ButtonWidth}">
+                <Button Height="40" 
+                        Width="{Binding ButtonWidth}" 
+                        Command="{Binding OpenHomepageCommand}">  
+                    <TextBlock Text="Home" Opacity="{Binding ButtonTextOpacity}"/>
+                </Button>
+                <Button Command="{Binding OpenAssetManagerCommand}" 
+                        Height="40" 
+                        Width="{Binding ButtonWidth}">
+                    <TextBlock Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
+                </Button>
+                <Button Command="{Binding OpenOptimiserCommand}" 
+                        Height="40" 
+                        Width="{Binding ButtonWidth}">
                     <TextBlock Text="Optimiser" Opacity="{Binding ButtonTextOpacity}"/>
-                    </Button>
-                <Button Height="40" Width="{Binding ButtonWidth}" Command="{Binding OpenResultsCommand}">  <!--Command Binding is still missing, no view yet-->
+                </Button>
+                <Button Command="{Binding OpenResultsCommand}"
+                        Height="40" 
+                        Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
                     <TextBlock Text="Results" Opacity="{Binding ButtonTextOpacity}"/>
-                    </Button>
+                </Button>
                 <Button Height="40" Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
                     <TextBlock Text="Reports and Schedules" Opacity="{Binding ButtonTextOpacity}"/>
-                    </Button>
+                </Button>
             </StackPanel>
 
 

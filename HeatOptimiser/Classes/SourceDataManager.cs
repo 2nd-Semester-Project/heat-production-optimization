@@ -14,15 +14,14 @@ namespace HeatOptimiser
         public List<SourceDataPoint> SummerData;
         public List<SourceDataPoint> WinterData;
         public SourceData(){
-            SourceDataManager sourceManager = new SourceDataManager();
-            SummerData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
-            WinterData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
+            SummerData = SourceDataManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
+            WinterData = SourceDataManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
         }
     }
-    public class SourceDataManager : ISourceDataManager
+    public static class SourceDataManager
     {
         // Example usage: List<SourceDataPoint> SourceList = SourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2); Columns and Rows start with 1!!!!
-        public List<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
+        public static List<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
         {
             var sourceList = new List<SourceDataPoint>();
 
@@ -67,7 +66,7 @@ namespace HeatOptimiser
 
             return sourceList; 
         }
-        public List<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
+        public static List<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
         {
             DateTime winterEnd = DateTime.ParseExact("31/03/2023", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
             bool rangeExists = false;

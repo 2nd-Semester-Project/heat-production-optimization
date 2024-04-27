@@ -27,24 +27,16 @@ namespace HeatOptimiser
         public List<ProductionAsset>? Assets { get; set; }
         public List<double>? Demands { get; set; }
     }
-    public class Optimiser: IOptimiserModule
+    public static class Optimiser
     {
-        private ISourceDataManager sd;
-        private IAssetManager am;
-        public Optimiser(ISourceDataManager sourceDataManager, IAssetManager assetManager)
-        {
-            sd = sourceDataManager;
-            am = assetManager;
-        }
-
-        public Schedule Optimise(DateTime startDate, DateTime endDate)
+        public static Schedule Optimise(DateTime startDate, DateTime endDate)
         {
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
-            ProductionAsset gasBoiler = am.SearchUnits("GB")[0];
-            ProductionAsset oilBoiler = am.SearchUnits("OB")[0];
+            ProductionAsset gasBoiler = AssetManager.SearchUnits("GB")[0];
+            ProductionAsset oilBoiler = AssetManager.SearchUnits("OB")[0];
 
-            foreach (SourceDataPoint hour in sd.GetDataInRange(data, startDate, endDate))
+            foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
             {
                 if (hour.HeatDemand <= gasBoiler.Heat)
                 {

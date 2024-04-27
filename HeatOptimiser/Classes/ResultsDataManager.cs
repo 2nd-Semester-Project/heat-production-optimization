@@ -5,16 +5,10 @@ using CsvHelper.Configuration;
 
 namespace HeatOptimiser
 {
-    public class ResultsDataManager : IResultsDataManager
+    public static class ResultsDataManager
     {
-        private string filePath;
-        private AssetManager am;
-        public ResultsDataManager(string passedFilePath, AssetManager assetManager)
-        {
-            filePath = passedFilePath;
-            am = assetManager;
-        }
-        public void Save(Schedule schedule)
+        public static string filePath;
+        public static void Save(Schedule schedule)
         {
             var csv = new StringBuilder();
             foreach (ScheduleHour hour in schedule.schedule)
@@ -53,15 +47,15 @@ namespace HeatOptimiser
             }
             File.WriteAllText(filePath, csv.ToString());
         }
-        public void Remove(DateOnly dateFrom, DateOnly dateTo)
+        public static void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
             List<string> lines = File.ReadAllLines(filePath).ToList();
             List<int> removableIndexes = new List<int>();
             int counter = 0;
             foreach (string line in lines)
             {
-                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
-                    DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
+                if (DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00")) ||
+                    DateTime.ParseExact(line.Split(',')[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("23:00")))
                 {
                     removableIndexes.Add(counter);
                 }
@@ -78,7 +72,7 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
-        public Schedule Load(DateOnly dateFrom, DateOnly dateTo)
+        public static Schedule Load(DateOnly dateFrom, DateOnly dateTo)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
@@ -99,17 +93,17 @@ namespace HeatOptimiser
                 {
                     line.Add(value);
                 }
-                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
+                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
                     reading = !reading;
                 if(reading)
                 {
-                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH.mm", CultureInfo.InvariantCulture);
+                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
                 
                     List<ProductionAsset> assets = [];
                     List<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        var unit = am.GetAllUnits().Find(x => x.ID.ToString() == assetID);
+                        var unit = AssetManager.GetAllUnits().Find(x => x.ID.ToString() == assetID);
                         if (unit != null)
                         {
                             assets.Add(unit);

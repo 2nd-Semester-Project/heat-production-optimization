@@ -54,12 +54,12 @@ namespace HeatOptimiser
             set { _carbonDioxide = value; }
         }
     }
-    public class AssetManager: IAssetManager
+    public static class AssetManager
     {
-        public string saveFileName = "ProductionAssets.json";
-        private List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
-        private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
-        public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
+        public static string saveFileName = "ProductionAssets.json";
+        private static List<ProductionAsset> _productionAssets = new List<ProductionAsset>();
+        private static JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
+        public static void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {
             if (name != null && image != null && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(image))
             {
@@ -80,12 +80,12 @@ namespace HeatOptimiser
                 throw new ArgumentNullException("Name and Image cannot be null");
             }
         }
-        public void DeleteUnit(Guid ID)
+        public static void DeleteUnit(Guid ID)
         {
             _productionAssets.Remove(_productionAssets.Find(x => x.ID == ID)!);
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public void EditUnit(Guid ID, int index, string stringValue)
+        public static void EditUnit(Guid ID, int index, string stringValue)
         {
             switch (index)
             {
@@ -100,7 +100,7 @@ namespace HeatOptimiser
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public void EditUnit(Guid ID, int index, double doubleValue)
+        public static void EditUnit(Guid ID, int index, double doubleValue)
         {
             switch (index)
             {
@@ -124,24 +124,24 @@ namespace HeatOptimiser
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public List<ProductionAsset> GetAllUnits()
+        public static List<ProductionAsset> GetAllUnits()
         {
             return _productionAssets;
         }
-        public List<ProductionAsset> LoadUnits(string fileName)
+        public static List<ProductionAsset> LoadUnits(string fileName)
         {
             _productionAssets = _jsonAssetStorage.LoadUnits(fileName);
             return _productionAssets;
         }
-        public void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
+        public static void SaveUnits(List<ProductionAsset> AllAssets, string fileName)
         {
             _jsonAssetStorage.SaveUnits(AllAssets, fileName);
         }
-        public List<ProductionAsset> SearchUnits(string name)
+        public static List<ProductionAsset> SearchUnits(string name)
         {
             return _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
         }
-        public void SetSaveFile(string fileName)
+        public static void SetSaveFile(string fileName)
         {
             saveFileName = fileName;
         }

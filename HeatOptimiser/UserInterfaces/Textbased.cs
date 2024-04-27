@@ -1,13 +1,7 @@
 namespace HeatOptimiser
 {
     public class TextBasedUI
-    {
-        private readonly SourceDataManager sourceDataManager;
-        private readonly Optimiser optimiser;
-        private readonly SourceData sourceData;
-        public AssetManager assetManager;
-        private readonly ResultsDataManager resultsDataManager;
-        private readonly string filePath = "your_file_path.csv";
+    {private readonly string filePath = "your_file_path.csv";
         private DateTime startDate = DateTime.MinValue;
         private DateTime endDate = DateTime.MinValue;
         private Schedule? schedule;
@@ -16,12 +10,6 @@ namespace HeatOptimiser
         public TextBasedUI()
         {
             this.filePath = string.IsNullOrWhiteSpace(filePath) ? "default_file_path.csv" : filePath;
-            sourceDataManager = new SourceDataManager();
-            sourceData = new SourceData();
-            assetManager = new AssetManager();
-            optimiser = new Optimiser(sourceDataManager, assetManager);
-            resultsDataManager = new ResultsDataManager(filePath, assetManager);
-            
         }
         public void Interface()
         {
@@ -86,7 +74,7 @@ namespace HeatOptimiser
                         {
                             Console.WriteLine("Invalid input. Please enter a valid number for carbon dioxide:");
                         }
-                        assetManager.AddUnit(name, image, heat, electricity, energy, cost, carbonDioxide);
+                        AssetManager.AddUnit(name, image, heat, electricity, energy, cost, carbonDioxide);
                     }
                     else
                     {
@@ -116,7 +104,7 @@ namespace HeatOptimiser
                         {
                             if(index >= 0 && index <= 1)
                             {
-                                assetManager.EditUnit(id , index , value!);
+                                AssetManager.EditUnit(id , index , value!);
                             }
                             else if (index >=2 && index <= 6)
                             {
@@ -126,7 +114,7 @@ namespace HeatOptimiser
                                      Console.WriteLine("Invalid input. Please enter a valid number:");
                                      value = Console.ReadLine();
                                 }
-                                 assetManager.EditUnit(id, index, doubleValue);
+                                 AssetManager.EditUnit(id, index, doubleValue);
                             }
                         }
                         catch (Exception ex)
@@ -144,7 +132,7 @@ namespace HeatOptimiser
                         }
                         try
                         {
-                            assetManager.DeleteUnit(deleteId);
+                            AssetManager.DeleteUnit(deleteId);
                              Console.WriteLine("Unit deleted successfully.");
                         }
                         catch(Exception ex)
@@ -159,7 +147,7 @@ namespace HeatOptimiser
                     string? fileName = Console.ReadLine();
                     try
                     {
-                        assetManager.SaveUnits(assetManager.GetAllUnits(), fileName!);
+                        AssetManager.SaveUnits(AssetManager.GetAllUnits(), fileName!);
                         Console.WriteLine("Units saved successfully.");
                     }
                     catch (Exception ex)
@@ -179,7 +167,7 @@ namespace HeatOptimiser
                         {
                             Console.WriteLine("Invalid input. Please enter a valid date (dd/MM/yyyy):");
                         }
-                        schedule = optimiser.Optimise(startDate, endDate);
+                        schedule = Optimiser.Optimise(startDate, endDate);
                         DisplaySchedule(schedule);
                         break;
                     case "6":
@@ -188,9 +176,9 @@ namespace HeatOptimiser
                     {
                         Console.WriteLine("Enter file name to save results:");
                         string userFileName = Console.ReadLine()!;
-                        Schedule optimizedSchedule = optimiser.Optimise(startDate, endDate);
+                        Schedule optimizedSchedule = Optimiser.Optimise(startDate, endDate);
                         string resultFileName = $"results_{startDate:yyyyMMdd}_{endDate:yyyyMMdd}.csv";
-                        resultsDataManager.Save(optimizedSchedule);
+                        ResultsDataManager.Save(optimizedSchedule);
                         Console.WriteLine($"Data results saved successfully to '{resultFileName}'.");
                     }
                     catch(Exception ex)
@@ -211,7 +199,7 @@ namespace HeatOptimiser
                             Console.WriteLine("Enter end date (dd/MM/yyyy):");
                             DateOnly endDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
 
-                            Schedule loadedSchedule = resultsDataManager.Load(startDate, endDate);
+                            Schedule loadedSchedule = ResultsDataManager.Load(startDate, endDate);
 
                             DisplaySchedule(loadedSchedule);
                             Console.WriteLine("Data results loaded successfully");
@@ -232,7 +220,7 @@ namespace HeatOptimiser
                             Console.WriteLine("Enter end date (dd/MM/yyyy):");
                             DateOnly endDate = DateOnly.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
 
-                            resultsDataManager.Remove(startDate, endDate);
+                            ResultsDataManager.Remove(startDate, endDate);
                              Console.WriteLine("Data results removed successfully");
                         }
                          catch (Exception ex)

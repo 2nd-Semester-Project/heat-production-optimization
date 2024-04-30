@@ -1,4 +1,3 @@
-<<<<<<< HEAD:HeatOptimiser/UserInterface/Classes/Optimiser.cs
 using System.Security.Cryptography;
 using System;
 using System.Text.Json;
@@ -7,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 
-=======
->>>>>>> main:HeatOptimiser/Classes/Optimiser.cs
 namespace HeatOptimiser
 {
     public class Schedule

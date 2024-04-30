@@ -115,7 +115,7 @@ namespace HeatOptimiser
                     ObservableCollection<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        var unit = am.GetAllUnits().Find(x => x.ID.ToString() == assetID);
+                        var unit = am.GetAllUnits().FirstOrDefault(x => x.ID.ToString() == assetID);
                         if (unit != null)
                         {
                             assets.Add(unit);

@@ -8,13 +8,13 @@
              x:Class="UserInterface.Views.ResultsView">
 
     <Grid>
-        <oxy:Plot Width="400" Height="300" Model="{Binding PlotModel}">
+        <!-- <oxy:Plot Width="400" Height="300" Model="{Binding PlotModel}">
             <oxy:Plot.Series>
                 <oxy:LineSeries ItemsSource="{Binding Results.EnergySavings}"
                                 DataFieldX="Time"
                                 DataFieldY="Value"
                                 Title="Energy Savings" />
             </oxy:Plot.Series>
-        </oxy:Plot>
+        </oxy:Plot> -->
     </Grid>
 </UserControl>

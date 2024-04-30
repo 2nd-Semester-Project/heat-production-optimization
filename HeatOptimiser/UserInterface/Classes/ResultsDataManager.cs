@@ -1,7 +1,11 @@
 using System.Text;
+using System.IO;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace HeatOptimiser
 {
@@ -51,6 +55,7 @@ namespace HeatOptimiser
                 newLine += $"{producedElectricity}, {consumedElectricity}, {productionCosts}, {energyConsumption}, {producedCarbonDioxide}";
                 csv.AppendLine(newLine);
             }
+
             File.WriteAllText(filePath, csv.ToString());
         }
         public void Remove(DateOnly dateFrom, DateOnly dateTo)

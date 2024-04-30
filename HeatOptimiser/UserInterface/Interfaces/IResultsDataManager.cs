@@ -1,3 +1,5 @@
+using System;
+
 namespace HeatOptimiser
 {
     public interface IResultsDataManager

@@ -3,18 +3,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:UserInterface.ViewModels.ResultsViewModel"
-             xmlns:views="clr-namespace:UserInterface.ViewModels" 
+             xmlns:lvc="clr-namespace:LiveCharts.Avalonia;assembly=LiveCharts.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UserInterface.Views.ResultsView">
 
     <Grid>
-        <!-- <oxy:Plot Width="400" Height="300" Model="{Binding PlotModel}">
-            <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Results.EnergySavings}"
-                                DataFieldX="Time"
-                                DataFieldY="Value"
+        <lvc:CartesianChart Width="400" Height="300" Series="{Binding SeriesCollection}">
+            <lvc:CartesianChart.Series>
+                <lvc:LineSeries Values="{Binding Results.EnergySavings}"
                                 Title="Energy Savings" />
-            </oxy:Plot.Series>
-        </oxy:Plot> -->
+            </lvc:CartesianChart.Series>
+        </lvc:CartesianChart>
     </Grid>
 </UserControl>

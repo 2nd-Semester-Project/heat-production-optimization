@@ -10,6 +10,7 @@ namespace UserInterface.ViewModels;
 
 public class ResultsViewModel : ViewModelBase
 {
+    
     public ISeries[] Series { get; set; } = new ISeries[]
     {
         new LineSeries<double>

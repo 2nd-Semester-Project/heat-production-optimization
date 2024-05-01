@@ -1,22 +1,26 @@
-
 using System;
 using System.Collections.Generic;
 
 namespace HeatOptimiser
 {
 
-public class DataPoint
-    {
-        public DateTime Time { get; set; }
-        public double Value { get; set; }
-    }
+    // public class DataVisualizer
+    // {
 
-    public class OptimizationResult
-    {
-        public List<DataPoint> EnergySavings { get; set; } = new List<DataPoint>();
-        public List<DataPoint> CostEfficiencies { get; set; } = new List<DataPoint>();
-        public List<DataPoint> CarbonReductions { get; set; } = new List<DataPoint>();
-    }
+    //     private ResultsDataManager resultsDataManager;
 
+    //     public void SetResultsDataManager(ResultsDataManager resultsDataManager)
+    //     {
+    //         this.resultsDataManager = resultsDataManager;
+    //     }
+
+    //     public void AccessResults()
+    //     {
+    //         // Now you can access filePath and am using the resultsDataManager instance
+    //         string filePath = resultsDataManager.passedFilePath;
+    //         AssetManager am = resultsDataManager.am;
+
+    //         // Use filePath and am as needed
+    //     }
+    // }
 }
-

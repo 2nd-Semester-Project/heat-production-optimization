@@ -19,12 +19,14 @@ public class ResultsViewModel : ViewModelBase
     private readonly Random _random = new();
     private readonly ObservableCollection<ObservableValue> WinterHeatDemandData;
     public ObservableCollection<ISeries> Series { get; set; }
-    
+
+    private readonly ObservableCollection<ObservableValue> SummerHeatDemandData;
 
     public ResultsViewModel()
     {
         // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
         WinterHeatDemandData = new ObservableCollection<ObservableValue>();
+        SummerHeatDemandData = new ObservableCollection<ObservableValue>();
 
         foreach (var point in dataVisualizer.sourceData.WinterData)
         {
@@ -34,15 +36,29 @@ public class ResultsViewModel : ViewModelBase
             }
         }
 
+        foreach (var point in dataVisualizer.sourceData.SummerData)
+        {
+            if (point.HeatDemand.HasValue)
+            {
+                SummerHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+            }
+        }
 
         Series = new ObservableCollection<ISeries>
+    {
+        new LineSeries<ObservableValue>
         {
-            new LineSeries<ObservableValue>
-            {
-                Values = WinterHeatDemandData,
-                Fill = null
-            }
-        };
+            Values = WinterHeatDemandData,
+            Fill = null
+        },
+        // new LineSeries<ObservableValue>
+        // {
+        //     Values = SummerHeatDemandData,
+        //     Fill = null
+        // }
+    };
     }
 }
+
+
 

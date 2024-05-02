@@ -9,8 +9,10 @@
              x:DataType="vm:ResultsViewModel"> 
 
     <lvc:CartesianChart 
-    Series="{Binding Series}
-    Y Axes="{Binding YAxes}"
-    X Axes="{Binding XAxes}"    
-    "/>
+    Series="{Binding Series}"
+    
+    />
 </UserControl>
+<!-- 
+YAxes="{Binding YAxes}"
+    XAxes="{Binding XAxes}" -->

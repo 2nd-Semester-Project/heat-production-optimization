@@ -24,61 +24,72 @@ public class HomepageViewModel : ViewModelBase
 
     private readonly DataVisualizer dataVisualizer = new DataVisualizer();
     private readonly Random _random = new();
-    private readonly ObservableCollection<ObservableValue> WinterHeatDemandData;
+    //private readonly ObservableCollection<ObservableValue> WinterHeatDemandData;
+    //private readonly ObservableCollection<ObservableValue> SummerHeatDemandData;
     public ObservableCollection<ISeries> WinterSeries { get; set; }
     public ObservableCollection<ISeries> SummerSeries { get; set; }
 
-    private readonly ObservableCollection<ObservableValue> SummerHeatDemandData;
+
 
     public HomepageViewModel()
     {
+        dataVisualizer = new DataVisualizer();
 
 
         // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-        WinterHeatDemandData = new ObservableCollection<ObservableValue>();
-        SummerHeatDemandData = new ObservableCollection<ObservableValue>();
+        // WinterHeatDemandData = new ObservableCollection<ObservableValue>();
+        // SummerHeatDemandData = new ObservableCollection<ObservableValue>();
 
-        foreach (var point in dataVisualizer.sourceData.WinterData)
-        {
-            if (point.HeatDemand.HasValue)
-            {
-                WinterHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
-            }
-        }
+        // foreach (var point in dataVisualizer.sourceData.WinterData)
+        // {
+        //     if (point.HeatDemand.HasValue)
+        //     {
+        //         WinterHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+        //     }
+        // }
 
-        foreach (var point in dataVisualizer.sourceData.SummerData)
+        // foreach (var point in dataVisualizer.sourceData.SummerData)
+        // {
+        //     if (point.HeatDemand.HasValue)
+        //     {
+        //         SummerHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+        //     }
+        // }
+
+        // WinterSeries = new ObservableCollection<ISeries>
+        // {
+        //     new LineSeries<ObservableValue>
+        //     {
+        //         Values = WinterHeatDemandData,
+        //         Fill = null,
+        //         GeometryStroke = null,
+        //         GeometryFill = null,
+        //         LineSmoothness = 1 ,
+        //     },
+        // };
+        SummerSeries = new ObservableCollection<ISeries>
         {
-            if (point.HeatDemand.HasValue)
+            new LineSeries<DateTimePoint>
             {
-                SummerHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+                Values = new ObservableCollection<DateTimePoint>(dataVisualizer.SummerHeatDemandData),
+                // Fill = null,
+                // GeometryStroke = null,
+                // GeometryFill = null,
+                // LineSmoothness = 1
             }
-        }
+        };
 
         WinterSeries = new ObservableCollection<ISeries>
         {
-            new LineSeries<ObservableValue>
+            new LineSeries<DateTimePoint>
             {
-                Values = WinterHeatDemandData,
-                Fill = null,
-                GeometryStroke = null,
-                GeometryFill = null,
-                LineSmoothness = 1 ,
-            },
-        };
-
-        SummerSeries = new ObservableCollection<ISeries>
-        {
-            new LineSeries<ObservableValue>
-            {
-                Values = SummerHeatDemandData,
-                Fill = null,
-                GeometryStroke = null,
-                GeometryFill = null,
-                LineSmoothness = 1 ,
+                Values = new ObservableCollection<DateTimePoint>(dataVisualizer.WinterHeatDemandData),
+                // Fill = null,
+                // GeometryStroke = null,
+                // GeometryFill = null,
+                // LineSmoothness = 1
             }
         };
-
-
 
         AssetCount = assetManager.LoadUnits(assetManager.saveFileName).Count;
     }

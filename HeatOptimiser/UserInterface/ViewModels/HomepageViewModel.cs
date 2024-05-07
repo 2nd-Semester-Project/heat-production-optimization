@@ -61,6 +61,7 @@ public class HomepageViewModel : ViewModelBase
             new LineSeries<DateTimePoint>
             {
                 Values = WinterHeatDemandData,
+                Name = "Winter Heat Demand (MWh)",
                 Fill = null,
                 GeometryStroke = null,
                 GeometryFill = null,
@@ -73,6 +74,7 @@ public class HomepageViewModel : ViewModelBase
             new LineSeries<DateTimePoint>
             {
                 Values = SummerHeatDemandData,
+                Name = "Summer Heat Demand (MWh)",
                 Fill = null,
                 GeometryStroke = null,
                 GeometryFill = null,

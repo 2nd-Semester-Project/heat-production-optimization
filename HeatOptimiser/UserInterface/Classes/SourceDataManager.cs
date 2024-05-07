@@ -20,8 +20,8 @@ namespace HeatOptimiser
         public List<SourceDataPoint> WinterData;
         public SourceData(){
             SourceDataManager sourceManager = new SourceDataManager();
-            SummerData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
-            WinterData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
+            SummerData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
+            WinterData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
         }
     }
     public class SourceDataManager : ISourceDataManager

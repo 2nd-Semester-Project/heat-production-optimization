@@ -16,23 +16,22 @@ namespace UserInterface.ViewModels;
 public class ResultsViewModel : ViewModelBase
 {
     private readonly DataVisualizer dataVisualizer = new DataVisualizer();
-    private readonly Random _random = new();
-    private readonly ObservableCollection<ObservableValue> WinterHeatDemandData;
+    private readonly ObservableCollection<DateTimePoint> WinterHeatDemandData;
     public ObservableCollection<ISeries> Series { get; set; }
 
-    private readonly ObservableCollection<ObservableValue> SummerHeatDemandData;
+    private readonly ObservableCollection<DateTimePoint> SummerHeatDemandData;
 
     public ResultsViewModel()
     {
         // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-        WinterHeatDemandData = new ObservableCollection<ObservableValue>();
-        SummerHeatDemandData = new ObservableCollection<ObservableValue>();
+        WinterHeatDemandData = new ObservableCollection<DateTimePoint>();
+        SummerHeatDemandData = new ObservableCollection<DateTimePoint>();
 
         foreach (var point in dataVisualizer.sourceData.WinterData)
         {
             if (point.HeatDemand.HasValue)
             {
-                WinterHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+                WinterHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
             }
         }
 
@@ -40,16 +39,20 @@ public class ResultsViewModel : ViewModelBase
         {
             if (point.HeatDemand.HasValue)
             {
-                SummerHeatDemandData.Add(new ObservableValue(point.HeatDemand.Value));
+                SummerHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
             }
         }
 
         Series = new ObservableCollection<ISeries>
     {
-        new LineSeries<ObservableValue>
+        new LineSeries<DateTimePoint>
         {
             Values = WinterHeatDemandData,
-            Fill = null
+            Name = "Heat Demand",
+            Fill = null,
+            GeometryStroke = null,
+            GeometryFill = null,
+            LineSmoothness = 1
         },
         // new LineSeries<ObservableValue>
         // {
@@ -57,7 +60,13 @@ public class ResultsViewModel : ViewModelBase
         //     Fill = null
         // }
     };
+    
+    
     }
+    public Axis[] XAxes { get; set; } =
+    {
+        new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMMM dd HH:mm"))
+    };
 }
 
 

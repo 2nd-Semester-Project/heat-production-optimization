@@ -9,7 +9,11 @@
              x:DataType="vm:ResultsViewModel"> 
 
     <lvc:CartesianChart 
+    Grid.Column="1"
+    Grid.Row="1"
     Series="{Binding Series}"
+    XAxes="{Binding XAxes}"
+    ZoomMode="X"
     />
     <!-- <lvc:CartesianChart
     Series="{Binding Series}"

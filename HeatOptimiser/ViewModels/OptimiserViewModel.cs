@@ -26,8 +26,6 @@ public class OptimiserViewModel : ViewModelBase
     public void Optimise(DateTime start, DateTime end )//also add which category to optimise from later
     {
         Console.WriteLine("Testing");
-        // AssetManager.AddUnit("GB", "none", 5.0, 0, 1.1, 500, 215);
-        // AssetManager.AddUnit("OB", "none", 4.0, 0, 1.2, 700, 265);
         Schedule optimisedData = Optimiser.Optimise(start, end);
         Console.WriteLine(StartingDate);
         Console.WriteLine("Optimised Schedule:");

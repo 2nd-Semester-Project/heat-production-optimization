@@ -44,7 +44,8 @@
     Grid.Column="1" 
     Grid.Row="1" 
     Series="{Binding WinterSeries}" 
-    Margin="20" 
+    Margin="20"
+    XAxes="{Binding XAxesSummer}" 
     ZoomMode="X" />
 
     <!-- SummerData chart below -->
@@ -53,6 +54,7 @@
     Grid.Row="2" 
     Series="{Binding SummerSeries}" 
     Margin="20" 
+    XAxes="{Binding XAxesWinter}" 
     ZoomMode="X"  
     />
 </Grid>

@@ -1,7 +1,12 @@
 using System.Text;
+using System.IO;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace HeatOptimiser
 {
@@ -51,6 +56,7 @@ namespace HeatOptimiser
                 newLine += $"{producedElectricity}, {consumedElectricity}, {productionCosts}, {energyConsumption}, {producedCarbonDioxide}";
                 csv.AppendLine(newLine);
             }
+
             File.WriteAllText(filePath, csv.ToString());
         }
         public void Remove(DateOnly dateFrom, DateOnly dateTo)
@@ -105,11 +111,11 @@ namespace HeatOptimiser
                 {
                     DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
                 
-                    List<ProductionAsset> assets = [];
-                    List<double> demands = [];
+                    ObservableCollection<ProductionAsset> assets = [];
+                    ObservableCollection<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        var unit = am.GetAllUnits().Find(x => x.ID.ToString() == assetID);
+                        var unit = am.GetAllUnits().FirstOrDefault(x => x.ID.ToString() == assetID);
                         if (unit != null)
                         {
                             assets.Add(unit);

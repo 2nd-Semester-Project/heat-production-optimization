@@ -1,3 +1,11 @@
+using System.Security.Cryptography;
+using System;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Collections.ObjectModel;
+
 namespace HeatOptimiser
 {
     public class Schedule
@@ -11,7 +19,7 @@ namespace HeatOptimiser
             endDate = end;
             schedule = [];
         }
-        public void AddHour(DateTime? dateTime, List<ProductionAsset> assets, List<double> demands)
+        public void AddHour(DateTime? dateTime, ObservableCollection<ProductionAsset> assets, ObservableCollection<double> demands)
         {
             schedule.Add(new ScheduleHour
             {
@@ -24,8 +32,8 @@ namespace HeatOptimiser
     public class ScheduleHour
     {
         public DateTime? Hour { get; set; }
-        public List<ProductionAsset>? Assets { get; set; }
-        public List<double>? Demands { get; set; }
+        public ObservableCollection<ProductionAsset>? Assets { get; set; }
+        public ObservableCollection<double>? Demands { get; set; }
     }
     public class Optimiser: IOptimiserModule
     {
@@ -42,7 +50,7 @@ namespace HeatOptimiser
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
 
-            List<ProductionAsset> assets = am.GetAllUnits();
+            ObservableCollection<ProductionAsset> assets = am.GetAllUnits();
 
             for (int i = 0; i < assets.Count; i++)
             {
@@ -59,8 +67,8 @@ namespace HeatOptimiser
             {
                 double producedHeat = 0;
                 int index = 0;
-                List<ProductionAsset> assetsUsed = [];
-                List<double> assetDemands = [];
+                ObservableCollection<ProductionAsset> assetsUsed = [];
+                ObservableCollection<double> assetDemands = [];
                 while (producedHeat < hour.HeatDemand)
                 {
                     assetsUsed.Add(assets[index]);
@@ -78,7 +86,7 @@ namespace HeatOptimiser
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
 
-            List<ProductionAsset> assets = am.GetAllUnits();
+            ObservableCollection<ProductionAsset> assets = am.GetAllUnits();
 
             Dictionary<ProductionAsset, double?> netCosts = new();
 
@@ -98,8 +106,8 @@ namespace HeatOptimiser
                 Dictionary<ProductionAsset, double?> sortedCosts = costs.OrderBy(x => x.Value).ToDictionary();
                 double producedHeat = 0;
                 int index = 0;
-                List<ProductionAsset> assetsUsed = [];
-                List<double> assetDemands = [];
+                ObservableCollection<ProductionAsset> assetsUsed = [];
+                ObservableCollection<double> assetDemands = [];
                 while (producedHeat < hour.HeatDemand)
                 {
                     assetsUsed.Add(sortedCosts.Keys.ToList()[index]);

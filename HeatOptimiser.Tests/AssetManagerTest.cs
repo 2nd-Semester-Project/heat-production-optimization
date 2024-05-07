@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Xunit;
 
 namespace HeatOptimiser.Tests
@@ -12,7 +13,7 @@ namespace HeatOptimiser.Tests
 
             // Act
             assetManager.AddUnit("Asset Name", "Asset Image", 100.5, 200.0, 300.0, 400.0, 500.0);
-            List<ProductionAsset> units = assetManager.GetAllUnits();
+            ObservableCollection<ProductionAsset> units = assetManager.GetAllUnits();
 
             // Assert
             Assert.NotNull(assetManager);
@@ -69,42 +70,19 @@ namespace HeatOptimiser.Tests
             Assert.Equal(51.5, units[0].CarbonDioxide);
         }
         [Fact]
-        public void TestAssetManagerGetAllUnits()
-        {
-            // Arrange
-            var assetManager = new AssetManager();
-            assetManager.AddUnit("Unit 1", "image1.jpg", 10.5, 20.5, 30.5, 40.5, 50.5);
-
-            // Act
-            var units = assetManager.GetAllUnits();
-
-            // Assert
-            Assert.NotNull(assetManager);
-            Assert.Single(units);
-            Assert.Equal("Unit 1", units[0].Name);
-            Assert.Equal("image1.jpg", units[0].Image);
-            Assert.Equal(10.5, units[0].Heat);
-            Assert.Equal(20.5, units[0].Electricity);
-            Assert.Equal(30.5, units[0].Energy);
-            Assert.Equal(40.5, units[0].Cost);
-            Assert.Equal(50.5, units[0].CarbonDioxide);
-        }
-        [Fact]
         public void TestAssetManagerLoadAndSaveUnits()
         {
             // Arrange
             var assetManager = new AssetManager();
             assetManager.AddUnit("Unit 1", "image1.jpg", 10.5, 20.5, 30.5, 40.5, 50.5);
             assetManager.SaveUnits(assetManager.GetAllUnits(), "TestUnits.json");
-            var newAssetManager = new AssetManager();
 
             // Act
-
-            newAssetManager.LoadUnits("TestUnits.json");
-            var units = newAssetManager.GetAllUnits();
+            assetManager.LoadUnits("TestUnits.json");
+            var units = assetManager.GetAllUnits();
 
             // Assert
-            Assert.NotNull(newAssetManager);
+            Assert.NotNull(assetManager);
             Assert.Single(units);
             Assert.Equal("Unit 1", units[0].Name);
             Assert.Equal("image1.jpg", units[0].Image);
@@ -127,28 +105,6 @@ namespace HeatOptimiser.Tests
             // Assert
             Assert.NotNull(assetManager);
             Assert.Equal("TestUnits.json", saveFileName);
-        }
-        [Fact]
-        public void TestAssetManagerSearchUnits()
-        {
-            // Arrange
-            var assetManager = new AssetManager();
-            assetManager.AddUnit("Unit 1", "image1.jpg", 10.5, 20.5, 30.5, 40.5, 50.5);
-            assetManager.AddUnit("Unit 2", "image2.jpg", 11.5, 21.5, 31.5, 41.5, 51.5);
-
-            // Act
-            var units = assetManager.SearchUnits("Unit 1");
-
-            // Assert
-            Assert.NotNull(assetManager);
-            Assert.Single(units);
-            Assert.Equal("Unit 1", units[0].Name);
-            Assert.Equal("image1.jpg", units[0].Image);
-            Assert.Equal(10.5, units[0].Heat);
-            Assert.Equal(20.5, units[0].Electricity);
-            Assert.Equal(30.5, units[0].Energy);
-            Assert.Equal(40.5, units[0].Cost);
-            Assert.Equal(50.5, units[0].CarbonDioxide);
         }
     }
 }

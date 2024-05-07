@@ -1,5 +1,10 @@
 using OfficeOpenXml; // dotnet add package EPPlus
 using System.Globalization;
+using System;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace HeatOptimiser
 {
@@ -15,8 +20,8 @@ namespace HeatOptimiser
         public List<SourceDataPoint> WinterData;
         public SourceData(){
             SourceDataManager sourceManager = new SourceDataManager();
-            SummerData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
-            WinterData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
+            SummerData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
+            WinterData = sourceManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
         }
     }
     public class SourceDataManager : ISourceDataManager
@@ -92,7 +97,7 @@ namespace HeatOptimiser
                 foreach (SourceDataPoint point in dataCollection.GetRange(startIndex, dataCollection.Count - startIndex))
                 {
                     endIndex++;
-                    DateTime dt = (DateTime)point.TimeTo!;
+                    DateTime dt = (DateTime)point.TimeTo;
                     if (dt.Date > endDate.Date)
                     {
                         break;

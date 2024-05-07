@@ -35,58 +35,39 @@ namespace HeatOptimiser
         public ObservableCollection<ProductionAsset>? Assets { get; set; }
         public ObservableCollection<double>? Demands { get; set; }
     }
-    public class Optimiser: IOptimiserModule
+    public static class Optimiser
     {
-        private ISourceDataManager sd;
-        private IAssetManager am;
-        public Optimiser(ISourceDataManager sourceDataManager, IAssetManager assetManager)
-        {
-            sd = sourceDataManager;
-            am = assetManager;
-        }
-
-        public Schedule Optimise(DateTime startDate, DateTime endDate)
+        public static Schedule Optimise(DateTime startDate, DateTime endDate)
         {
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
+            ProductionAsset gasBoiler = AssetManager.SearchUnits("GB")[0];
+            ProductionAsset oilBoiler = AssetManager.SearchUnits("OB")[0];
 
-            ObservableCollection<ProductionAsset> assets = am.GetAllUnits();
-
-            for (int i = 0; i < assets.Count; i++)
+            foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
             {
-                for (int j = 0; j > assets.Count - i; i++)
+                if (hour.HeatDemand <= gasBoiler.Heat)
                 {
-                    if (assets[i].Cost > assets[j].Cost)
-                    {
-                        (assets[i], assets[j]) = (assets[j], assets[i]);
-                    }
+                    double gasDemand = (double)hour.HeatDemand;
+                    schedule.AddHour(hour.TimeFrom, [gasBoiler], [gasDemand]);
                 }
-            }
-
-            foreach (SourceDataPoint hour in sd.GetDataInRange(data, startDate, endDate))
-            {
-                double producedHeat = 0;
-                int index = 0;
-                ObservableCollection<ProductionAsset> assetsUsed = [];
-                ObservableCollection<double> assetDemands = [];
-                while (producedHeat < hour.HeatDemand)
+                else
                 {
-                    assetsUsed.Add(assets[index]);
-                    assetDemands.Add(assets[index].Heat!.Value);
-                    producedHeat += assets[index].Heat!.Value;
-                    index += 1;
+                    double gasCapacity = (double)gasBoiler.Heat!;
+                    double hourDemand = (double)hour.HeatDemand!;
+                    double oilDemand = hourDemand - gasCapacity;
+                    schedule.AddHour(hour.TimeFrom, [gasBoiler, oilBoiler], [gasCapacity, oilDemand]);
                 }
-                schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
             }
             return schedule;
         }
 
-        public Schedule Optimise2(DateTime startDate, DateTime endDate)
+        public static Schedule Optimise2(DateTime startDate, DateTime endDate)
         {
             SourceData data = new();
             Schedule schedule = new(startDate, endDate);
 
-            ObservableCollection<ProductionAsset> assets = am.GetAllUnits();
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetAllUnits();
 
             Dictionary<ProductionAsset, double?> netCosts = new();
 
@@ -95,7 +76,7 @@ namespace HeatOptimiser
                 netCosts.Add(assets[i], assets[i].Cost);
             }
 
-            foreach (SourceDataPoint hour in sd.GetDataInRange(data, startDate, endDate))
+            foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
             {
                 Dictionary<ProductionAsset, double?> costs = new(netCosts);
                 foreach(ProductionAsset asset in costs.Keys)

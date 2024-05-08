@@ -8,13 +8,14 @@ namespace HeatOptimiser.Tests
         public void TestLoadXLSXFile()
         {
             // Arrange
-            SourceDataManager sourceManager = new SourceDataManager();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
             Console.WriteLine(file);
 
             // Act
-            var result = sourceManager.LoadXLSXFile(file, 4, 2);
+            var result = SourceDataManager.LoadXLSXFile(file, 4, 2);
 
             // Assert
             Assert.NotNull(result);
@@ -26,12 +27,11 @@ namespace HeatOptimiser.Tests
         {
             // Arrange
             SourceData data = new SourceData();
-            SourceDataManager sourceManager = new SourceDataManager();
             DateTime startDate = new DateTime(2023, 1, 1);
             DateTime endDate = new DateTime(2023, 1, 31);
 
             // Act
-            var result = sourceManager.GetDataInRange(data, startDate, endDate);
+            var result = SourceDataManager.GetDataInRange(data, startDate, endDate);
 
             // Assert
             Assert.NotNull(result);

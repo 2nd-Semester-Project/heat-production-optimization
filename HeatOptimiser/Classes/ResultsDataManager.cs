@@ -10,16 +10,10 @@ using System.Collections.ObjectModel;
 
 namespace HeatOptimiser
 {
-    public class ResultsDataManager : IResultsDataManager
+    public class ResultsDataManager
     {
-        private string filePath;
-        private AssetManager am;
-        public ResultsDataManager(string passedFilePath, AssetManager assetManager)
-        {
-            filePath = passedFilePath;
-            am = assetManager;
-        }
-        public void Save(Schedule schedule)
+        private static string filePath = "data/resultdata.csv";
+        public static void Save(Schedule schedule)
         {
             var csv = new StringBuilder();
             foreach (ScheduleHour hour in schedule.schedule)
@@ -59,7 +53,7 @@ namespace HeatOptimiser
 
             File.WriteAllText(filePath, csv.ToString());
         }
-        public void Remove(DateOnly dateFrom, DateOnly dateTo)
+        public static void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
             List<string> lines = File.ReadAllLines(filePath).ToList();
             List<int> removableIndexes = new List<int>();
@@ -84,7 +78,7 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
-        public Schedule Load(DateOnly dateFrom, DateOnly dateTo)
+        public static Schedule Load(DateOnly dateFrom, DateOnly dateTo)
         {
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
@@ -115,7 +109,7 @@ namespace HeatOptimiser
                     ObservableCollection<double> demands = [];
                     foreach(string assetID in line[1].Trim().Split('/'))
                     {
-                        var unit = am.GetAllUnits().FirstOrDefault(x => x.ID.ToString() == assetID);
+                        var unit = AssetManager.GetAllUnits().FirstOrDefault(x => x.ID.ToString() == assetID);
                         if (unit != null)
                         {
                             assets.Add(unit);

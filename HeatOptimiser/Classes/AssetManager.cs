@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using ReactiveUI;
 using System.Reactive;
 using UserInterface.ViewModels;
+using System.Net;
 
 namespace HeatOptimiser
 {
@@ -68,12 +69,12 @@ namespace HeatOptimiser
             set => this.RaiseAndSetIfChanged(ref _isSelected, value);
         }
     }
-    public class AssetManager: IAssetManager
+    public static class AssetManager
     {
-        public string saveFileName = "ProductionAssets.json"; 
-        public ObservableCollection<ProductionAsset> _productionAssets = new ObservableCollection<ProductionAsset>();
-        private JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
-        public void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
+        public static string saveFileName = "ProductionAssets.json"; 
+        public static ObservableCollection<ProductionAsset> _productionAssets = new ObservableCollection<ProductionAsset>();
+        private static JsonAssetStorage _jsonAssetStorage = new JsonAssetStorage();
+        public static void AddUnit(string name, string image, double heat, double electricity, double energy, double cost, double carbonDioxide)
         {
             if (name != null && image != null && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(image))
             {
@@ -95,12 +96,12 @@ namespace HeatOptimiser
                 throw new ArgumentNullException("Name and Image cannot be null");
             }
         }
-        public void DeleteUnit(Guid ID)
+        public static void DeleteUnit(Guid ID)
         {
             _productionAssets.Remove(_productionAssets.FirstOrDefault(x => x.ID == ID)!);
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public void EditUnit(Guid ID, int index, string stringValue)
+        public static void EditUnit(Guid ID, int index, string stringValue)
         {
             switch (index)
             {
@@ -115,7 +116,7 @@ namespace HeatOptimiser
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public void EditUnit(Guid ID, int index, double doubleValue)
+        public static void EditUnit(Guid ID, int index, double doubleValue)
         {
             switch (index)
             {
@@ -139,31 +140,31 @@ namespace HeatOptimiser
             }
             _jsonAssetStorage.SaveUnits(_productionAssets, saveFileName); // this is also up for debate, just like on AddUnit.
         }
-        public ObservableCollection<ProductionAsset> GetAllUnits()
+        public static ObservableCollection<ProductionAsset> GetAllUnits()
         {
             return _productionAssets;
         }
-        public ObservableCollection<ProductionAsset> LoadUnits(string fileName)
+        public static ObservableCollection<ProductionAsset> LoadUnits(string fileName)
         {
             _productionAssets = _jsonAssetStorage.LoadUnits(fileName);
             return _productionAssets;
         }
-        public void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName)
+        public static void SaveUnits(ObservableCollection<ProductionAsset> AllAssets, string fileName)
         {
             _jsonAssetStorage.SaveUnits(AllAssets, fileName);
         }
-        public ObservableCollection<ProductionAsset> SearchUnits(string name)
+        public static ObservableCollection<ProductionAsset> SearchUnits(string name)
         {
             var selection = _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
             ObservableCollection<ProductionAsset> selected = [.. selection];
             return selected;
         }
-        public void SetSaveFile(string fileName)
+        public static void SetSaveFile(string fileName)
         {
             saveFileName = fileName;
         }
     }
-    public class JsonAssetStorage: IAssetStorage
+    public class JsonAssetStorage
     {
         public ObservableCollection<ProductionAsset> LoadUnits(string fileName)
         {

@@ -66,7 +66,6 @@ public class NewAsset : ViewModelBase
 }
 public class AssetManagerViewModel : ViewModelBase
 {
-    public AssetManager assetManager = new();
     public JsonAssetStorage jsonAssetStorage;
     
     //public ProductionAsset productionAsset;
@@ -181,7 +180,7 @@ public class AssetManagerViewModel : ViewModelBase
     {
         if (AssetNameNew!= null && double.TryParse(AssetHeatNew, out double AssetHeat)&&double.TryParse(AssetElectricityNew, out double AssetElectricity) &&double.TryParse(AssetEnergyNew, out double AssetEnergy) &&double.TryParse(AssetCostNew, out double AssetCost) &&double.TryParse(AssetCarbonNew, out double AssetCarbon))
             {
-            assetManager.AddUnit(AssetNameNew,"none",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
+            AssetManager.AddUnit(AssetNameNew,"none",AssetHeat,AssetElectricity, AssetEnergy, AssetCost, AssetCarbon);
             AssetNameNew=string.Empty;
             AssetHeatNew=string.Empty;
             AssetElectricityNew=string.Empty;
@@ -197,7 +196,7 @@ public class AssetManagerViewModel : ViewModelBase
         var selectedAsset = ProductionAssets.Where(x => x.IsSelected == true).ToList(); 
         foreach (var asset in selectedAsset)
         {
-            assetManager.DeleteUnit(asset.ID);
+            AssetManager.DeleteUnit(asset.ID);
         }
     }
     public void EditAsset()
@@ -215,7 +214,7 @@ public class AssetManagerViewModel : ViewModelBase
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
-        ProductionAssets=assetManager.LoadUnits(assetManager.saveFileName);
+        ProductionAssets=AssetManager.LoadUnits(AssetManager.saveFileName);
     }
 
 }

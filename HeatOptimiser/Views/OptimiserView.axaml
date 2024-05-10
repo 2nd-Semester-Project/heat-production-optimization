@@ -13,7 +13,7 @@
     <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom">
       <TextBlock Text="Enter Starting Date" Foreground="Black" FontSize="20"/>
       <CalendarDatePicker x:Name="Calendar" Height="40" Width="250" SelectedDate="{Binding StartingDate}"/>
-      <TextBlock Text="{Binding #Calendar.SelectedDate}"/>
+      <!--<TextBlock Text="{Binding #Calendar.SelectedDate}"/>-->
       </StackPanel>
     <StackPanel Grid.Column="0" Grid.Row="1">
       <TextBlock Text="Enter End Date" Foreground="Black" FontSize="20"/>
@@ -34,7 +34,7 @@
             Background="#a11d33"
             Width="150"/>
       </StackPanel>
-      <TextBlock Text="{Binding StartingDate}"/>
+      <!--<TextBlock Text="{Binding StartingDate}"/>-->
     
     
   </Grid>

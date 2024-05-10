@@ -15,7 +15,6 @@ namespace UserInterface.ViewModels;
 
 public class ResultsViewModel : ViewModelBase
 {
-    private readonly DataVisualizer dataVisualizer = new DataVisualizer();
     private readonly ObservableCollection<DateTimePoint> WinterHeatDemandData;
     public ObservableCollection<ISeries> Series { get; set; }
 
@@ -27,7 +26,7 @@ public class ResultsViewModel : ViewModelBase
         WinterHeatDemandData = new ObservableCollection<DateTimePoint>();
         SummerHeatDemandData = new ObservableCollection<DateTimePoint>();
 
-        foreach (var point in dataVisualizer.sourceData.WinterData)
+        foreach (var point in DataVisualizer.sourceData.WinterData)
         {
             if (point.HeatDemand.HasValue)
             {
@@ -35,7 +34,7 @@ public class ResultsViewModel : ViewModelBase
             }
         }
 
-        foreach (var point in dataVisualizer.sourceData.SummerData)
+        foreach (var point in DataVisualizer.sourceData.SummerData)
         {
             if (point.HeatDemand.HasValue)
             {

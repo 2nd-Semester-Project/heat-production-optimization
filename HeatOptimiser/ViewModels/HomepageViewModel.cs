@@ -12,8 +12,6 @@ namespace UserInterface.ViewModels;
 
 public class HomepageViewModel : ViewModelBase
 {
-
-    AssetManager assetManager = new();
     ObservableCollection<ProductionAsset> ProductionAssets;
     public int _assetCount;
     public int AssetCount
@@ -21,8 +19,6 @@ public class HomepageViewModel : ViewModelBase
         get => _assetCount;
         set => this.RaiseAndSetIfChanged(ref _assetCount, value);
     }
-
-    private readonly DataVisualizer dataVisualizer = new DataVisualizer();
     private readonly Random _random = new();
     private readonly ObservableCollection<DateTimePoint> WinterHeatDemandData;
     private readonly ObservableCollection<DateTimePoint> SummerHeatDemandData;
@@ -33,14 +29,11 @@ public class HomepageViewModel : ViewModelBase
 
     public HomepageViewModel()
     {
-        dataVisualizer = new DataVisualizer();
-
-
         // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
         WinterHeatDemandData = new ObservableCollection<DateTimePoint>();
         SummerHeatDemandData = new ObservableCollection<DateTimePoint>();
 
-        foreach (var point in dataVisualizer.sourceData.WinterData)
+        foreach (var point in DataVisualizer.sourceData.WinterData)
         {
             if (point.HeatDemand.HasValue)
             {
@@ -48,7 +41,7 @@ public class HomepageViewModel : ViewModelBase
             }
         }
 
-        foreach (var point in dataVisualizer.sourceData.SummerData)
+        foreach (var point in DataVisualizer.sourceData.SummerData)
         {
             if (point.HeatDemand.HasValue)
             {
@@ -82,7 +75,7 @@ public class HomepageViewModel : ViewModelBase
             },
         };
 
-        AssetCount = assetManager.LoadUnits(assetManager.saveFileName).Count;
+        AssetCount = AssetManager.LoadUnits(AssetManager.saveFileName).Count;
     }
     public Axis[] XAxesSummer { get; set; } =
     {

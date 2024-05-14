@@ -28,7 +28,7 @@
 
     <!-- Left side content -->
     <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,150,0,0">
-        <TextBlock Text="Source Data loaded" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
+        <TextBlock Text="{Binding SourceText}" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
     </StackPanel>
     <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,150,0,0">
         <StackPanel Orientation="Horizontal">

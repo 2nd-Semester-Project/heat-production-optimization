@@ -25,6 +25,7 @@ namespace HeatOptimiser
             if (XLSXFIlePath == string.Empty)
             {
                 XLSXFIlePath = "data/sourcedata.xlsx";
+                SettingsManager.SaveSetting("DataLoaded", "False");
             }
             string columnstring = SettingsManager.GetSetting("Column");
             if (columnstring == string.Empty)

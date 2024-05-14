@@ -39,6 +39,11 @@
                         Width="{Binding ButtonWidth}">
                     <TextBlock Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
+                <Button Height="40" 
+                        Width="{Binding ButtonWidth}" 
+                        Command="{Binding OpenSourceDataCommand}">  
+                    <TextBlock Text="Source Data" Opacity="{Binding ButtonTextOpacity}"/>
+                </Button>
                 <Button Command="{Binding OpenOptimiserCommand}" 
                         Height="40" 
                         Width="{Binding ButtonWidth}">

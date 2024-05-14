@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using DynamicData;
 using HeatOptimiser;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -35,11 +36,13 @@ public class HomepageViewModel : ViewModelBase
 
         foreach (var point in DataVisualizer.sourceData.WinterData)
         {
-            if (point.HeatDemand.HasValue&&point.TimeFrom.HasValue)
+            if (point.HeatDemand.HasValue && point.TimeFrom.HasValue)
             {
-                WinterHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
+                WinterHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value)); //Right now does not read the TimeFrom Value that is why the data is not displayed
             }
         }
+
+        
 
         foreach (var point in DataVisualizer.sourceData.SummerData)
         {

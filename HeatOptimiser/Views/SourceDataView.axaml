@@ -8,5 +8,14 @@
              x:Class="UserInterface.Views.SourceDataView"
              x:DataType="views:SourceDataViewModel">
 
-  Source Data
+  <Grid Margin="30">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />    <!-- For content -->
+    </Grid.RowDefinitions>
+    <TextBox Grid.Column="0" Grid.Row="0" Text="NameOfFile"/>
+    <Button Grid.Column="0" Grid.Row="1"/>
+    </Grid>
 </UserControl>

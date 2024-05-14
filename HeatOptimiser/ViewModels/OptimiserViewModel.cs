@@ -26,13 +26,13 @@ public class OptimiserViewModel : ViewModelBase
     public void Optimise(DateTime start, DateTime end )//also add which category to optimise from later
     {
         Console.WriteLine("Testing");
-        //Schedule optimisedData = Optimiser.Optimise(start, end);
-        //Console.WriteLine(StartingDate);
-        //Console.WriteLine("Optimised Schedule:");
-        //foreach (var hour in optimisedData.schedule)
-        //{
-        //    Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
-        //}
+        Schedule optimisedData = Optimiser.Optimise(start, end);
+        Console.WriteLine(StartingDate);
+        Console.WriteLine("Optimised Schedule:");
+        foreach (var hour in optimisedData.schedule)
+        {
+            Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
+        }
     }
            
     public OptimiserViewModel()

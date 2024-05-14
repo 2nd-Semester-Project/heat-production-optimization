@@ -46,7 +46,7 @@
               <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
               <TextBlock Text="{Binding ErrorText6}" Foreground="Red"/>
             </StackPanel>
-              <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
+              <Button Content="{Binding AssetButton}" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
         </StackPanel>
       
       <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="20" Width="500" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
@@ -80,7 +80,8 @@
                 Background="#a11d33" 
                 Width="130" 
                 HorizontalAlignment="Left" 
-                Margin="0,0,20,0"/>
+                Margin="0,0,20,0"
+                Command="{Binding EditAssetCommand}"/>
         <Button Content="Delete Assets" 
                 CornerRadius="25" 
                 Background="#a11d33" 

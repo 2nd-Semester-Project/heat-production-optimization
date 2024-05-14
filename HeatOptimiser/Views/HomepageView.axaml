@@ -30,11 +30,12 @@
     <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,150,0,0">
         <TextBlock Text="Source Data loaded" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
     </StackPanel>
-    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,150,0,0">
-        <StackPanel Orientation="Horizontal">
+    <Rectangle Fill="Blue" Grid.Column="0" Grid.Row="2" Opacity="0.7"/>
+    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,150,0,0" VerticalAlignment="Center">
+        <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
             <TextBlock Text="Currently you have " HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
             <TextBlock Text="{Binding AssetCount}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" 
-                       Foreground="Black" Margin="15,0,15,0" VerticalAlignment="Top"/>
+                       Foreground="Black" Margin="15,0,15,0"/>
             <TextBlock Text="Production Assets" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
         </StackPanel>
     </StackPanel> 

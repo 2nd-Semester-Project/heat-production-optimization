@@ -35,7 +35,7 @@ public class HomepageViewModel : ViewModelBase
 
         foreach (var point in DataVisualizer.sourceData.WinterData)
         {
-            if (point.HeatDemand.HasValue)
+            if (point.HeatDemand.HasValue&&point.TimeFrom.HasValue)
             {
                 WinterHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
             }
@@ -43,7 +43,7 @@ public class HomepageViewModel : ViewModelBase
 
         foreach (var point in DataVisualizer.sourceData.SummerData)
         {
-            if (point.HeatDemand.HasValue)
+            if (point.HeatDemand.HasValue&&point.TimeFrom.HasValue)
             {
                 SummerHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
           

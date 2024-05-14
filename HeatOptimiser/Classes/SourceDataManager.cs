@@ -16,31 +16,34 @@ namespace HeatOptimiser
 
     public class SourceData
     {
-        private const string SummerDataFilePath = "data/summer_source_data.csv";
-        private const string WinterDataFilePath = "data/winter_source_data.csv";
-
-        public List<SourceDataPoint> SummerData { get; set; }
-        public List<SourceDataPoint> WinterData { get; set; }
+        private const string defaultSavePath = "data/source_data.csv";
+        public List<SourceDataPoint> LoadedData { get; set; }
 
         public SourceData()
         {
-            SummerData = SourceDataManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 7);
-            WinterData = SourceDataManager.LoadXLSXFile("data/sourcedata.xlsx", 4, 2);
+            string XLSXFIlePath = SettingsManager.GetSetting("XLSXFilePath");
+            if (XLSXFIlePath == string.Empty)
+            {
+                XLSXFIlePath = "data/sourcedata.xlsx";
+            }
+            string columnstring = SettingsManager.GetSetting("Column");
+            if (columnstring == string.Empty)
+            {
+                columnstring = "4";
+            }
+            string rowstring = SettingsManager.GetSetting("Row");
+            if (rowstring == string.Empty)
+            {
+                rowstring = "7";
+            }
+            int column = int.TryParse(columnstring, out column) ? column : 4;
+            int row = int.TryParse(rowstring, out row) ? row : 7;
+            LoadedData = SourceDataManager.LoadXLSXFile(XLSXFIlePath, column, row);
 
             // Automatically write the CSV files
-            WriteSummerDataToCSV(SummerDataFilePath);
-            WriteWinterDataToCSV(WinterDataFilePath);
+            SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
         }
 
-        public void WriteSummerDataToCSV(string filePath)
-        {
-            SourceDataManager.WriteToCSV(SummerData, filePath);
-        }
-
-        public void WriteWinterDataToCSV(string filePath)
-        {
-            SourceDataManager.WriteToCSV(WinterData, filePath);
-        }
     }
     public static class SourceDataManager
     {
@@ -52,7 +55,7 @@ namespace HeatOptimiser
 
             using (var package = new ExcelPackage(new FileInfo(file)))
             {
-                ExcelWorksheet worksheet = null;
+                ExcelWorksheet worksheet = null ?? package.Workbook.Worksheets[0];
                 try
                 {
                     worksheet = package.Workbook.Worksheets[workSheetNumber];
@@ -99,7 +102,7 @@ namespace HeatOptimiser
             DateTime winterEnd = DateTime.ParseExact("31/03/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
             bool rangeExists = false;
             int startIndex = 0;
-            List<SourceDataPoint> dataCollection = startDate.Date < winterEnd.Date ? data.SummerData : data.WinterData;
+            List<SourceDataPoint> dataCollection = data.LoadedData;
             foreach (SourceDataPoint point in dataCollection)
             {
                 if (point.TimeFrom.HasValue)
@@ -119,7 +122,7 @@ namespace HeatOptimiser
                 foreach (SourceDataPoint point in dataCollection.GetRange(startIndex, dataCollection.Count - startIndex))
                 {
                     endIndex++;
-                    DateTime dt = (DateTime)point.TimeTo;
+                    DateTime dt = (DateTime)point.TimeTo!;
                     if (dt.Date > endDate.Date)
                     {
                         break;

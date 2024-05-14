@@ -39,24 +39,15 @@
         </StackPanel>
     </StackPanel> 
 
-    <!-- WinterData chart -->
+    <!-- Data chart -->
     <lvc:CartesianChart 
     Grid.Column="1" 
     Grid.Row="1" 
-    Series="{Binding WinterSeries}" 
+    Series="{Binding Series}" 
     Margin="20"
-    XAxes="{Binding XAxesWinter}" 
+    XAxes="{Binding XAxes}" 
     ZoomMode="X" />
 
-    <!-- SummerData chart below -->
-    <lvc:CartesianChart 
-    Grid.Column="1" 
-    Grid.Row="2" 
-    Series="{Binding SummerSeries}" 
-    Margin="20" 
-    XAxes="{Binding XAxesSummer}" 
-    ZoomMode="X"  
-    />
 </Grid>
 
 </UserControl>

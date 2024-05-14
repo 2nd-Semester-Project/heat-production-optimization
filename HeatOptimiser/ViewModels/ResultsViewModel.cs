@@ -15,38 +15,28 @@ namespace UserInterface.ViewModels;
 
 public class ResultsViewModel : ViewModelBase
 {
-    private readonly ObservableCollection<DateTimePoint> WinterHeatDemandData;
+    private readonly ObservableCollection<DateTimePoint> HeatDemandData;
     public ObservableCollection<ISeries> Series { get; set; }
-
-    private readonly ObservableCollection<DateTimePoint> SummerHeatDemandData;
 
     public ResultsViewModel()
     {
         // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-        WinterHeatDemandData = new ObservableCollection<DateTimePoint>();
-        SummerHeatDemandData = new ObservableCollection<DateTimePoint>();
+        HeatDemandData = new ObservableCollection<DateTimePoint>();
 
-        foreach (var point in DataVisualizer.sourceData.WinterData)
+        foreach (var point in DataVisualizer.sourceData.LoadedData)
         {
             if (point.HeatDemand.HasValue)
             {
-                WinterHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
+                HeatDemandData.Add(new DateTimePoint(point.TimeFrom!.Value, point.HeatDemand.Value));
             }
         }
 
-        foreach (var point in DataVisualizer.sourceData.SummerData)
-        {
-            if (point.HeatDemand.HasValue)
-            {
-                SummerHeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
-            }
-        }
 
         Series = new ObservableCollection<ISeries>
     {
         new LineSeries<DateTimePoint>
         {
-            Values = WinterHeatDemandData,
+            Values = HeatDemandData,
             Name = "Heat Demand",
             Fill = null,
             GeometryStroke = null,

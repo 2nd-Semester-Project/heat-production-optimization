@@ -12,17 +12,15 @@ namespace HeatOptimiser
     {
         public static SourceData sourceData = new SourceData(); 
 
-        public static readonly ObservableCollection<DateTimePoint>? WinterHeatDemandData = new ObservableCollection<DateTimePoint>();
-        public static readonly ObservableCollection<DateTimePoint>? SummerHeatDemandData = new ObservableCollection<DateTimePoint>();
-
-        public static void AccessData()
+        public static readonly ObservableCollection<DateTimePoint>? HeatDemandData = new ObservableCollection<DateTimePoint>();
+        public static void AccessSummerData()
         {
             // Accessing the summer data
             foreach (var point in sourceData.LoadedData)
             {
                 if (point.TimeFrom.HasValue) // Ensuring the time is not null
                 {
-                    SummerHeatDemandData!.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand));
+                    HeatDemandData?.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand));
                     // SummerElectricityPrices.Add(point.ElectricityPrice);
                 }
             }

@@ -41,6 +41,12 @@ namespace HeatOptimiser
             int row = int.TryParse(rowstring, out row) ? row : 7;
             LoadedData = SourceDataManager.LoadXLSXFile(XLSXFIlePath, column, row);
 
+            if (!(LoadedData.Count > 0))
+            {
+                SettingsManager.SaveSetting("DataLoaded", "False");
+            }
+
+            SettingsManager.SaveSetting("DataLoaded", "False");
             // Automatically write the CSV files
             SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
         }

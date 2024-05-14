@@ -31,6 +31,23 @@ public class HomepageViewModel : ViewModelBase
     public HomepageViewModel()
     {
         HeatDemandData = new ObservableCollection<DateTimePoint>();
+        //HeatDemandData = DataVisualizer.HeatDemandData!;
+        _sourceText = "Source Data not loaded. \nPlease load the data.";
+        _assetCount = AssetManager.LoadUnits(AssetManager.saveFileName).Count;
+        
+        if (SettingsManager.GetSetting("DataLoaded") != "False")
+        {
+            //HeatDemandData = DataVisualizer.HeatDemandData!;
+            _sourceText = $"Source Data loaded.";
+            // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
+            foreach (var point in DataVisualizer.sourceData.LoadedData)
+            {
+                if (point.HeatDemand.HasValue && point.TimeFrom.HasValue)
+                {
+                    HeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value)); //Right now does not read the TimeFrom Value that is why the data is not displayed
+                }
+            }
+        }
 
         Series = new ObservableCollection<ISeries>
             {
@@ -44,22 +61,6 @@ public class HomepageViewModel : ViewModelBase
                     LineSmoothness = 1 ,
                 },
             };
-
-        _sourceText = "Source Data not loaded. \nPlease load the data.";
-        _assetCount = AssetManager.LoadUnits(AssetManager.saveFileName).Count;
-        
-        if (SettingsManager.GetSetting("DataLoaded") != "False")
-        {
-            _sourceText = "Source Data loaded.";
-            // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-            foreach (var point in DataVisualizer.sourceData.LoadedData)
-            {
-                if (point.HeatDemand.HasValue && point.TimeFrom.HasValue)
-                {
-                    HeatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value)); //Right now does not read the TimeFrom Value that is why the data is not displayed
-                }
-            }
-        }
     }
     public Axis[] XAxes { get; set; } =
     {

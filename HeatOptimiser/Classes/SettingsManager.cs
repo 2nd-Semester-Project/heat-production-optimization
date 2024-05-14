@@ -26,16 +26,24 @@ namespace HeatOptimiser
         {
             // Load existing settings
             var settings = new Dictionary<string, string>();
-            if (File.Exists("data/appsettings.json"))
+            string filePath = "data/appsettings.json";
+            string directoryPath = Path.GetDirectoryName(filePath)!;
+            if (File.Exists(filePath))
             {
-                settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText("appsettings.json"));
+                settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filePath));
             }
 
             // Update setting
             settings![settingName] = settingValue;
 
+            // Check if directory exists, create if not
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
             // Save settings
-            File.WriteAllText("data/appsettings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
     }
 }

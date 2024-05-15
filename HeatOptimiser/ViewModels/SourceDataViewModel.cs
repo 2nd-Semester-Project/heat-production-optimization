@@ -28,7 +28,9 @@ public class SourceDataViewModel : ViewModelBase
 
     public SourceDataViewModel()
     {
-        _selectedFilePath = string.Empty;
+        _selectedFilePath = SettingsManager.GetSetting("XLSXFilePath");
+        _selectedRow = int.TryParse(SettingsManager.GetSetting("Row"), out int row) ? row : 7;
+        _selectedColumn = int.TryParse(SettingsManager.GetSetting("Column"), out int column) ? column : 4;
         SourceData sourceData = new SourceData(); 
         SourceDataCommand = ReactiveCommand.Create(() => sourceData.LoadSourceData(SelectedFilePath, SelectedRow, SelectedColumn));
 

@@ -14,14 +14,22 @@
         </Style>
     </UserControl.Styles>
   
-  <StackPanel Grid.Column="0" Margin="30" Spacing="10">
+  <StackPanel Margin="30" Spacing="10">
     
     <TextBlock  Text="Asset Manager" 
                 HorizontalAlignment="Left" 
                 Margin="0,0,0,20" FontSize="30" 
                 Foreground="#a11d33"/>
-      <Grid>
-        <StackPanel Grid.Column="0" Spacing="10" Width="200" HorizontalAlignment="Left" Margin="0,0,20,0">
+      <Grid ShowGridLines="False">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="*"/> 
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/> 
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Spacing="5" Width="160" HorizontalAlignment="Left" Margin="10">
             <StackPanel>
               <TextBox Text="{Binding AssetNameNew}" Watermark="Enter Assets Name"/>
               <TextBlock Text="{Binding ErrorText1}" Foreground="Red"/>
@@ -46,48 +54,69 @@
               <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
               <TextBlock Text="{Binding ErrorText6}" Foreground="Red"/>
             </StackPanel>
-              <Button Content="Add new Asset" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
+              <Button Content="Add Unit" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
         </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="20" Width="500" HorizontalAlignment="Right" Height="300" Margin="0,0,10,5">
+      <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Vertical" Background="#a11d33" Spacing="10">
-                  <StackPanel Margin="5" Orientation="Horizontal">
-                      <TextBlock  FontSize="20" 
-                                  Text="{Binding Name}" 
-                                  Margin="10"/>
-                      <CheckBox   HorizontalAlignment="Right" 
+                  <StackPanel Margin="5" Orientation="Horizontal" Background="#a11d33" Spacing="10">
+                      <CheckBox   HorizontalAlignment="Left" 
+                                  VerticalAlignment="Center"
                                   IsChecked="{Binding IsSelected}"/>
+                      <TextBox  FontSize="20" 
+                                  Text="{Binding Name}" 
+                                  Margin="10"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center"/>
+                      <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/> 
+                            <ColumnDefinition Width="*"/> 
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+                          <TextBlock Text=" Heat:          " VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBox Text="{Binding Heat}" HorizontalAlignment="Right"/>
+                        </StackPanel>  
+                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                          <TextBlock Text=" Electricity: " VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBox Text="{Binding Electricity}" MaxWidth="200" HorizontalAlignment="Right"/>
+                        </StackPanel> 
+                        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal">
+                          <TextBlock Text=" Carbon: " VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBox Text="{Binding CarbonDioxide}" Width="40" HorizontalAlignment="Right"/>
+                        </StackPanel> 
+                        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+                          <Rectangle Grid.Column="0" Grid.Row="1" Fill="Blue"/>
+                          <TextBlock Text=" Energy:      " VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBox Text="{Binding Energy}" Width="40" HorizontalAlignment="Right"/>
+                        </StackPanel> 
+                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                          <TextBlock Text=" Cost:          " VerticalAlignment="Center" HorizontalAlignment="Left"/><TextBox Text="{Binding Cost}" Width="40" HorizontalAlignment="Right"/>
+                        </StackPanel> 
+                       </Grid> 
                   </StackPanel>
-                    
-                      <StackPanel Margin="5,5,5,5" Orientation="Horizontal">
-                        <TextBlock Text="Heat: "/><TextBlock Text="{Binding Heat}"/>
-                        <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBlock Text="{Binding Electricity}"/>
-                        <TextBlock Margin="15,0,0,0" Text="Energy: "/><TextBlock Text="{Binding Energy}"/>
-                        <TextBlock Margin="15,0,0,0" Text="Cost: "/><TextBlock Text="{Binding Cost}"/>
-                        <TextBlock Margin="15,0,0,0" Text="Carbon: "/><TextBlock Text="{Binding CarbonDioxide}"/>
-                      </StackPanel>
-                </StackPanel>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
     
-    </Grid>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,20,150">
-        <Button Content="Edit Asset" 
+   
+    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+        <Button Content="Update Units" 
                 CornerRadius="25" 
                 Background="#a11d33" 
                 Width="130" 
                 HorizontalAlignment="Left" 
-                Margin="0,0,20,0"/>
-        <Button Content="Delete Assets" 
+                Margin="0,0,20,0"
+                Command="{Binding UpdateAssetCommand}"/>
+        <Button Content="Delete Units" 
                 CornerRadius="25" 
                 Background="#a11d33" 
                 Width="130" 
                 Command="{Binding DeleteAssetCommand}"/>
     </StackPanel>
-
+  </Grid>
   </StackPanel>
 
 </UserControl>

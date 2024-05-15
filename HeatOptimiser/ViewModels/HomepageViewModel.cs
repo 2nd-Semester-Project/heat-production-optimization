@@ -35,7 +35,7 @@ public class HomepageViewModel : ViewModelBase
         _sourceText = "Source Data not loaded. \nPlease load the data.";
         _assetCount = AssetManager.LoadUnits(AssetManager.saveFileName).Count;
         
-        if (SettingsManager.GetSetting("DataLoaded") != "False")
+        if (SettingsManager.GetSetting("DataLoaded") == "True")
         {
             //HeatDemandData = DataVisualizer.HeatDemandData!;
             _sourceText = $"Source Data loaded.";

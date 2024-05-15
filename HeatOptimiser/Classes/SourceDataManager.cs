@@ -22,31 +22,38 @@ namespace HeatOptimiser
         public SourceData()
         {
             string XLSXFIlePath = SettingsManager.GetSetting("XLSXFilePath");
-            if (XLSXFIlePath == string.Empty)
+            string columnstring = SettingsManager.GetSetting("Column");
+            string rowstring = SettingsManager.GetSetting("Row");
+
+            if (XLSXFIlePath == string.Empty || !File.Exists(XLSXFIlePath) || columnstring == string.Empty || rowstring == string.Empty)
             {
-                XLSXFIlePath = "data/sourcedata.xlsx";
                 SettingsManager.SaveSetting("DataLoaded", "False");
             }
-            string columnstring = SettingsManager.GetSetting("Column");
-            if (columnstring == string.Empty)
-            {
-                columnstring = "4";
+            else {
+                int column = int.TryParse(columnstring, out column) ? column : 4;
+                int row = int.TryParse(rowstring, out row) ? row : 7;
+                LoadedData = SourceDataManager.LoadXLSXFile(XLSXFIlePath, column, row);
+                if (!(LoadedData.Count > 0))
+                {
+                    SettingsManager.SaveSetting("DataLoaded", "False");
+                }
+                else {
+                    SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
+                }
             }
-            string rowstring = SettingsManager.GetSetting("Row");
-            if (rowstring == string.Empty)
-            {
-                rowstring = "7";
-            }
-            int column = int.TryParse(columnstring, out column) ? column : 4;
-            int row = int.TryParse(rowstring, out row) ? row : 7;
-            LoadedData = SourceDataManager.LoadXLSXFile(XLSXFIlePath, column, row);
 
+        }
+        public void LoadSourceData(string filePath, int rowStart, int columnStart)
+        {
+            LoadedData = SourceDataManager.LoadXLSXFile(filePath, rowStart, columnStart);
             if (!(LoadedData.Count > 0))
             {
                 SettingsManager.SaveSetting("DataLoaded", "False");
             }
-
-            SettingsManager.SaveSetting("DataLoaded", "False");
+            SettingsManager.SaveSetting("XLSXFilePath", filePath);
+            SettingsManager.SaveSetting("Row", rowStart.ToString());
+            SettingsManager.SaveSetting("Column", columnStart.ToString());
+            SettingsManager.SaveSetting("DataLoaded", "True");
             // Automatically write the CSV files
             SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
         }

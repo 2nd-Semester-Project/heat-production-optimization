@@ -1,20 +1,31 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:UserInterface.ViewModels.SourceDataViewModel"
-             xmlns:views="clr-namespace:UserInterface.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="UserInterface.Views.SourceDataView"
-             x:DataType="views:SourceDataViewModel">
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                         xmlns:vm="clr-namespace:UserInterface.ViewModels.SourceDataViewModel"
+                         xmlns:views="clr-namespace:UserInterface.ViewModels"
+                         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                         x:Class="UserInterface.Views.SourceDataView"
+                         x:DataType="views:SourceDataViewModel">
 
-  <Grid Margin="30">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="*" />    <!-- For content -->
-    </Grid.RowDefinitions>
-    
+  <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="false">
+    <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom">
+        <TextBox Text="{Binding SelectedFilePath}" Watermark="Enter SourceData File Path"/>
+        <!--<TextBlock Text="{Binding ErrorFilePath}" Foreground="Red"/>-->
+      </StackPanel>
+    <StackPanel Grid.Column="0" Grid.Row="1">
+        <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row"/>
+        <!--<TextBlock Text="{Binding ErrorSelectRow}" Foreground="Red"/>-->
+        <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column"/>
+        <!--<TextBlock Text="{Binding ErrorSelectColumn}" Foreground="Red"/>-->  
+      </StackPanel>
+      <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+    <Button Content="Load" Command="{Binding SourceDataCommand}"
+            VerticalAlignment="Bottom"
+            Margin="5" 
+            Background="#a11d33"
+            Width="150"/>
+      </StackPanel>
+
     </Grid>
 </UserControl>

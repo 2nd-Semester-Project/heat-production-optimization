@@ -38,6 +38,6 @@ public class OptimiserViewModel : ViewModelBase
     public OptimiserViewModel()
     {
         Console.WriteLine("OptimiserViewModel created");
-        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(DateTime.Today, DateTime.Today)); 
+        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate)); 
     }
 }

@@ -3,12 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:UserInterface.ViewModels.SourceDataViewModel"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:views="clr-namespace:UserInterface.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UserInterface.Views.SourceDataView"
              x:DataType="views:SourceDataViewModel">
 
-  <Grid Margin="30" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" ShowGridLines="true">
+  <Grid Margin="30" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" ShowGridLines="false">
     
     <StackPanel Grid.Column="0" Grid.Row="0" Margin="10">
       <TextBlock Text="Source Data File Path:" FontWeight="Bold" Margin="0,0,0,5"/>

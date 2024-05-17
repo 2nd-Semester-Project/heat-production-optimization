@@ -93,7 +93,7 @@ namespace HeatOptimiser
                         try
                         {
                             DateTime temp;
-                            string[] formats = { "dd/MM/yyyy HH.mm.ss", "dd/MM/yyyy HH:mm:ss", "HH.mm.ss", "HH:mm:ss","dd.MM.yyyy HH:mm:ss" };
+                            string[] formats = {  "dd/MM/yyyy HH.mm.ss", "dd/MM/yyyy HH:mm:ss", "HH.mm.ss", "HH:mm:ss","dd.MM.yyyy HH:mm:ss" };
                             SourceDataPoint sourceData = new SourceDataPoint
                             {
                                 TimeFrom = DateTime.TryParseExact(worksheet.Cells[row, columnStart].Value?.ToString(), formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out temp) ? temp : null,

@@ -60,7 +60,7 @@
       <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                  <StackPanel Margin="5" Orientation="Horizontal" Background="#a11d33" Spacing="10">
+                  <StackPanel Margin="5" Orientation="Horizontal" Background="#a11d33" Spacing="5">
                       <CheckBox   HorizontalAlignment="Left" 
                                   VerticalAlignment="Center"
                                   IsChecked="{Binding IsSelected}"/>

@@ -63,7 +63,7 @@
                     
                       <StackPanel Margin="5,5,5,5" Orientation="Horizontal">
                         <TextBlock Text="Heat: "/><TextBlock Text="{Binding Heat}"/>
-                        <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBlock Text="{Binding Electricity}"/>
+                        <TextBlock Margin="15,0,0,0" Text="Electricity: "/><TextBox Text="{Binding Electricity}"/>
                         <TextBlock Margin="15,0,0,0" Text="Energy: "/><TextBlock Text="{Binding Energy}"/>
                         <TextBlock Margin="15,0,0,0" Text="Cost: "/><TextBlock Text="{Binding Cost}"/>
                         <TextBlock Margin="15,0,0,0" Text="Carbon: "/><TextBlock Text="{Binding CarbonDioxide}"/>

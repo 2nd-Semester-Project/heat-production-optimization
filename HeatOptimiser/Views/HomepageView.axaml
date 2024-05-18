@@ -9,55 +9,35 @@
              x:Class="UserInterface.Views.HomepageView"
              x:DataType="views:HomepageViewModel">
              
-             
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /> <!-- For the title -->
+            <RowDefinition Height="Auto" /> <!-- For the SourceText -->
+            <RowDefinition Height="Auto" /> <!-- For the AssetCount -->
+            <RowDefinition Height="*" />    <!-- For the chart -->
+        </Grid.RowDefinitions>
 
-<Grid Margin="30">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="2*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" /> <!-- For the title -->
-        <RowDefinition Height="*" />    <!-- For content -->
-        <RowDefinition Height="*" />    <!-- For content -->
-    </Grid.RowDefinitions>
+        <!-- Title -->
+        <TextBlock Text="Heat Production Optimisation" FontSize="30" FontWeight="Bold" Foreground="#a11d33" 
+                   HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
-    <!-- Title -->
-    <TextBlock Text="Heat Production Optimisation" FontSize="30" FontWeight="Bold" Foreground="#a11d33" 
-               HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="0,0,0,30"/>
+        <!-- Source Text -->
+        <TextBlock Text="{Binding SourceText}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,0,0,20" Grid.Row="1"/>
 
-    <!-- Left side content -->
-    <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,150,0,0">
-        <TextBlock Text="Source Data loaded" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
-    </StackPanel>
-    <Rectangle Fill="Blue" Grid.Column="0" Grid.Row="2" Opacity="0.7"/>
-    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,150,0,0" VerticalAlignment="Center">
-        <StackPanel Orientation="Vertical" Margin="10" VerticalAlignment="Center">
-            <TextBlock Text="Currently you have " HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
-            <TextBlock Text="{Binding AssetCount}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" 
-                       Foreground="Black" Margin="15,0,15,0"/>
-            <TextBlock Text="Production Assets" HorizontalAlignment="Center" FontSize="18" Foreground="Black"/>
+        <!-- Asset Count -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2">
+            <TextBlock Text="Currently you have " FontSize="18" Foreground="Black"/>
+            <TextBlock Text="{Binding AssetCount}" FontSize="22" FontWeight="Bold" Foreground="Black" Margin="10,0"/>
+            <TextBlock Text=" Production Assets" FontSize="18" Foreground="Black"/>
         </StackPanel>
-    </StackPanel> 
 
-    <!-- WinterData chart -->
-    <lvc:CartesianChart 
-    Grid.Column="1" 
-    Grid.Row="1" 
-    Series="{Binding WinterSeries}" 
-    Margin="20"
-    XAxes="{Binding XAxesSummer}" 
-    ZoomMode="X" />
-
-    <!-- SummerData chart below -->
-    <lvc:CartesianChart 
-    Grid.Column="1" 
-    Grid.Row="2" 
-    Series="{Binding SummerSeries}" 
-    Margin="20" 
-    XAxes="{Binding XAxesWinter}" 
-    ZoomMode="X"  
-    />
-</Grid>
-
+        <!-- Data chart -->
+        <lvc:CartesianChart 
+            Grid.Row="3" 
+            Series="{Binding Series}" 
+            Margin="20"
+            XAxes="{Binding XAxes}" 
+            YAxes="{Binding YAxes}"
+            ZoomMode="X" />
+    </Grid>
 </UserControl>

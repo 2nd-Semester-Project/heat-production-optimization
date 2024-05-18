@@ -39,7 +39,7 @@ namespace HeatOptimiser
         public double? Electricity
         {
             get { return _electricity; }
-            set { _electricity = value; }
+            set { this.RaiseAndSetIfChanged(ref _electricity,value);}
         }
 
         private double? _energy;

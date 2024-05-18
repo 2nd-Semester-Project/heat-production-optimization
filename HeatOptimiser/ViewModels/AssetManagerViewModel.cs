@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using HeatOptimiser;
+using System.Globalization;
 
 
 
@@ -152,6 +153,12 @@ public class AssetManagerViewModel : ViewModelBase
         else{   ErrorText6 = string.Empty;}
         }
     }
+    public string _assetButton = "Add Unit";
+    public string AssetButton 
+    {
+        get =>_assetButton;
+        set => this.RaiseAndSetIfChanged(ref _assetButton, value);
+    }
     public int _assetCount;
     public int AssetCount
     {
@@ -168,6 +175,7 @@ public class AssetManagerViewModel : ViewModelBase
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteAssetCommand { get; }
+    public ReactiveCommand<Unit, Unit> EditAssetCommand { get; }
     
     public string _assetEdit;
 
@@ -187,6 +195,7 @@ public class AssetManagerViewModel : ViewModelBase
             AssetEnergyNew=string.Empty;
             AssetCostNew=string.Empty;
             AssetCarbonNew=string.Empty;
+            AssetButton="Add Unit";
             }
        
         
@@ -201,7 +210,21 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void EditAsset()
     {   
-        
+        var selectedAsset = ProductionAssets.Where(x => x.IsSelected == true).ToList(); 
+        if(selectedAsset.Count==1)
+        {
+            
+            AssetNameNew=selectedAsset[0].Name;
+            AssetHeatNew=selectedAsset[0].Heat.ToString();
+            AssetElectricityNew=selectedAsset[0].Electricity.ToString();
+            AssetEnergyNew=selectedAsset[0].Energy.ToString();
+            AssetCostNew=selectedAsset[0].Cost.ToString();
+            AssetCarbonNew=selectedAsset[0].CarbonDioxide.ToString();
+            AssetButton="Update Unit";
+            AssetManager.DeleteUnit(selectedAsset[0].ID);
+            
+        }
+
     }
     public void ValidateInput(string input)
     {   if (!double.TryParse(input, out _) && input!= string.Empty)
@@ -213,6 +236,7 @@ public class AssetManagerViewModel : ViewModelBase
         //Assets = new ObservableCollection<ProductionAsset>(assetManager.LoadUnits("ProductionAssets.json"));
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
+        EditAssetCommand=ReactiveCommand.Create(EditAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
         ProductionAssets=AssetManager.LoadUnits(AssetManager.saveFileName);
     }

@@ -27,6 +27,7 @@ namespace HeatOptimiser.Tests
         {
             // Arrange
             SourceData data = new SourceData();
+            data.LoadedData = new List<SourceDataPoint>(); // Initialize LoadedData
             DateTime startDate = new DateTime(2023, 1, 1);
             DateTime endDate = new DateTime(2023, 1, 31);
 

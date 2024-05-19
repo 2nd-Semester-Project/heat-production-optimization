@@ -62,9 +62,10 @@ namespace HeatOptimiser
 
             using (var package = new ExcelPackage(new FileInfo(file)))
             {
-                ExcelWorksheet worksheet = null ?? package.Workbook.Worksheets[0];
+                ExcelWorksheet worksheet;
                 try
                 {
+                    worksheet = null ?? package.Workbook.Worksheets[0];
                     worksheet = package.Workbook.Worksheets[workSheetNumber];
                 }
                 catch (Exception e)

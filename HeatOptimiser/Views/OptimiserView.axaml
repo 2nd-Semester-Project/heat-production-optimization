@@ -21,7 +21,8 @@
       
       </StackPanel>
       <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
-    <ComboBox PlaceholderText="Select Category" 
+    <ComboBox x:Name="OptimisationCategory"
+              PlaceholderText="Select Category" 
               Width="200" 
               VerticalAlignment="Bottom"
               Margin="5">

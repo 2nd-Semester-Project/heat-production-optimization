@@ -19,57 +19,50 @@ namespace UserInterface.ViewModels;
 
 public class ResultsViewModel : ViewModelBase
 {
-    private readonly ObservableCollection<DateTimePoint> HeatDemandData;
-    public ObservableCollection<ISeries> Series { get; set; }
+    public ISeries[] Series { get; set; }
+    public Axis[] XAxes { get; set; }
 
     public ResultsViewModel()
     {
-        // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-        HeatDemandData = new ObservableCollection<DateTimePoint>();
-
-        foreach (var point in DataVisualizer.sourceData.LoadedData)
+        
+        Schedule results = ResultsDataManager.LoadAll();
+        List<List<double>> demandsList = new();
+        List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
+        int assetCount = assets.Count;
+        foreach (ProductionAsset asset in assets)
         {
-            if (point.HeatDemand.HasValue)
+            List<double> demands = new();
+            foreach (ScheduleHour hour in results.schedule)
             {
-                HeatDemandData.Add(new DateTimePoint(point.TimeFrom!.Value, point.HeatDemand.Value));
+                demands.Add(hour.Demands![assets.IndexOf(asset)]);
             }
+            demandsList.Add(demands);
+        }
+        List<string> AssetNames = new();
+        foreach (ProductionAsset asset in assets)
+        {
+            AssetNames.Add(asset.Name);
         }
 
-        Schedule schedule = ResultsDataManager.LoadAll();
-        foreach (var hour in schedule.schedule)
+        Series = demandsList.Select(demands => new StackedStepAreaSeries<double>
         {
-            foreach (var asset in hour.Assets!)
-            {
-                HeatDemandData.Add(new DateTimePoint(hour.Hour!.Value, asset.Heat));
-            }
+            Values = demands,
+            Name = AssetNames[demandsList.IndexOf(demands)],
+            Stroke = null
+        }).ToArray();
+    
+        List<DateTime> hours = new();
+        foreach (ScheduleHour hour in results.schedule)
+        {
+            hours.Add(hour.Hour!.Value);
         }
 
-
-        Series = new ObservableCollection<ISeries>
-    {
-        new LineSeries<DateTimePoint>
+        XAxes = new Axis[]
         {
-            Values = HeatDemandData,
-            Name = "Heat Demand",
-            Fill = null,
-            GeometryStroke = null,
-            GeometryFill = null,
-            LineSmoothness = 1
-        },
-        // new LineSeries<ObservableValue>
-        // {
-        //     Values = SummerHeatDemandData,
-        //     Fill = null
-        // }
-    };
-    
-    
+            new Axis
+            {
+                Labels = hours.Select(hour => hour.ToString("dd/MM/yyyy HH:mm")).ToArray()
+            }
+        };
     }
-    public Axis[] XAxes { get; set; } =
-    {
-        new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMMM dd HH:mm"))
-    };
 }
-
-
-

@@ -11,6 +11,7 @@ public class OptimiserViewModel : ViewModelBase
 {
     public DateTime _startingDate = new DateTime(2023,7,12,0,0,0);
     public DateTime _endingDate = new DateTime(2023,7,13,0,0,0);
+    //public var optimisationCategory = this.Find<ComboBox>("OptimisationCategory")
     public DateTime StartingDate
     {
         get => _startingDate;
@@ -23,10 +24,10 @@ public class OptimiserViewModel : ViewModelBase
     }
     public ReactiveCommand<Unit, Unit> OptimiseCommand { get; }
 
-    public void Optimise(DateTime start, DateTime end )//also add which category to optimise from later
+    public void Optimise(DateTime start, DateTime end )
     {
         Console.WriteLine("Testing");
-        Schedule optimisedData = Optimiser.Optimise(start, end);
+        Schedule optimisedData = Optimiser.Optimise(start, end, OptimisationChoice.Cost); //change OptimisationChoice.Cost to correspond with users choice - third argument should be something like OptimisationChoice[OptimisationCategory.SelectedIndex]
         Console.WriteLine(StartingDate);
         Console.WriteLine("Optimised Schedule:");
         foreach (var hour in optimisedData.schedule)

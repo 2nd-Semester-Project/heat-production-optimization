@@ -44,6 +44,8 @@ public class OptimiserViewModel : ViewModelBase
             choice = OptimisationChoice.Emissions;
         }
         Schedule optimisedData = Optimiser.Optimise(start, end, choice);
+        ResultsDataManager.Save(optimisedData);
+        
         Console.WriteLine(StartingDate);
         Console.WriteLine("Optimised Schedule:");
         foreach (var hour in optimisedData.schedule)

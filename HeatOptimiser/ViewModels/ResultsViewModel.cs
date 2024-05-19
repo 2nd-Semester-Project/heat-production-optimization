@@ -35,6 +35,15 @@ public class ResultsViewModel : ViewModelBase
             }
         }
 
+        Schedule schedule = ResultsDataManager.LoadAll();
+        foreach (var hour in schedule.schedule)
+        {
+            foreach (var asset in hour.Assets!)
+            {
+                HeatDemandData.Add(new DateTimePoint(hour.Hour!.Value, asset.Heat));
+            }
+        }
+
 
         Series = new ObservableCollection<ISeries>
     {

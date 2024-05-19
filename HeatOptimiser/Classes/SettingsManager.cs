@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System;
 
 namespace HeatOptimiser
 {
@@ -11,16 +12,44 @@ namespace HeatOptimiser
 
         static SettingsManager()
         {
+            Configuration = InitializeBuilder();
+        }
+        public static IConfiguration InitializeBuilder()
+        {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("data/appsettings.json", optional: true, reloadOnChange: true);
 
-            Configuration = builder.Build();
+            try
+            {
+                Configuration = builder.Build();
+            }
+            catch (Exception)
+            {
+                // Delete the file if it exists
+                if (File.Exists("data/appsettings.json"))
+                {
+                    File.Delete("data/appsettings.json");
+                }
+                builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("data/appsettings.json", optional: true, reloadOnChange: true);
+                Configuration = builder.Build();
+            }
+            return Configuration;
         }
 
         public static string GetSetting(string settingName)
         {
-            return Configuration?[settingName] ?? string.Empty;
+            try
+            {
+                return Configuration?[settingName]! ?? string.Empty;
+            }
+            catch (Exception)
+            {
+                Configuration = InitializeBuilder();
+                return string.Empty;
+            }
         }
         public static void SaveSetting(string settingName, string settingValue)
         {

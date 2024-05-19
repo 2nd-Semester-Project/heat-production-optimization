@@ -210,7 +210,7 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void EditAsset()
     {   
-        AssetManager.SaveUnits(ProductionAssets, "ProductionAssets.json");
+        AssetManager.SaveUnits(ProductionAssets);
 
     }
     public void ValidateInput(string input)
@@ -225,7 +225,7 @@ public class AssetManagerViewModel : ViewModelBase
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         UpdateAssetCommand=ReactiveCommand.Create(EditAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
-        ProductionAssets=AssetManager.LoadUnits(AssetManager.saveFileName);
+        ProductionAssets=AssetManager.LoadUnits();
     }
 
 }

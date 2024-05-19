@@ -65,6 +65,7 @@ namespace HeatOptimiser
         public static Schedule Optimise2(DateTime startDate, DateTime endDate)
         {
             SourceData data = new();
+            data.LoadedData = new List<SourceDataPoint>(); // Initialize LoadedData
             Schedule schedule = new(startDate, endDate);
 
             ObservableCollection<ProductionAsset> assets = AssetManager.GetAllUnits();

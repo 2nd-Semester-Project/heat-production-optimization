@@ -175,7 +175,7 @@ public class AssetManagerViewModel : ViewModelBase
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteAssetCommand { get; }
-    public ReactiveCommand<Unit, Unit> EditAssetCommand { get; }
+    public ReactiveCommand<Unit, Unit> UpdateAssetCommand { get; }
     
     public string _assetEdit;
 
@@ -210,20 +210,7 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void EditAsset()
     {   
-        var selectedAsset = ProductionAssets.Where(x => x.IsSelected == true).ToList(); 
-        if(selectedAsset.Count==1)
-        {
-            
-            AssetNameNew=selectedAsset[0].Name;
-            AssetHeatNew=selectedAsset[0].Heat.ToString();
-            AssetElectricityNew=selectedAsset[0].Electricity.ToString();
-            AssetEnergyNew=selectedAsset[0].Energy.ToString();
-            AssetCostNew=selectedAsset[0].Cost.ToString();
-            AssetCarbonNew=selectedAsset[0].CarbonDioxide.ToString();
-            AssetButton="Update Unit";
-            AssetManager.DeleteUnit(selectedAsset[0].ID);
-            
-        }
+        AssetManager.SaveUnits(ProductionAssets, "ProductionAssets.json");
 
     }
     public void ValidateInput(string input)
@@ -236,7 +223,7 @@ public class AssetManagerViewModel : ViewModelBase
         //Assets = new ObservableCollection<ProductionAsset>(assetManager.LoadUnits("ProductionAssets.json"));
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
-        EditAssetCommand=ReactiveCommand.Create(EditAsset);
+        UpdateAssetCommand=ReactiveCommand.Create(EditAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
         ProductionAssets=AssetManager.LoadUnits(AssetManager.saveFileName);
     }

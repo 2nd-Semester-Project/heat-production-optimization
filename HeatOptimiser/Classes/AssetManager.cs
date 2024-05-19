@@ -8,6 +8,9 @@ using ReactiveUI;
 using System.Reactive;
 using UserInterface.ViewModels;
 using System.Net;
+using Avalonia.Data;
+using System.Globalization;
+using Avalonia.Data.Converters;
 
 namespace HeatOptimiser
 {
@@ -46,7 +49,7 @@ namespace HeatOptimiser
         public double? Energy
         {
             get { return _energy; }
-            set { _energy = value; }
+            set { _energy=value;}
         }
 
         private double? _cost;
@@ -192,4 +195,7 @@ namespace HeatOptimiser
             File.WriteAllText(fileName, jsonString);
         }
     }
+
+    
+
 }

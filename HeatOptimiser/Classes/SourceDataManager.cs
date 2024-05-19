@@ -68,19 +68,19 @@ namespace HeatOptimiser
             {
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // EPPlus license
 
-                using (var package = new ExcelPackage(new FileInfo(file)))
+            using (var package = new ExcelPackage(new FileInfo(file)))
+            {
+                ExcelWorksheet worksheet;
+                try
                 {
-                    ExcelWorksheet worksheet;
-                    try
-                    {
-                        worksheet = null ?? package.Workbook.Worksheets[0];
-                        worksheet = package.Workbook.Worksheets[workSheetNumber];
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Worksheet not found: {e}");
-                        return sourceList;
-                    }
+                    worksheet = null ?? package.Workbook.Worksheets[0];
+                    worksheet = package.Workbook.Worksheets[workSheetNumber];
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Worksheet not found: {e}");
+                    return sourceList;
+                }
 
                     if (worksheet.Dimension == null)
                     {

@@ -24,7 +24,7 @@ namespace HeatOptimiser.Tests
             DateTime endDate = DateTime.ParseExact(endDateStr, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
 
             // Act
-            Schedule schedule = Optimiser.Optimise(startDate, endDate);
+            Schedule schedule = Optimiser.Optimise2(startDate, endDate);
 
             // Assert
             Assert.NotNull(schedule);

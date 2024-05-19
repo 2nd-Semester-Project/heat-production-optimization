@@ -3,19 +3,46 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:UserInterface.ViewModels.SourceDataViewModel"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:views="clr-namespace:UserInterface.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UserInterface.Views.SourceDataView"
              x:DataType="views:SourceDataViewModel">
 
-  <Grid Margin="30">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="*" />    <!-- For content -->
-    </Grid.RowDefinitions>
-    <TextBox Grid.Column="0" Grid.Row="0" Text="NameOfFile"/>
-    <Button Grid.Column="0" Grid.Row="1"/>
-    </Grid>
+  <Grid Margin="30" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" ShowGridLines="false">
+    
+    <StackPanel Grid.Column="0" Grid.Row="0" Margin="10">
+      <TextBlock Text="Source Data File Path:" FontWeight="Bold" Margin="0,0,0,5"/>
+      <TextBox Text="{Binding SelectedFilePath}" Watermark="Enter SourceData File Path" VerticalAlignment="Bottom"/>
+      <TextBlock Text="{Binding ErrorFilePath}" Foreground="Red" IsVisible="{Binding IsErrorFilePathVisible}"/>
+    </StackPanel>
+
+    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">    
+    <StackPanel Margin="10">
+      <TextBlock Text="Starting Row:" FontWeight="Bold" Margin="0,0,0,5"/>
+      <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row" Margin="0,0,0,10"/>
+      <TextBlock Text="{Binding ErrorSelectRow}" Foreground="Red" IsVisible="{Binding IsErrorSelectRowVisible}"/>
+    </StackPanel>
+
+    <StackPanel Margin="10">
+      <TextBlock Text="Starting Column:" FontWeight="Bold" Margin="0,0,0,5"/>
+      <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column" Margin="0,0,0,10"/>
+      <TextBlock Text="{Binding ErrorSelectColumn}" Foreground="Red" IsVisible="{Binding IsErrorSelectColumnVisible}"/>
+    </StackPanel>
+    </StackPanel>
+
+    <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5">
+        <Button Command="{Binding SourceDataCommand}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Bottom"
+              Margin="5"
+              Background="#a11d33"
+              Foreground="White"
+              Width="150"
+              Height="35">
+        <TextBlock Text="Load" HorizontalAlignment="Center"/>
+        </Button>
+    </StackPanel>
+    
+  </Grid>
 </UserControl>

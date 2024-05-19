@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using HeatOptimiser;
+using System.Globalization;
 
 
 
@@ -152,6 +153,12 @@ public class AssetManagerViewModel : ViewModelBase
         else{   ErrorText6 = string.Empty;}
         }
     }
+    public string _assetButton = "Add Unit";
+    public string AssetButton 
+    {
+        get =>_assetButton;
+        set => this.RaiseAndSetIfChanged(ref _assetButton, value);
+    }
     public int _assetCount;
     public int AssetCount
     {
@@ -188,6 +195,7 @@ public class AssetManagerViewModel : ViewModelBase
             AssetEnergyNew=string.Empty;
             AssetCostNew=string.Empty;
             AssetCarbonNew=string.Empty;
+            AssetButton="Add Unit";
             }
        
         
@@ -203,6 +211,7 @@ public class AssetManagerViewModel : ViewModelBase
     public void EditAsset()
     {   
         AssetManager.SaveUnits(ProductionAssets, "ProductionAssets.json");
+
     }
     public void ValidateInput(string input)
     {   if (!double.TryParse(input, out _) && input!= string.Empty)

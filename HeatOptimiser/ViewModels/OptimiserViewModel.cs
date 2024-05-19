@@ -23,22 +23,42 @@ public class OptimiserViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _endingDate, value);
     }
     public ReactiveCommand<Unit, Unit> OptimiseCommand { get; }
-
-    public void Optimise(DateTime start, DateTime end )
+    private int _selectedCategoryIndex;
+    public int SelectedCategoryIndex
     {
-        Console.WriteLine("Testing");
-        Schedule optimisedData = Optimiser.Optimise(start, end, OptimisationChoice.Cost); //change OptimisationChoice.Cost to correspond with users choice - third argument should be something like OptimisationChoice[OptimisationCategory.SelectedIndex]
+        get =>  _selectedCategoryIndex;
+        set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
+    }
+
+    public void Optimise(DateTime start, DateTime end, int categoryIndex)
+    {
+        Console.WriteLine($"Testing {categoryIndex} optimisation.");
+
+        OptimisationChoice choice;
+        if (categoryIndex == 0)
+        {
+            choice = OptimisationChoice.Cost;
+        }
+        else
+        {
+            choice = OptimisationChoice.Emissions;
+        }
+        Schedule optimisedData = Optimiser.Optimise(start, end, choice);
         Console.WriteLine(StartingDate);
         Console.WriteLine("Optimised Schedule:");
         foreach (var hour in optimisedData.schedule)
         {
             Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
+            foreach (var asset in hour.Assets!)
+            {
+                Console.WriteLine($"Asset: {asset.Name}, Heat: {asset.Heat}, Demand {hour.Demands![hour.Assets!.IndexOf(asset)]}");
+            }
         }
     }
            
     public OptimiserViewModel()
     {
         Console.WriteLine("OptimiserViewModel created");
-        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate)); 
+        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex)); 
     }
 }

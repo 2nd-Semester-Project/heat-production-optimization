@@ -25,6 +25,7 @@
               PlaceholderText="Select Category" 
               Width="200" 
               VerticalAlignment="Bottom"
+              SelectedIndex="{Binding SelectedCategoryIndex}"
               Margin="5">
       <ComboBoxItem>Optimize by Costs</ComboBoxItem>
       <ComboBoxItem>Optimize by CarbonDioxide</ComboBoxItem>

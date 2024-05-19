@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 
 namespace UserInterface.ViewModels;
 

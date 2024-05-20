@@ -34,7 +34,14 @@ public class ResultsViewModel : ViewModelBase
             List<double> demands = new();
             foreach (ScheduleHour hour in results.schedule)
             {
-                demands.Add(hour.Demands![assets.IndexOf(asset)]);
+                if (hour.Assets!.Contains(asset))
+                {
+                    demands.Add(hour.Demands![hour.Assets.IndexOf(asset)]);
+                }
+                else
+                {
+                    demands.Add(0);
+                }
             }
             demandsList.Add(demands);
         }
@@ -57,12 +64,12 @@ public class ResultsViewModel : ViewModelBase
             hours.Add(hour.Hour!.Value);
         }
 
-        XAxes = new Axis[]
-        {
+        XAxes =
+        [
             new Axis
             {
                 Labels = hours.Select(hour => hour.ToString("dd/MM/yyyy HH:mm")).ToArray()
             }
-        };
+        ];
     }
 }

@@ -54,9 +54,6 @@
                         Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
                     <TextBlock Text="Results" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
-                <Button Height="40" Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
-                    <TextBlock Text="Reports and Schedules" Opacity="{Binding ButtonTextOpacity}"/>
-                </Button>
             </StackPanel>
 
 

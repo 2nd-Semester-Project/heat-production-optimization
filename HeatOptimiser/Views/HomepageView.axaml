@@ -8,27 +8,59 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="UserInterface.Views.HomepageView"
              x:DataType="views:HomepageViewModel">
-             
-    <Grid Margin="30">
+
+    <Grid Margin="40">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> <!-- For the title -->
-            <RowDefinition Height="Auto" /> <!-- For the SourceText -->
-            <RowDefinition Height="Auto" /> <!-- For the AssetCount -->
-            <RowDefinition Height="*" />    <!-- For the chart -->
+            <RowDefinition Height="Auto" /> <!-- Logo -->
+            <RowDefinition Height="Auto" /> <!-- Title -->
+            <RowDefinition Height="Auto" /> <!-- Subtitle -->
+            <RowDefinition Height="Auto" /> <!-- Description -->
         </Grid.RowDefinitions>
 
+        <!-- Logo -->
+        <Image Source="avares://HeatOptimiser/Assets/800px-Danfoss-Logo.svg.png" 
+               HorizontalAlignment="Center" Height="80" Margin="0,0,0,20" Grid.Row="0"/>
+
         <!-- Title -->
-        <TextBlock Text="Heat Production Optimisation" FontSize="30" FontWeight="Bold" Foreground="#a11d33" 
-                   HorizontalAlignment="Center" Margin="0,0,0,30"/>
+        <TextBlock Text="Heat Production Optimization" FontSize="32" FontWeight="Bold" Foreground="#a11d33" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="1"/>
 
+        <!-- Subtitle -->
+        <TextBlock Text="Optimizing Heat and Electricity Production for Cost Efficiency" FontSize="20" Foreground="Gray" 
+                   HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2"/>
 
-        <!-- Asset Count -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2">
-            <TextBlock Text="Currently you have " FontSize="18" Foreground="Black"/>
-            <TextBlock Text="{Binding AssetCount}" FontSize="22" FontWeight="Bold" Foreground="Black" Margin="10,0"/>
-            <TextBlock Text=" Production Assets" FontSize="18" Foreground="Black"/>
+        <!-- Project Description -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,20" HorizontalAlignment="Center" Width="800">
+            <TextBlock Text="HeatItOn User Guide" FontSize="24" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
+            <TextBlock FontSize="18" TextWrapping="Wrap" Foreground="Black">
+                <Run Text="HeatItOn is tasked with optimizing heat delivery to 1600 buildings in Heatington through a district heating network. The goal is to cost-effectively schedule heat production using various units, including traditional boilers. The project involves defining heat schedules for all available production units, aiming for the lowest expenses and highest profit on the electricity market."/>
+                <LineBreak/>
+                <LineBreak/>
+                <Run Text="You are presented with a menu on the left side of the window where you can navigate to different sections of the application. The main sections are:"/>
+                <LineBreak/>
+                <Run Text="• Home: This page, where you can find an overview of the project."/>
+                <LineBreak/>
+                <Run Text="• Assets: A list of all available production units, where you can edit and add assets."/>
+                <LineBreak/>
+                <Run Text="• Source Data: A page where you can load and view the source data."/>
+                <LineBreak/>
+                <Run Text="• Optimiser: The main page where you can run the optimization algorithm."/>
+                <LineBreak/>
+                <Run Text="• Results: A page where you can view the results of the optimization."/>
+                <LineBreak/>
+                
+            </TextBlock>
+            <TextBlock Text="User Workflow:" FontSize="24" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
+            <TextBlock FontSize="18" TextWrapping="Wrap" Foreground="Black">
+                <LineBreak/>
+                <Run Text="1. Load the Source Data."/>
+                <LineBreak/>
+                <Run Text="2. Review the data to ensure it is correct."/>
+                <LineBreak/>
+                <Run Text="3. Go to the Optimisation tab, select the time period, and choose the optimisation type."/>
+                <LineBreak/>
+                <Run Text="4. Navigate to the Results tab to view the final optimisation results."/>
+            </TextBlock>
         </StackPanel>
-
-   
     </Grid>
 </UserControl>

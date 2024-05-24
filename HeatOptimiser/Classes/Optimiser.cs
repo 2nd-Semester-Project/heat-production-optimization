@@ -47,7 +47,7 @@ namespace HeatOptimiser
             SourceData data = new();
             if (data.LoadedData == null)
             {
-                data.LoadedData = new List<SourceDataPoint>(); // Initialize LoadedData
+                data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
             }
             Schedule schedule = new(startDate, endDate);
 

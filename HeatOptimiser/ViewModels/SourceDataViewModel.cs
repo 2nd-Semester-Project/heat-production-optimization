@@ -112,6 +112,7 @@ namespace UserInterface.ViewModels
             _heatDemandData = new ObservableCollection<DateTimePoint>();
             _electricityPriceData = new ObservableCollection<DateTimePoint>();
             _sourceText = "Source Data not loaded. \nPlease load the data.";
+            
 
             if (SettingsManager.GetSetting("DataLoaded") == "True")
             {

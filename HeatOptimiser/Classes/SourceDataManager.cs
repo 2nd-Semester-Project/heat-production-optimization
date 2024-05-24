@@ -3,6 +3,7 @@ using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace HeatOptimiser
 {
@@ -17,7 +18,7 @@ namespace HeatOptimiser
     public class SourceData
     {
         private const string defaultSavePath = "data/source_data.csv";
-        public List<SourceDataPoint> LoadedData { get; set; }
+        public ObservableCollection<SourceDataPoint> LoadedData { get; set; }
 
         public SourceData()
         {
@@ -45,6 +46,7 @@ namespace HeatOptimiser
         }
         public void LoadSourceData(string filePath, int rowStart, int columnStart)
         {
+            LoadedData.Clear();
             LoadedData = SourceDataManager.LoadXLSXFile(filePath, rowStart, columnStart);
             if (!(LoadedData.Count > 0))
             {
@@ -61,9 +63,9 @@ namespace HeatOptimiser
     }
     public static class SourceDataManager
     {
-        public static List<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
+        public static ObservableCollection<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
         {
-            var sourceList = new List<SourceDataPoint>();
+            var sourceObservableCollection = new ObservableCollection<SourceDataPoint>();
             if (file != string.Empty || File.Exists(file) || rowStart >= 1 || columnStart >= 1)
             {
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // EPPlus license
@@ -79,13 +81,13 @@ namespace HeatOptimiser
                 catch (Exception e)
                 {
                     Console.WriteLine($"Worksheet not found: {e}");
-                    return sourceList;
+                    return sourceObservableCollection;
                 }
 
                     if (worksheet.Dimension == null)
                     {
                         Console.WriteLine("The worksheet is empty.");
-                        return sourceList;
+                        return sourceObservableCollection;
                     }
 
                     for (int row = rowStart; row <= worksheet.Dimension.End.Row; row++)
@@ -101,7 +103,7 @@ namespace HeatOptimiser
                                 HeatDemand = worksheet.Cells[row, columnStart + 2]?.Value != null ? double.Parse(worksheet.Cells[row, columnStart + 2].Value.ToString()!) : null,
                                 ElectricityPrice = worksheet.Cells[row, columnStart + 3]?.Value != null ? double.Parse(worksheet.Cells[row, columnStart + 3].Value.ToString()!) : null
                             };
-                            sourceList.Add(sourceData);
+                            sourceObservableCollection.Add(sourceData);
                         }
                         catch (Exception e)
                         {
@@ -110,15 +112,15 @@ namespace HeatOptimiser
                     }
                 }
             }
-            return sourceList;
+            return sourceObservableCollection;
         }
 
-        public static List<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
+        public static ObservableCollection<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
         {
             DateTime winterEnd = DateTime.ParseExact("31/03/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
             bool rangeExists = false;
             int startIndex = 0;
-            List<SourceDataPoint> dataCollection = data.LoadedData;
+            ObservableCollection<SourceDataPoint> dataCollection = data.LoadedData;
             foreach (SourceDataPoint point in dataCollection)
             {
                 if (point.TimeFrom.HasValue)
@@ -135,21 +137,24 @@ namespace HeatOptimiser
             int endIndex = startIndex;
             if (rangeExists)
             {
-                foreach (SourceDataPoint point in dataCollection.GetRange(startIndex, dataCollection.Count - startIndex))
+                ObservableCollection<SourceDataPoint> range = new ObservableCollection<SourceDataPoint>();
+                for (int i = startIndex; i < dataCollection.Count; i++)
                 {
+                    SourceDataPoint point = dataCollection[i];
                     endIndex++;
                     DateTime dt = (DateTime)point.TimeTo!;
                     if (dt.Date > endDate.Date)
                     {
                         break;
                     }
+                    range.Add(point);
                 }
-                return dataCollection.GetRange(startIndex, endIndex - startIndex);
+                return new ObservableCollection<SourceDataPoint>(range);
             }
-            return new List<SourceDataPoint>();
+            return new ObservableCollection<SourceDataPoint>();
         }
 
-        public static void WriteToCSV(List<SourceDataPoint> data, string filePath)
+        public static void WriteToCSV(ObservableCollection<SourceDataPoint> data, string filePath)
         {
             using (var writer = new StreamWriter(filePath))
             {

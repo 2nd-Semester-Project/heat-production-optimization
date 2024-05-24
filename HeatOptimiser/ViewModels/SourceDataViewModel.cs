@@ -117,7 +117,7 @@ namespace UserInterface.ViewModels
             if (SettingsManager.GetSetting("DataLoaded") == "True")
             {
                 _sourceText = "Source Data loaded.";
-                foreach (var point in DataVisualizer.sourceData.LoadedData)
+                foreach (var point in sourceData.LoadedData)
                 {
                     if (point.HeatDemand.HasValue && point.TimeFrom.HasValue && point.ElectricityPrice.HasValue)
                     {

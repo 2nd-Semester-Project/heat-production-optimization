@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Collections.ObjectModel;
+using LiveChartsCore.Defaults;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HeatOptimiser
 {
@@ -42,7 +46,6 @@ namespace HeatOptimiser
                     SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
                 }
             }
-
         }
         public void LoadSourceData(string filePath, int rowStart, int columnStart)
         {
@@ -59,10 +62,15 @@ namespace HeatOptimiser
             // Automatically write the CSV files
             SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
         }
-
     }
     public static class SourceDataManager
     {
+        private static List<DateTimePoint> _heatDemandData;
+        private static List<DateTimePoint> _electricityPriceData;
+        public static ObservableCollection<ISeries> Series { get; set; }
+
+        public static Axis[] XAxes { get; set; }
+        public static Axis[] YAxes { get; set; }
         public static ObservableCollection<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
         {
             var sourceObservableCollection = new ObservableCollection<SourceDataPoint>();
@@ -165,6 +173,27 @@ namespace HeatOptimiser
                     writer.WriteLine(line);
                 }
             }
+        }
+
+        public static void VisualiseData(SourceData sourceData)
+        {
+            _heatDemandData = [];
+            _electricityPriceData = [];
+            
+            foreach (var point in sourceData.LoadedData)
+            {
+                if (point.HeatDemand.HasValue && point.TimeFrom.HasValue && point.ElectricityPrice.HasValue)
+                {
+                    _heatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
+                    _electricityPriceData.Add(new DateTimePoint(point.TimeFrom.Value, point.ElectricityPrice.Value));
+
+                    Console.WriteLine($"Added Point: TimeFrom={point.TimeFrom.Value}, HeatDemand={point.HeatDemand.Value}, ElectricityPrice={point.ElectricityPrice.Value}");
+                }
+            }
+
+            List<List<DateTimePoint>> data = [_heatDemandData, _electricityPriceData];
+            List<string> names = ["Heat Deamand (MWh)", "Electricity Price (€/MWh)"];
+            DataVisualizer.VisualiseSourceData(data, names);
         }
     }
 }

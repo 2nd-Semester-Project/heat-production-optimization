@@ -9,7 +9,7 @@
              x:DataType="views:OptimiserViewModel">
   
   
-  <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="false">
+  <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="true">
     <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom">
       <TextBlock Text="Enter Starting Date" Foreground="Black" FontSize="20"/>
       <CalendarDatePicker x:Name="Calendar" Height="40" Width="250" SelectedDate="{Binding StartingDate}"/>
@@ -36,6 +36,19 @@
             Background="#a11d33"
             Width="150"/>
       </StackPanel>
+      <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ProductionAssets}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                  <CheckBox IsChecked="{Binding OptimiseSelected}"/>
+                  <TextBlock Text="{Binding Name}"/>
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+
       <!--<TextBlock Text="{Binding StartingDate}"/>-->
     
     

@@ -4,6 +4,7 @@ using System;
 using Avalonia.Controls;
 using System.Reactive;
 using System.Data.SqlTypes;
+using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModels;
 
@@ -22,7 +23,9 @@ public class OptimiserViewModel : ViewModelBase
         get => _endingDate;
         set => this.RaiseAndSetIfChanged(ref _endingDate, value);
     }
+    public ObservableCollection<ProductionAsset> ProductionAssets{get; set;} = new();
     public ReactiveCommand<Unit, Unit> OptimiseCommand { get; }
+    public ReactiveCommand<Unit, Unit> TestSelectedList { get; }
     private int _selectedCategoryIndex;
     public int SelectedCategoryIndex
     {
@@ -30,8 +33,17 @@ public class OptimiserViewModel : ViewModelBase
         set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
     }
 
+    public void TestingSelectedList()
+    {
+        ObservableCollection<ProductionAsset> testList = AssetManager.GetSelectedUnits();
+        foreach(ProductionAsset asset in testList)
+        {
+            Console.WriteLine(asset.Name);
+        }
+    }
     public void Optimise(DateTime start, DateTime end, int categoryIndex)
     {
+        TestingSelectedList();
         Console.WriteLine($"Testing {categoryIndex} optimisation.");
 
         OptimisationChoice choice;
@@ -61,6 +73,8 @@ public class OptimiserViewModel : ViewModelBase
     public OptimiserViewModel()
     {
         Console.WriteLine("OptimiserViewModel created");
+        ProductionAssets=AssetManager.LoadUnits();
         OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex)); 
+        
     }
 }

@@ -71,6 +71,12 @@ namespace HeatOptimiser
             get => _isSelected;
             set => this.RaiseAndSetIfChanged(ref _isSelected, value);
         }
+        public bool _optimiseSelected;
+        public bool OptimiseSelected
+        {
+            get => _optimiseSelected;
+            set => this.RaiseAndSetIfChanged(ref _optimiseSelected, value);
+        }
     }
     public static class AssetManager
     {
@@ -89,7 +95,8 @@ namespace HeatOptimiser
                     Energy = energy,
                     Cost = cost,
                     CarbonDioxide = carbonDioxide,
-                    IsSelected = false
+                    IsSelected = false,
+                    OptimiseSelected = false
                 });
                 _jsonAssetStorage.SaveUnits(_productionAssets); // this is up for debate, I just want to auto save, and they likely wont have thousands of production units, that could cause a performance issue.
             }
@@ -145,6 +152,13 @@ namespace HeatOptimiser
         public static ObservableCollection<ProductionAsset> GetAllUnits()
         {
             return _productionAssets;
+        }
+        public static ObservableCollection<ProductionAsset> GetSelectedUnits()
+        {
+            var assets = _productionAssets.Where(x => x._optimiseSelected == true).ToList();
+            ObservableCollection<ProductionAsset> selectedAssets = new ObservableCollection<ProductionAsset>(assets);
+            return selectedAssets;
+            
         }
         public static ObservableCollection<ProductionAsset> LoadUnits()
         {

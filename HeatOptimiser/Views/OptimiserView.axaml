@@ -20,29 +20,26 @@
       <CalendarDatePicker x:Name="Calendar2" Height="40" Width="250" SelectedDate="{Binding EndingDate}"/>
       
       </StackPanel>
-      <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+      <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
     <ComboBox x:Name="OptimisationCategory"
               PlaceholderText="Select Category" 
-              Width="200" 
-              VerticalAlignment="Bottom"
               SelectedIndex="{Binding SelectedCategoryIndex}"
               Margin="5">
       <ComboBoxItem>Optimize by Costs</ComboBoxItem>
       <ComboBoxItem>Optimize by CarbonDioxide</ComboBoxItem>
       </ComboBox>
     <Button Content="Optimize" Command="{Binding OptimiseCommand}"
-            VerticalAlignment="Bottom"
             Margin="5" 
             Background="#a11d33"
             Width="150"/>
       </StackPanel>
-      <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ProductionAssets}">
+      <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding ProductionAssets}" Background="#a11d33">
         <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal" Margin="10">
+                <StackPanel Orientation="Horizontal" Margin="5">
                   <CheckBox IsChecked="{Binding OptimiseSelected}"/>
-                  <TextBlock Text="{Binding Name}"/>
+                  <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                 </StackPanel>
               </StackPanel>
             </DataTemplate>

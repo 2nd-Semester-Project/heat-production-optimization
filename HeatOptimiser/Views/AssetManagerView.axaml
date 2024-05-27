@@ -57,7 +57,7 @@
               <Button Content="Add Unit" CornerRadius="50" Background="#a11d33" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
         </StackPanel>
       
-      <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10">
+      <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="5" VerticalAlignment="Top" Height="420" HorizontalAlignment="Stretch" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
                   <StackPanel Margin="5" Orientation="Horizontal" Background="#a11d33" Spacing="5">

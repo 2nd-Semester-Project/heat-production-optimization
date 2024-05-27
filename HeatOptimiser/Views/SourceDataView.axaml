@@ -34,14 +34,14 @@
     <!-- Row and Column Inputs -->
     <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
       <StackPanel Margin="10">
-        <TextBlock Text="Starting Row:" FontWeight="Bold" Margin="0,0,0,5"/>
-        <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row" Margin="0,0,0,10"/>
+        <TextBlock Text="Starting Column:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column" Margin="0,0,0,10"/>
         <TextBlock Text="{Binding ErrorSelectRow}" Foreground="Red" IsVisible="{Binding IsErrorSelectRowVisible}"/>
       </StackPanel>
       
       <StackPanel Margin="10">
-        <TextBlock Text="Starting Column:" FontWeight="Bold" Margin="0,0,0,5"/>
-        <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column" Margin="0,0,0,10"/>
+        <TextBlock Text="Starting Row:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row" Margin="0,0,0,10"/>
         <TextBlock Text="{Binding ErrorSelectColumn}" Foreground="Red" IsVisible="{Binding IsErrorSelectColumnVisible}"/>
       </StackPanel>
     </StackPanel>

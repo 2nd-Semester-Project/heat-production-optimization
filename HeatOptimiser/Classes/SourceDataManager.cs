@@ -47,20 +47,24 @@ namespace HeatOptimiser
                 }
             }
         }
-        public void LoadSourceData(string filePath, int rowStart, int columnStart)
+        public void LoadSourceData(string filePath, int columnStart, int rowStart)
         {
             LoadedData.Clear();
-            LoadedData = SourceDataManager.LoadXLSXFile(filePath, rowStart, columnStart);
+            LoadedData = SourceDataManager.LoadXLSXFile(filePath, columnStart, rowStart);
             if (!(LoadedData.Count > 0))
             {
                 SettingsManager.SaveSetting("DataLoaded", "False");
             }
-            SettingsManager.SaveSetting("XLSXFilePath", filePath);
-            SettingsManager.SaveSetting("Row", rowStart.ToString());
-            SettingsManager.SaveSetting("Column", columnStart.ToString());
-            SettingsManager.SaveSetting("DataLoaded", "True");
-            // Automatically write the CSV files
-            SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
+            else
+            {
+                SettingsManager.SaveSetting("XLSXFilePath", filePath);
+                SettingsManager.SaveSetting("Row", rowStart.ToString());
+                SettingsManager.SaveSetting("Column", columnStart.ToString());
+                SettingsManager.SaveSetting("DataLoaded", "True");
+                
+                // Automatically write the CSV files
+                SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
+            }
         }
     }
     public static class SourceDataManager
@@ -71,7 +75,7 @@ namespace HeatOptimiser
 
         public static Axis[] XAxes { get; set; }
         public static Axis[] YAxes { get; set; }
-        public static ObservableCollection<SourceDataPoint> LoadXLSXFile(string file, int rowStart, int columnStart, int workSheetNumber = 0)
+        public static ObservableCollection<SourceDataPoint> LoadXLSXFile(string file, int columnStart, int rowStart, int workSheetNumber = 0)
         {
             var sourceObservableCollection = new ObservableCollection<SourceDataPoint>();
             if (file != string.Empty || File.Exists(file) || rowStart >= 1 || columnStart >= 1)
@@ -88,13 +92,11 @@ namespace HeatOptimiser
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Worksheet not found: {e}");
                     return sourceObservableCollection;
                 }
 
                     if (worksheet.Dimension == null)
                     {
-                        Console.WriteLine("The worksheet is empty.");
                         return sourceObservableCollection;
                     }
 
@@ -115,7 +117,6 @@ namespace HeatOptimiser
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine($"Error: {e}");
                         }
                     }
                 }
@@ -166,11 +167,9 @@ namespace HeatOptimiser
         {
             using (var writer = new StreamWriter(filePath))
             {
-                writer.WriteLine("TimeFrom,TimeTo,HeatDemand,ElectricityPrice");
                 foreach (var point in data)
                 {
                     var line = $"{point.TimeFrom},{point.TimeTo},{point.HeatDemand},{point.ElectricityPrice}";
-                    writer.WriteLine(line);
                 }
             }
         }
@@ -186,8 +185,6 @@ namespace HeatOptimiser
                 {
                     _heatDemandData.Add(new DateTimePoint(point.TimeFrom.Value, point.HeatDemand.Value));
                     _electricityPriceData.Add(new DateTimePoint(point.TimeFrom.Value, point.ElectricityPrice.Value));
-
-                    Console.WriteLine($"Added Point: TimeFrom={point.TimeFrom.Value}, HeatDemand={point.HeatDemand.Value}, ElectricityPrice={point.ElectricityPrice.Value}");
                 }
             }
 

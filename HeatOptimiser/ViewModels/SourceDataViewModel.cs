@@ -106,7 +106,6 @@ namespace UserInterface.ViewModels
             _selectedFilePath = SettingsManager.GetSetting("XLSXFilePath");
             _selectedColumn = int.TryParse(SettingsManager.GetSetting("Column"), out int column) ? column : 4;
             _selectedRow = int.TryParse(SettingsManager.GetSetting("Row"), out int row) ? row : 7;
-            SourceData sourceData = new SourceData();
             SourceDataCommand = ReactiveCommand.Create(LoadSourceData);
 
             // Initialize error properties
@@ -119,7 +118,7 @@ namespace UserInterface.ViewModels
             
             if (SettingsManager.GetSetting("DataLoaded") == "True")
             {
-                SourceDataManager.VisualiseData(sourceData);
+                SourceDataManager.VisualiseData();
                 Series = SourceDataManager.Series;
                 XAxes = SourceDataManager.XAxes;
                 YAxes = SourceDataManager.YAxes;
@@ -172,13 +171,12 @@ namespace UserInterface.ViewModels
             if (!hasError)
             {
                 // No errors, proceed with loading the source data
-                SourceData sourceData = new();
-                sourceData.LoadSourceData(SelectedFilePath, SelectedColumn, SelectedRow);
+                SourceDataManager.LoadSourceData(SelectedFilePath, SelectedColumn, SelectedRow);
                 
                 if (SettingsManager.GetSetting("DataLoaded") == "True") {
                     SourceText = "Source Data loaded.";
 
-                    SourceDataManager.VisualiseData(sourceData);
+                    SourceDataManager.VisualiseData();
                     Series = SourceDataManager.Series;
                     XAxes = SourceDataManager.XAxes;
                     YAxes = SourceDataManager.YAxes;

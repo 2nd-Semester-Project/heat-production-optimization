@@ -1,23 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using DynamicData;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using UserInterface.ViewModels;
 
 namespace HeatOptimiser
 {
 
     public static class DataVisualizer
     {
-        public static SourceData sourceData = new(); 
-
-        public static readonly ObservableCollection<DateTimePoint>? HeatDemandData = new();
         public static void VisualiseSourceData(List<List<DateTimePoint>> data, List<string> names)
         {
             List<SKColor> colors = [

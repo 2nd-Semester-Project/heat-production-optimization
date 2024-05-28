@@ -8,6 +8,7 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeatOptimiser
 {
@@ -18,39 +19,16 @@ namespace HeatOptimiser
         public double? HeatDemand { get; set; }
         public double? ElectricityPrice { get; set; }
     }
-
-    public class SourceData
+    public static class SourceDataManager
     {
-        private const string defaultSavePath = "data/source_data.csv";
-        public ObservableCollection<SourceDataPoint> LoadedData { get; set; }
+        public const string defaultSavePath = "data/source_data.csv";
+        public static ObservableCollection<SourceDataPoint> LoadedData { get; set; } = [];
 
-        public SourceData()
+        public static void LoadSourceData(string filePath, int columnStart, int rowStart)
         {
-            string XLSXFIlePath = SettingsManager.GetSetting("XLSXFilePath");
-            string columnstring = SettingsManager.GetSetting("Column");
-            string rowstring = SettingsManager.GetSetting("Row");
 
-            if (XLSXFIlePath == string.Empty || !File.Exists(XLSXFIlePath) || columnstring == string.Empty || rowstring == string.Empty)
-            {
-                SettingsManager.SaveSetting("DataLoaded", "False");
-            }
-            else {
-                int column = int.TryParse(columnstring, out column) ? column : 4;
-                int row = int.TryParse(rowstring, out row) ? row : 7;
-                LoadedData = SourceDataManager.LoadXLSXFile(XLSXFIlePath, column, row);
-                if (!(LoadedData.Count > 0))
-                {
-                    SettingsManager.SaveSetting("DataLoaded", "False");
-                }
-                else {
-                    SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
-                }
-            }
-        }
-        public void LoadSourceData(string filePath, int columnStart, int rowStart)
-        {
             LoadedData.Clear();
-            LoadedData = SourceDataManager.LoadXLSXFile(filePath, columnStart, rowStart);
+            LoadedData = LoadXLSXFile(filePath, columnStart, rowStart);
             if (!(LoadedData.Count > 0))
             {
                 SettingsManager.SaveSetting("DataLoaded", "False");
@@ -63,12 +41,9 @@ namespace HeatOptimiser
                 SettingsManager.SaveSetting("DataLoaded", "True");
                 
                 // Automatically write the CSV files
-                SourceDataManager.WriteToCSV(LoadedData, defaultSavePath);
+                WriteToCSV(LoadedData, defaultSavePath);
             }
         }
-    }
-    public static class SourceDataManager
-    {
         private static List<DateTimePoint> _heatDemandData;
         private static List<DateTimePoint> _electricityPriceData;
         public static ObservableCollection<ISeries> Series { get; set; }
@@ -124,12 +99,23 @@ namespace HeatOptimiser
             return sourceObservableCollection;
         }
 
-        public static ObservableCollection<SourceDataPoint> GetDataInRange(SourceData data, DateTime startDate, DateTime endDate)
+        public static SourceDataPoint? GetDataByDateTime(DateTime dateTime)
         {
-            DateTime winterEnd = DateTime.ParseExact("31/03/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            foreach(SourceDataPoint sdp in LoadedData)
+            {
+                if(sdp.TimeFrom == dateTime)
+                {
+                    return sdp;
+                };
+            }
+            return null;
+        }
+
+        public static ObservableCollection<SourceDataPoint> GetDataInRange(DateTime startDate, DateTime endDate)
+        {
             bool rangeExists = false;
             int startIndex = 0;
-            ObservableCollection<SourceDataPoint> dataCollection = data.LoadedData;
+            ObservableCollection<SourceDataPoint> dataCollection = LoadedData;
             foreach (SourceDataPoint point in dataCollection)
             {
                 if (point.TimeFrom.HasValue)
@@ -174,12 +160,12 @@ namespace HeatOptimiser
             }
         }
 
-        public static void VisualiseData(SourceData sourceData)
+        public static void VisualiseData()
         {
             _heatDemandData = [];
             _electricityPriceData = [];
             
-            foreach (var point in sourceData.LoadedData)
+            foreach (var point in LoadedData)
             {
                 if (point.HeatDemand.HasValue && point.TimeFrom.HasValue && point.ElectricityPrice.HasValue)
                 {

@@ -44,10 +44,9 @@ namespace HeatOptimiser
     {
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
-            SourceData data = new();
-            if (data.LoadedData == null)
+            if (SourceDataManager.LoadedData == null)
             {
-                data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
+                SourceDataManager.LoadedData = []; // Initialize LoadedData
             }
             Schedule schedule = new(startDate, endDate);
 
@@ -56,14 +55,14 @@ namespace HeatOptimiser
             {
                 if (optimisationChoice == OptimisationChoice.Cost)
                 {
-                    Dictionary<ProductionAsset, double?> netCosts = new();
+                    Dictionary<ProductionAsset, double?> netCosts = [];
 
                     for (int i = 0; i < assets.Count; i++)
                     {
                         netCosts.Add(assets[i], assets[i].Cost);
                     }
 
-                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
                     {
                         Dictionary<ProductionAsset, double?> costs = new(netCosts);
                         foreach(ProductionAsset asset in costs.Keys)
@@ -76,7 +75,7 @@ namespace HeatOptimiser
                         int index = 0;
                         ObservableCollection<ProductionAsset> assetsUsed = [];
                         ObservableCollection<double> assetDemands = [];
-                        while (producedHeat < hour.HeatDemand)
+                        while (producedHeat < hour.HeatDemand && index != sortedCosts.Count)
                         {
                             assetsUsed.Add(sortedCosts.Keys.ToList()[index]);
                             if (sortedCosts.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
@@ -91,6 +90,7 @@ namespace HeatOptimiser
                             }
                             index += 1;
                         }
+                        //Check if enough heat has been produced
                         schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
                     }
                 }
@@ -104,7 +104,7 @@ namespace HeatOptimiser
                         emissions.Add(assets[i], assets[i].CarbonDioxide);
                     }
 
-                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
                     {
                         Dictionary<ProductionAsset, double?> sortedEmissions = emissions.OrderBy(x => x.Value).ToDictionary();
                         double producedHeat = 0;

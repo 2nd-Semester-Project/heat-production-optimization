@@ -8,17 +8,37 @@
              x:Class="UserInterface.Views.ResultsView"
              x:DataType="vm:ResultsViewModel"> 
 
-    <lvc:CartesianChart 
-    Grid.Column="1"
-    Grid.Row="1"
-    Series="{Binding Series}"
-    XAxes="{Binding XAxes}"
-    ZoomMode="X"
-    />
-    <!-- <lvc:CartesianChart
-    Series="{Binding Series}"
-    /> -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="10">
+            <Button Content="Schedule" Command="{Binding SelectScheduleChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
+            <Button Content="Costs" Command="{Binding SelectCostsChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
+            <Button Content="Emissions" Command="{Binding SelectEmissionsChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
+            <Button Content="Electricity" Command="{Binding SelectElectricityChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
+        </StackPanel>
+        
+        <lvc:CartesianChart 
+        Grid.Column="1"
+        Grid.Row="0"
+        Series="{Binding Series}"
+        XAxes="{Binding XAxes}"
+        YAxes="{Binding YAxes}"
+        ZoomMode="X"
+        />
+    </Grid>
 </UserControl>
-<!-- 
-YAxes="{Binding YAxes}"
-    XAxes="{Binding XAxes}" -->

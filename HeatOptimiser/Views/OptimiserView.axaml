@@ -10,17 +10,19 @@
   
   
   <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="true">
-    <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom">
-      <TextBlock Text="Enter Starting Date" Foreground="Black" FontSize="20"/>
-      <CalendarDatePicker x:Name="Calendar" Height="40" Width="250" SelectedDate="{Binding StartingDate}"/>
-      <!--<TextBlock Text="{Binding #Calendar.SelectedDate}"/>-->
+    <Rectangle Grid.Column="0" Grid.Row="0" Margin="10" VerticalAlignment="Top" Height="200" Width="270" Fill="#a11d33"/>
+    <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" Spacing="10">
+      <StackPanel VerticalAlignment="Bottom">
+        <TextBlock Text="Enter Starting Date" Foreground="White" FontSize="16" FontWeight="Bold"/>
+        <CalendarDatePicker x:Name="Calendar" Height="40" SelectedDate="{Binding StartingDate}" HorizontalAlignment="Stretch"/>
       </StackPanel>
-    <StackPanel Grid.Column="0" Grid.Row="1">
-      <TextBlock Text="Enter End Date" Foreground="Black" FontSize="20"/>
-      <CalendarDatePicker x:Name="Calendar2" Height="40" Width="250" SelectedDate="{Binding EndingDate}"/>
-      
+      <StackPanel>
+        <TextBlock Text="Enter End Date" Foreground="White" FontSize="16" FontWeight="Bold"/>
+        <CalendarDatePicker x:Name="Calendar2" Height="40" SelectedDate="{Binding EndingDate}" HorizontalAlignment="Stretch"/>
       </StackPanel>
-      <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+    </StackPanel>
+    
+      <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
     <ComboBox x:Name="OptimisationCategory"
               PlaceholderText="Select Category" 
               SelectedIndex="{Binding SelectedCategoryIndex}"
@@ -33,7 +35,7 @@
             Background="#a11d33"
             Width="150"/>
       </StackPanel>
-      <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding ProductionAssets}" Background="#a11d33">
+      <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding ProductionAssets}" Background="#a11d33" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Vertical">

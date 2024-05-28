@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0" Margin="10">
-            <Button Content="Schedule" Command="{Binding SelectScheduleChart}"
+            <Button Content="Schedule" Command="{Binding SelectUsageChart}"
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>

@@ -28,19 +28,19 @@ public class ResultsViewModel : ViewModelBase
         get => _XAxes;
         set => this.RaiseAndSetIfChanged(ref _XAxes, value);
     }
-    public ReactiveCommand<Unit, Unit> SelectScheduleChart {get;}
+    public ReactiveCommand<Unit, Unit> SelectUsageChart {get;}
     public ReactiveCommand<Unit, Unit> SelectCostsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectEmissionsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectElectricityChart {get;}
     public ResultsViewModel()
     {
-        SelectScheduleChart = ReactiveCommand.Create(ScheduleChart);
+        SelectUsageChart = ReactiveCommand.Create(UsageChart);
         SelectCostsChart = ReactiveCommand.Create(CostsChart);
         SelectEmissionsChart = ReactiveCommand.Create(EmissionsChart);
         SelectElectricityChart = ReactiveCommand.Create(ElectricityChart);
-        ScheduleChart();
+        UsageChart();
     }
-    public void ScheduleChart()
+    public void UsageChart()
     {
         Schedule results = ResultsDataManager.LoadAll();
         List<List<double>> demandsList = [];
@@ -69,6 +69,7 @@ public class ResultsViewModel : ViewModelBase
         }
 
         Series = [];
+
         foreach(List<double> demands in demandsList)
         {
             StackedStepAreaSeries<double> ssaSeries = new()
@@ -79,6 +80,21 @@ public class ResultsViewModel : ViewModelBase
             };
             Series.Add(ssaSeries);
         }
+        
+        List<double> demandValues = [];
+        foreach(ScheduleHour hour in results.schedule)
+        {
+            double demand = (double)SourceDataManager.GetDataByDateTime(hour.Hour!.Value)!.HeatDemand!;
+            demandValues.Add(demand);
+        }
+        LineSeries<double> demandSeries = new()
+        {
+            Values = demandValues,
+            Name = "Total demand",
+            LineSmoothness = 1,
+            Stroke = null
+        };
+        Series.Add(demandSeries);
         
         YAxes = [
             new()
@@ -131,6 +147,7 @@ public class ResultsViewModel : ViewModelBase
             LineSeries<double> lineSeries = new()
             {
                 Values = costs,
+                LineSmoothness = 1,
                 Name = CostNames[costList.IndexOf(costs)],
                 Stroke = null
             };
@@ -181,6 +198,7 @@ public class ResultsViewModel : ViewModelBase
         Series = [new LineSeries<double>()
         {
             Values = emissions,
+            LineSmoothness = 1,
             Stroke = null
         }];
         
@@ -232,6 +250,7 @@ public class ResultsViewModel : ViewModelBase
         {
             Values = usage,
             Name = "Usage",
+            LineSmoothness = 1,
             Stroke = null
         };
         Series.Add(usageSeries);
@@ -241,6 +260,7 @@ public class ResultsViewModel : ViewModelBase
             Values = price,
             Name = "Price",
             Stroke = null,
+            LineSmoothness = 1,
             ScalesYAt = 1
         };
         Series.Add(priceSeries);
@@ -250,14 +270,14 @@ public class ResultsViewModel : ViewModelBase
             {
                 Name = "Usage (MWh)",
                 TextSize = 16,
-                NameTextSize = 18
+                NameTextSize = 18,
             },
             new()
             {
                 Name = "Price (€/MWh)",
                 TextSize = 16,
                 NameTextSize = 18,
-                Position = LiveChartsCore.Measure.AxisPosition.End
+                Position = LiveChartsCore.Measure.AxisPosition.End,
             }
         ];
 

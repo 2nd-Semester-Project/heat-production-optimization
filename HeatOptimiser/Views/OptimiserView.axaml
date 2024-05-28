@@ -10,7 +10,6 @@
   
   
   <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="true">
-    <Rectangle Grid.Column="0" Grid.Row="0" Margin="10" VerticalAlignment="Top" Height="200" Width="270" Fill="#a11d33"/>
     <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" Spacing="10">
       <StackPanel VerticalAlignment="Bottom">
         <TextBlock Text="Enter Starting Date" Foreground="White" FontSize="16" FontWeight="Bold"/>

@@ -1,4 +1,5 @@
 using Xunit;
+using System.Collections.ObjectModel;
 
 namespace HeatOptimiser.Tests
 {
@@ -15,7 +16,7 @@ namespace HeatOptimiser.Tests
             Console.WriteLine(file);
 
             // Act
-            var result = SourceDataManager.LoadXLSXFile(file, 4, 2);
+            var result = SourceDataManager.LoadXLSXFile(file, 2, 4);
 
             // Assert
             Assert.NotNull(result);
@@ -27,7 +28,7 @@ namespace HeatOptimiser.Tests
         {
             // Arrange
             SourceData data = new SourceData();
-            data.LoadedData = new List<SourceDataPoint>(); // Initialize LoadedData
+            data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
             DateTime startDate = new DateTime(2023, 1, 1);
             DateTime endDate = new DateTime(2023, 1, 31);
 

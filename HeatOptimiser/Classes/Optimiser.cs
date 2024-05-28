@@ -45,87 +45,93 @@ namespace HeatOptimiser
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
             SourceData data = new();
-            data.LoadedData = new List<SourceDataPoint>(); // Initialize LoadedData
+            if (data.LoadedData == null)
+            {
+                data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
+            }
             Schedule schedule = new(startDate, endDate);
 
-            ObservableCollection<ProductionAsset> assets = AssetManager.GetAllUnits();
-
-            if (optimisationChoice == OptimisationChoice.Cost)
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits(); // this is the change to selected assets
+            if(assets.Count != 0)
             {
-                Dictionary<ProductionAsset, double?> netCosts = new();
-
-                for (int i = 0; i < assets.Count; i++)
+                if (optimisationChoice == OptimisationChoice.Cost)
                 {
-                    netCosts.Add(assets[i], assets[i].Cost);
-                }
+                    Dictionary<ProductionAsset, double?> netCosts = new();
 
-                foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
-                {
-                    Dictionary<ProductionAsset, double?> costs = new(netCosts);
-                    foreach(ProductionAsset asset in costs.Keys)
+                    for (int i = 0; i < assets.Count; i++)
                     {
-                        costs[asset] -= asset.Electricity / asset.Heat * hour.ElectricityPrice;
+                        netCosts.Add(assets[i], assets[i].Cost);
                     }
 
-                    Dictionary<ProductionAsset, double?> sortedCosts = costs.OrderBy(x => x.Value).ToDictionary();
-                    double producedHeat = 0;
-                    int index = 0;
-                    ObservableCollection<ProductionAsset> assetsUsed = [];
-                    ObservableCollection<double> assetDemands = [];
-                    while (producedHeat < hour.HeatDemand)
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
                     {
-                        assetsUsed.Add(sortedCosts.Keys.ToList()[index]);
-                        if (sortedCosts.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
+                        Dictionary<ProductionAsset, double?> costs = new(netCosts);
+                        foreach(ProductionAsset asset in costs.Keys)
                         {
-                            assetDemands.Add(hour.HeatDemand.Value - producedHeat);
-                            producedHeat = hour.HeatDemand.Value;
+                            costs[asset] -= asset.Electricity / asset.Heat * hour.ElectricityPrice;
                         }
-                        else
+
+                        Dictionary<ProductionAsset, double?> sortedCosts = costs.OrderBy(x => x.Value).ToDictionary();
+                        double producedHeat = 0;
+                        int index = 0;
+                        ObservableCollection<ProductionAsset> assetsUsed = [];
+                        ObservableCollection<double> assetDemands = [];
+                        while (producedHeat < hour.HeatDemand)
                         {
-                            assetDemands.Add(sortedCosts.Keys.ToList()[index].Heat!.Value);
-                            producedHeat += sortedCosts.Keys.ToList()[index].Heat!.Value;
+                            assetsUsed.Add(sortedCosts.Keys.ToList()[index]);
+                            if (sortedCosts.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
+                            {
+                                assetDemands.Add(hour.HeatDemand.Value - producedHeat);
+                                producedHeat = hour.HeatDemand.Value;
+                            }
+                            else
+                            {
+                                assetDemands.Add(sortedCosts.Keys.ToList()[index].Heat!.Value);
+                                producedHeat += sortedCosts.Keys.ToList()[index].Heat!.Value;
+                            }
+                            index += 1;
                         }
-                        index += 1;
+                        schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
                     }
-                    schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
                 }
-            }
-            
-            else if (optimisationChoice == OptimisationChoice.Emissions)
-            {
-                Dictionary<ProductionAsset, double?> emissions = new();
-
-                for (int i = 0; i < assets.Count; i++)
+                
+                else if (optimisationChoice == OptimisationChoice.Emissions)
                 {
-                    emissions.Add(assets[i], assets[i].CarbonDioxide);
-                }
+                    Dictionary<ProductionAsset, double?> emissions = new();
 
-                foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
-                {
-                    Dictionary<ProductionAsset, double?> sortedEmissions = emissions.OrderBy(x => x.Value).ToDictionary();
-                    double producedHeat = 0;
-                    int index = 0;
-                    ObservableCollection<ProductionAsset> assetsUsed = [];
-                    ObservableCollection<double> assetDemands = [];
-                    while (producedHeat < hour.HeatDemand)
+                    for (int i = 0; i < assets.Count; i++)
                     {
-                        assetsUsed.Add(sortedEmissions.Keys.ToList()[index]);
-                        if (sortedEmissions.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
-                        {
-                            assetDemands.Add(hour.HeatDemand.Value - producedHeat);
-                            producedHeat = hour.HeatDemand.Value;
-                        }
-                        else
-                        {
-                            assetDemands.Add(sortedEmissions.Keys.ToList()[index].Heat!.Value);
-                            producedHeat += sortedEmissions.Keys.ToList()[index].Heat!.Value;
-                        }
-                        index += 1;
+                        emissions.Add(assets[i], assets[i].CarbonDioxide);
                     }
-                    schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
+
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
+                    {
+                        Dictionary<ProductionAsset, double?> sortedEmissions = emissions.OrderBy(x => x.Value).ToDictionary();
+                        double producedHeat = 0;
+                        int index = 0;
+                        ObservableCollection<ProductionAsset> assetsUsed = [];
+                        ObservableCollection<double> assetDemands = [];
+                        while (producedHeat < hour.HeatDemand)
+                        {
+                            assetsUsed.Add(sortedEmissions.Keys.ToList()[index]);
+                            if (sortedEmissions.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
+                            {
+                                assetDemands.Add(hour.HeatDemand.Value - producedHeat);
+                                producedHeat = hour.HeatDemand.Value;
+                            }
+                            else
+                            {
+                                assetDemands.Add(sortedEmissions.Keys.ToList()[index].Heat!.Value);
+                                producedHeat += sortedEmissions.Keys.ToList()[index].Heat!.Value;
+                            }
+                            index += 1;
+                        }
+                        schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
+                    }
                 }
-            }
+                return schedule;
+                }
             return schedule;
-        }
+            }
     }
 }

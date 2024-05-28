@@ -2,6 +2,7 @@
 using System.Reflection;
 using ReactiveUI;
 using System.Collections.ObjectModel;
+using Avalonia.Controls;
 
 
 namespace UserInterface.ViewModels;
@@ -39,32 +40,33 @@ public class MainWindowViewModel : ViewModelBase
     }
 
     private ReactiveObject _currentView;
-public ReactiveObject CurrentView {
-    get =>_currentView;
-    set => this.RaiseAndSetIfChanged(ref _currentView, value);
+    public ReactiveObject CurrentView {
+        get =>_currentView;
+        set => this.RaiseAndSetIfChanged(ref _currentView, value);
+        }
+
+    public ReactiveCommand<Unit, bool> PaneCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenAssetManagerCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataManagerCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenHomepageCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenOptimiserCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenResultsCommand {get;}
+    public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataCommand {get;}
+
+
+    public MainWindowViewModel()
+    {   
+        CurrentView=new HomepageViewModel();
+        PaneCommand=ReactiveCommand.Create(()=> PaneStatus=!PaneStatus);
+        OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
+        OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());
+        OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
+        OpenResultsCommand=ReactiveCommand.Create(()=> CurrentView= new ResultsViewModel());
+        OpenSourceDataCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataViewModel());
     }
 
-public ReactiveCommand<Unit, bool> PaneCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenAssetManagerCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataManagerCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenHomepageCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenOptimiserCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenResultsCommand {get;}
-public ReactiveCommand<Unit, ReactiveObject> OpenSourceDataCommand {get;}
-
-
-public MainWindowViewModel()
-{   
-    CurrentView=new HomepageViewModel();
-    PaneCommand=ReactiveCommand.Create(()=> PaneStatus=!PaneStatus);
-    OpenAssetManagerCommand=ReactiveCommand.Create(()=> CurrentView=new AssetManagerViewModel());
-    OpenHomepageCommand=ReactiveCommand.Create(()=> CurrentView=new HomepageViewModel());
-    OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
-    OpenResultsCommand=ReactiveCommand.Create(()=> CurrentView= new ResultsViewModel());
-    OpenSourceDataCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataViewModel());
-}
-
-
-
-
+    public void ChangeView()
+    {
+        this.CurrentView=new SourceDataViewModel();
+    }
 }

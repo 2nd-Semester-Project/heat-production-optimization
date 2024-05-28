@@ -66,11 +66,10 @@ namespace HeatOptimiser.Tests
         {
             // Arrange
             AssetManager.AddUnit("Unit 1", "image1.jpg", 10.5, 20.5, 30.5, 40.5, 50.5);
-            AssetManager.SaveUnits(AssetManager.GetAllUnits(), "TestUnits.json");
+            AssetManager.SaveUnits(AssetManager.GetAllUnits());
 
             // Act
-            AssetManager.LoadUnits("TestUnits.json");
-            var units = AssetManager.GetAllUnits();
+            ObservableCollection<ProductionAsset> units = AssetManager.LoadUnits();
 
             // Assert
             Assert.NotNull(units);
@@ -84,17 +83,6 @@ namespace HeatOptimiser.Tests
             Assert.Equal(50.5, units[0].CarbonDioxide);
 
             AssetManager.DeleteUnit(AssetManager.GetAllUnits()[0].ID);
-        }
-        [Fact]
-        public void TestAssetManagerSetSaveFile()
-        {
-            // Act
-            AssetManager.SetSaveFile("TestUnits.json");
-            var saveFileName = AssetManager.saveFileName;
-
-            // Assert
-            Assert.NotNull(saveFileName);
-            Assert.Equal("TestUnits.json", saveFileName);
         }
     }
 }

@@ -10,53 +10,66 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 
 namespace UserInterface.ViewModels;
 
 public class ResultsViewModel : ViewModelBase
 {
-    private readonly ObservableCollection<DateTimePoint> HeatDemandData;
-    public ObservableCollection<ISeries> Series { get; set; }
+    public ISeries[] Series { get; set; }
+    public Axis[] XAxes { get; set; }
 
     public ResultsViewModel()
     {
-        // Use ObservableCollections to let the chart listen for changes (or any INotifyCollectionChanged). 
-        HeatDemandData = new ObservableCollection<DateTimePoint>();
-
-        foreach (var point in DataVisualizer.sourceData.LoadedData)
+        
+        Schedule results = ResultsDataManager.LoadAll();
+        List<List<double>> demandsList = new();
+        List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
+        int assetCount = assets.Count;
+        foreach (ProductionAsset asset in assets)
         {
-            if (point.HeatDemand.HasValue)
+            List<double> demands = new();
+            foreach (ScheduleHour hour in results.schedule)
             {
-                HeatDemandData.Add(new DateTimePoint(point.TimeFrom!.Value, point.HeatDemand.Value));
+                if (hour.Assets!.Contains(asset))
+                {
+                    demands.Add(hour.Demands![hour.Assets.IndexOf(asset)]);
+                }
+                else
+                {
+                    demands.Add(0);
+                }
             }
+            demandsList.Add(demands);
+        }
+        List<string> AssetNames = new();
+        foreach (ProductionAsset asset in assets)
+        {
+            AssetNames.Add(asset.Name);
         }
 
-
-        Series = new ObservableCollection<ISeries>
-    {
-        new LineSeries<DateTimePoint>
+        Series = demandsList.Select(demands => new StackedStepAreaSeries<double>
         {
-            Values = HeatDemandData,
-            Name = "Heat Demand",
-            Fill = null,
-            GeometryStroke = null,
-            GeometryFill = null,
-            LineSmoothness = 1
-        },
-        // new LineSeries<ObservableValue>
-        // {
-        //     Values = SummerHeatDemandData,
-        //     Fill = null
-        // }
-    };
+            Values = demands,
+            Name = AssetNames[demandsList.IndexOf(demands)],
+            Stroke = null
+        }).ToArray();
     
-    
+        List<DateTime> hours = new();
+        foreach (ScheduleHour hour in results.schedule)
+        {
+            hours.Add(hour.Hour!.Value);
+        }
+
+        XAxes =
+        [
+            new Axis
+            {
+                Labels = hours.Select(hour => hour.ToString("dd/MM/yyyy HH:mm")).ToArray()
+            }
+        ];
     }
-    public Axis[] XAxes { get; set; } =
-    {
-        new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMMM dd HH:mm"))
-    };
 }
-
-
-

@@ -9,30 +9,48 @@
              x:Class="UserInterface.Views.SourceDataView"
              x:DataType="views:SourceDataViewModel">
 
-  <Grid Margin="30" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" ShowGridLines="false">
+  <Grid Margin="30">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" /> <!-- For the file path input -->
+      <RowDefinition Height="Auto" /> <!-- For the row and column inputs -->
+      <RowDefinition Height="Auto" /> <!-- For the "Load" button -->
+      <RowDefinition Height="Auto" /> <!-- For the source text -->
+      <RowDefinition Height="*" />    <!-- For the chart -->
+    </Grid.RowDefinitions>
     
-    <StackPanel Grid.Column="0" Grid.Row="0" Margin="10">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    
+    <!-- File Path Input -->
+    <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Margin="10">
       <TextBlock Text="Source Data File Path:" FontWeight="Bold" Margin="0,0,0,5"/>
       <TextBox Text="{Binding SelectedFilePath}" Watermark="Enter SourceData File Path" VerticalAlignment="Bottom"/>
       <TextBlock Text="{Binding ErrorFilePath}" Foreground="Red" IsVisible="{Binding IsErrorFilePathVisible}"/>
     </StackPanel>
 
-    <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch">    
-    <StackPanel Margin="10">
-      <TextBlock Text="Starting Row:" FontWeight="Bold" Margin="0,0,0,5"/>
-      <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row" Margin="0,0,0,10"/>
-      <TextBlock Text="{Binding ErrorSelectRow}" Foreground="Red" IsVisible="{Binding IsErrorSelectRowVisible}"/>
+    <!-- Row and Column Inputs -->
+    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Stretch">
+      <StackPanel Margin="10">
+        <TextBlock Text="Starting Column:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column" Margin="0,0,0,10"/>
+        <TextBlock Text="{Binding ErrorSelectRow}" Foreground="Red" IsVisible="{Binding IsErrorSelectRowVisible}"/>
+      </StackPanel>
+      
+      <StackPanel Margin="10">
+        <TextBlock Text="Starting Row:" FontWeight="Bold" Margin="0,0,0,5"/>
+        <TextBox Text="{Binding SelectedRow}" Watermark="Enter Starting Row" Margin="0,0,0,10"/>
+        <TextBlock Text="{Binding ErrorSelectColumn}" Foreground="Red" IsVisible="{Binding IsErrorSelectColumnVisible}"/>
+      </StackPanel>
     </StackPanel>
 
-    <StackPanel Margin="10">
-      <TextBlock Text="Starting Column:" FontWeight="Bold" Margin="0,0,0,5"/>
-      <TextBox Text="{Binding SelectedColumn}" Watermark="Enter Starting Column" Margin="0,0,0,10"/>
-      <TextBlock Text="{Binding ErrorSelectColumn}" Foreground="Red" IsVisible="{Binding IsErrorSelectColumnVisible}"/>
-    </StackPanel>
-    </StackPanel>
+  
 
-    <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5">
-        <Button Command="{Binding SourceDataCommand}"
+    <!-- Load Button -->
+    <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5">
+      <Button Command="{Binding SourceDataCommand}"
               HorizontalAlignment="Center"
               VerticalAlignment="Bottom"
               Margin="5"
@@ -41,8 +59,14 @@
               Width="150"
               Height="35">
         <TextBlock Text="Load" HorizontalAlignment="Center"/>
-        </Button>
+      </Button>
     </StackPanel>
-    
+
+    <!-- Source Text -->
+    <TextBlock Text="{Binding SourceText}" HorizontalAlignment="Center" FontSize="18" Foreground="Black" Margin="0,20" Grid.Row="3"/>
+
+    <!-- Data Chart -->
+    <lvc:CartesianChart Grid.Row="4" Grid.ColumnSpan="3" Series="{Binding Series}" Margin="20"
+                        XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" ZoomMode="X" />
   </Grid>
 </UserControl>

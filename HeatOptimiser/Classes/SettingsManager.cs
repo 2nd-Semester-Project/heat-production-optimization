@@ -43,6 +43,7 @@ namespace HeatOptimiser
         {
             try
             {
+                Configuration = InitializeBuilder();
                 return Configuration?[settingName]! ?? string.Empty;
             }
             catch (Exception)

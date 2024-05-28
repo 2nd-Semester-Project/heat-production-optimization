@@ -1,6 +1,14 @@
 using ReactiveUI;
 using System.Reactive;
 using HeatOptimiser;
+using System.Collections.ObjectModel;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
 
 namespace UserInterface.ViewModels
 {
@@ -15,6 +23,27 @@ namespace UserInterface.ViewModels
         private bool _isErrorSelectRowVisible;
         private string _errorSelectColumn;
         private bool _isErrorSelectColumnVisible;
+        private string _sourceText;
+        private ObservableCollection<ISeries> _series = [];
+        public ObservableCollection<ISeries> Series {
+            get => _series;
+            set => this.RaiseAndSetIfChanged(ref _series, value);
+        }
+        private Axis[] _XAxes = [];
+        private Axis[] _YAxes = [];
+        public Axis[] XAxes {
+            get => _XAxes;
+            set => this.RaiseAndSetIfChanged(ref _XAxes, value);
+        }
+        public Axis[] YAxes {
+            get => _YAxes;
+            set => this.RaiseAndSetIfChanged(ref _YAxes, value);
+        }
+        public string SourceText
+        {
+            get => _sourceText;
+            set => this.RaiseAndSetIfChanged(ref _sourceText, value);
+        }
 
         public ReactiveCommand<Unit, Unit> SourceDataCommand { get; }
 
@@ -75,8 +104,8 @@ namespace UserInterface.ViewModels
         public SourceDataViewModel()
         {
             _selectedFilePath = SettingsManager.GetSetting("XLSXFilePath");
-            _selectedRow = int.TryParse(SettingsManager.GetSetting("Row"), out int row) ? row : 7;
             _selectedColumn = int.TryParse(SettingsManager.GetSetting("Column"), out int column) ? column : 4;
+            _selectedRow = int.TryParse(SettingsManager.GetSetting("Row"), out int row) ? row : 7;
             SourceData sourceData = new SourceData();
             SourceDataCommand = ReactiveCommand.Create(LoadSourceData);
 
@@ -87,6 +116,19 @@ namespace UserInterface.ViewModels
             IsErrorSelectRowVisible = false;
             ErrorSelectColumn = string.Empty;
             IsErrorSelectColumnVisible = false;
+            
+            if (SettingsManager.GetSetting("DataLoaded") == "True")
+            {
+                SourceDataManager.VisualiseData(sourceData);
+                Series = SourceDataManager.Series;
+                XAxes = SourceDataManager.XAxes;
+                YAxes = SourceDataManager.YAxes;
+                _sourceText = "Source Data loaded.";
+            }
+            else
+            {
+                _sourceText = "Source Data not loaded. \nPlease load the data.";
+            }
         }
 
         private void LoadSourceData()
@@ -130,8 +172,29 @@ namespace UserInterface.ViewModels
             if (!hasError)
             {
                 // No errors, proceed with loading the source data
-                SourceData sourceData = new SourceData();
-                sourceData.LoadSourceData(SelectedFilePath, SelectedRow, SelectedColumn);
+                SourceData sourceData = new();
+                sourceData.LoadSourceData(SelectedFilePath, SelectedColumn, SelectedRow);
+                
+                if (SettingsManager.GetSetting("DataLoaded") == "True") {
+                    SourceText = "Source Data loaded.";
+
+                    SourceDataManager.VisualiseData(sourceData);
+                    Series = SourceDataManager.Series;
+                    XAxes = SourceDataManager.XAxes;
+                    YAxes = SourceDataManager.YAxes;
+                }
+                else
+                {
+                    SourceText = "Source Data not loaded. \nPlease load the data.";
+                    Series.Clear();
+                    XAxes = [];
+                    YAxes = [];
+                }
+            }
+            else
+            {
+                SettingsManager.SaveSetting("DataLoaded", "False");
+                SourceText = "Not able to load data. Check file path!";
             }
         }
     }

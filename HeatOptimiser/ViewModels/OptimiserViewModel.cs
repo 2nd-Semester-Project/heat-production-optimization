@@ -4,6 +4,7 @@ using System;
 using Avalonia.Controls;
 using System.Reactive;
 using System.Data.SqlTypes;
+using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModels;
 
@@ -22,23 +23,58 @@ public class OptimiserViewModel : ViewModelBase
         get => _endingDate;
         set => this.RaiseAndSetIfChanged(ref _endingDate, value);
     }
+    public ObservableCollection<ProductionAsset> ProductionAssets{get; set;} = new();
     public ReactiveCommand<Unit, Unit> OptimiseCommand { get; }
-
-    public void Optimise(DateTime start, DateTime end )
+    public ReactiveCommand<Unit, Unit> TestSelectedList { get; }
+    private int _selectedCategoryIndex;
+    public int SelectedCategoryIndex
     {
-        Console.WriteLine("Testing");
-        Schedule optimisedData = Optimiser.Optimise(start, end, OptimisationChoice.Cost); //change OptimisationChoice.Cost to correspond with users choice - third argument should be something like OptimisationChoice[OptimisationCategory.SelectedIndex]
+        get =>  _selectedCategoryIndex;
+        set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
+    }
+
+    public void TestingSelectedList()
+    {
+        ObservableCollection<ProductionAsset> testList = AssetManager.GetSelectedUnits();
+        foreach(ProductionAsset asset in testList)
+        {
+            Console.WriteLine(asset.Name);
+        }
+    }
+    public void Optimise(DateTime start, DateTime end, int categoryIndex)
+    {
+        TestingSelectedList();
+        Console.WriteLine($"Testing {categoryIndex} optimisation.");
+
+        OptimisationChoice choice;
+        if (categoryIndex == 0)
+        {
+            choice = OptimisationChoice.Cost;
+        }
+        else
+        {
+            choice = OptimisationChoice.Emissions;
+        }
+        Schedule optimisedData = Optimiser.Optimise(start, end, choice);
+        ResultsDataManager.Save(optimisedData);
+        
         Console.WriteLine(StartingDate);
         Console.WriteLine("Optimised Schedule:");
         foreach (var hour in optimisedData.schedule)
         {
             Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
+            foreach (var asset in hour.Assets!)
+            {
+                Console.WriteLine($"Asset: {asset.Name}, Heat: {asset.Heat}, Demand {hour.Demands![hour.Assets!.IndexOf(asset)]}");
+            }
         }
     }
            
     public OptimiserViewModel()
     {
         Console.WriteLine("OptimiserViewModel created");
-        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate)); 
+        ProductionAssets=AssetManager.LoadUnits();
+        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex)); 
+        
     }
 }

@@ -125,5 +125,40 @@ namespace HeatOptimiser
                 
             return schedule;
         }
+    
+        public static Schedule LoadAll()
+        {
+            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+            {
+                HasHeaderRecord = false
+            };
+
+            using var streamReader = File.OpenText(filePath);
+            using var csvReader = new CsvReader(streamReader, csvConfig);
+            
+            DateTime minDate = DateTime.MaxValue;
+            DateTime maxDate = DateTime.MinValue;
+
+            while (csvReader.Read())
+            {
+                string dateString = csvReader.GetField<string>(0);
+                DateTime date = DateTime.ParseExact(dateString, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                
+                if (date < minDate)
+                {
+                    minDate = date;
+                }
+                
+                if (date > maxDate)
+                {
+                    maxDate = date;
+                }
+            }
+
+            DateOnly minDateOnly = new DateOnly(minDate.Year, minDate.Month, minDate.Day);
+            DateOnly maxDateOnly = new DateOnly(maxDate.Year, maxDate.Month, maxDate.Day);
+
+            return Load(minDateOnly, maxDateOnly);
+        }
     }
 }

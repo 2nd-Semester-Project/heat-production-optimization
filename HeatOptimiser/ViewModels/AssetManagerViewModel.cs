@@ -159,18 +159,13 @@ public class AssetManagerViewModel : ViewModelBase
         get =>_assetButton;
         set => this.RaiseAndSetIfChanged(ref _assetButton, value);
     }
-    public int _assetCount;
-    public int AssetCount
-    {
-        get => Assets.Count();
-    }
     public string _errorText;
     public string ErrorText
     {
         get => _errorText;
         set => this.RaiseAndSetIfChanged(ref _errorText, value);
     }
-    public ObservableCollection<NewAsset> Assets {get;} = new();
+    
     public ObservableCollection<ProductionAsset> ProductionAssets{get; set;} = new();
     
     public ReactiveCommand<Unit, Unit> AddAssetCommand { get; }
@@ -210,7 +205,7 @@ public class AssetManagerViewModel : ViewModelBase
     }
     public void EditAsset()
     {   
-        AssetManager.SaveUnits(ProductionAssets, "ProductionAssets.json");
+        AssetManager.SaveUnits(ProductionAssets);
 
     }
     public void ValidateInput(string input)
@@ -225,7 +220,7 @@ public class AssetManagerViewModel : ViewModelBase
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         UpdateAssetCommand=ReactiveCommand.Create(EditAsset);
         //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
-        ProductionAssets=AssetManager.LoadUnits(AssetManager.saveFileName);
+        ProductionAssets=AssetManager.LoadUnits();
     }
 
 }

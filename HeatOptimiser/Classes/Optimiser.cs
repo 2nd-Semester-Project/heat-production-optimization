@@ -42,6 +42,38 @@ namespace HeatOptimiser
     }
     public static class Optimiser
     {
+        public static Schedule NetOptimise(DateTime startDate, DateTime endDate)
+        {
+            Schedule schedule = new(startDate, endDate);
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits();
+
+            for (int i = 0; i < assets.Count; i++)
+            {
+                for (int j = 0; j > assets.Count - i; i++)
+                {
+                    if (assets[i].Cost > assets[j].Cost)
+                    {
+                        (assets[i], assets[j]) = (assets[j], assets[i]);
+                    }
+                }
+            }
+
+            foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
+            {
+                double producedHeat = 0;
+                int index = 0;
+                ObservableCollection<ProductionAsset> assetsUsed = [];
+                ObservableCollection<double> assetDemands = [];
+                while (producedHeat < hour.HeatDemand && index < assets.Count)
+                {
+                    assetsUsed.Add(assets[index]);
+                    assetDemands.Add((double)assets[index].Heat!);
+                    index += 1;
+                }
+                schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
+            }
+            return schedule;
+        }
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
             if (SourceDataManager.LoadedData == null)

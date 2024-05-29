@@ -30,6 +30,10 @@
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>
+            <Button Content="Costs by Optimisation" Command="{Binding SelectCostsByOptimisationChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
         </StackPanel>
         
         <lvc:CartesianChart 

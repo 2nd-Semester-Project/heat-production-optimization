@@ -32,12 +32,14 @@ public class ResultsViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> SelectCostsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectEmissionsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectElectricityChart {get;}
+    public ReactiveCommand<Unit, Unit> SelectCostsByOptimisationChart {get;}
     public ResultsViewModel()
     {
         SelectUsageChart = ReactiveCommand.Create(UsageChart);
         SelectCostsChart = ReactiveCommand.Create(CostsChart);
         SelectEmissionsChart = ReactiveCommand.Create(EmissionsChart);
         SelectElectricityChart = ReactiveCommand.Create(ElectricityChart);
+        SelectCostsByOptimisationChart = ReactiveCommand.Create(CostsByOptimisationChart);
         UsageChart();
     }
     public void UsageChart()
@@ -296,5 +298,80 @@ public class ResultsViewModel : ViewModelBase
         ];
 
 
+    }
+    public void CostsByOptimisationChart()
+    {
+        Schedule results = ResultsDataManager.LoadAll();
+        List<List<double>> costList = [[], [], []]; //NetCost, Cost, Emissions
+        List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
+        Schedule NetOptimised = Optimiser.NetOptimise(results.startDate, results.endDate);
+        Schedule CostOptimised = Optimiser.Optimise(results.startDate, results.endDate, OptimisationChoice.Cost);
+        Schedule EmissionOptimised = Optimiser.Optimise(results.startDate, results.endDate, OptimisationChoice.Emissions);
+        for (int i = 0; i < NetOptimised.schedule.Count; i++)
+        {
+            List<double> hourlyCosts = [0, 0, 0];
+            foreach (ProductionAsset asset in assets)
+            {
+                if (NetOptimised.schedule[i].Assets!.Contains(asset))
+                {
+                    ScheduleHour hour = NetOptimised.schedule[i];
+                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
+                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                }
+                if (CostOptimised.schedule[i].Assets!.Contains(asset))
+                {
+                    ScheduleHour hour = CostOptimised.schedule[i];
+                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
+                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                }
+                if (EmissionOptimised.schedule[i].Assets!.Contains(asset))
+                {
+                    ScheduleHour hour = EmissionOptimised.schedule[i];
+                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
+                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                }
+            }
+            for (int j = 0; j < costList.Count; j++)
+            {
+                costList[j].Add(hourlyCosts[j]);
+            }
+        }
+        List<string> CostNames = ["Net Cost", "Cost", "Emissions"];
+
+        Series = [];
+        foreach(List<double> costs in costList)
+        {
+            LineSeries<double> lineSeries = new()
+            {
+                Values = costs,
+                LineSmoothness = 1,
+                Name = CostNames[costList.IndexOf(costs)],
+                Stroke = null
+            };
+            Series.Add(lineSeries);
+        }
+        
+        YAxes = [
+            new()
+            {
+                Name = "Cost (€)",
+                TextSize = 16,
+                NameTextSize = 18
+            }
+        ];
+    
+        List<DateTime> hours = [];
+        foreach (ScheduleHour hour in results.schedule)
+        {
+            hours.Add(hour.Hour!.Value);
+        }
+
+        XAxes =
+        [
+            new Axis
+            {
+                Labels = hours.Select(hour => hour.ToString("dd/MM/yyyy HH:mm")).ToArray()
+            }
+        ];
     }
 }

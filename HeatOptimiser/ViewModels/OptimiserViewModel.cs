@@ -77,8 +77,6 @@ public class OptimiserViewModel : ViewModelBase
                 }
             }
         }
-
-        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex)); 
-        
+        OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex));
     }
 }

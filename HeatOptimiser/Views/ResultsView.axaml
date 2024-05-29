@@ -18,7 +18,7 @@
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>
-            <Button Content="Costs" Command="{Binding SelectCostsChart}"
+            <Button Content="Profit" Command="{Binding SelectProfitChart}"
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>
@@ -30,7 +30,11 @@
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>
-            <Button Content="Costs by Optimisation" Command="{Binding SelectCostsByOptimisationChart}"
+            <Button Content="Profit by Optimisation" Command="{Binding SelectProfitByOptimisationChart}"
+                    Margin="5" 
+                    Background="#a11d33"
+                    Width="150"/>
+            <Button Content="Emissions by Optimisation" Command="{Binding SelectEmissionsByOptimisationChart}"
                     Margin="5" 
                     Background="#a11d33"
                     Width="150"/>

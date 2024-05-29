@@ -32,6 +32,14 @@ namespace HeatOptimiser
                 Assets = assets,
                 Demands = demands
             });
+            if (dateTime > endDate)
+            {
+                endDate = (DateTime)dateTime;
+            }
+            if (dateTime < startDate)
+            {
+                startDate = (DateTime)dateTime;
+            }
         }
     }
     public class ScheduleHour
@@ -47,16 +55,7 @@ namespace HeatOptimiser
             Schedule schedule = new(startDate, endDate);
             ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits();
 
-            for (int i = 0; i < assets.Count; i++)
-            {
-                for (int j = 0; j > assets.Count - i; i++)
-                {
-                    if (assets[i].Cost > assets[j].Cost)
-                    {
-                        (assets[i], assets[j]) = (assets[j], assets[i]);
-                    }
-                }
-            }
+            List<ProductionAsset> orderedAssets = assets.OrderBy(x => x.Cost).ToList();
 
             foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
             {
@@ -64,10 +63,20 @@ namespace HeatOptimiser
                 int index = 0;
                 ObservableCollection<ProductionAsset> assetsUsed = [];
                 ObservableCollection<double> assetDemands = [];
-                while (producedHeat < hour.HeatDemand && index < assets.Count)
+                while (producedHeat < hour.HeatDemand && index < orderedAssets.Count)
                 {
-                    assetsUsed.Add(assets[index]);
-                    assetDemands.Add((double)assets[index].Heat!);
+                    assetsUsed.Add(orderedAssets[index]);
+                    double assetUsed;
+                    if ((double)orderedAssets[index].Heat! > (hour.HeatDemand - producedHeat))
+                    {
+                        assetUsed = (double)hour.HeatDemand-producedHeat;
+                    }
+                    else
+                    {
+                        assetUsed = (double)orderedAssets[index].Heat!;
+                    }
+                    assetDemands.Add(assetUsed);
+                    producedHeat += assetUsed;
                     index += 1;
                 }
                 schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
@@ -76,13 +85,9 @@ namespace HeatOptimiser
         }
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
-            if (SourceDataManager.LoadedData == null)
-            {
-                SourceDataManager.LoadedData = []; // Initialize LoadedData
-            }
             Schedule schedule = new(startDate, endDate);
 
-            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits(); // this is the change to selected assets
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits();
             if(assets.Count != 0)
             {
                 if (optimisationChoice == OptimisationChoice.Cost)
@@ -107,18 +112,19 @@ namespace HeatOptimiser
                         int index = 0;
                         ObservableCollection<ProductionAsset> assetsUsed = [];
                         ObservableCollection<double> assetDemands = [];
-                        while (producedHeat < hour.HeatDemand && index != sortedCosts.Count)
+                        while (producedHeat < hour.HeatDemand && index < sortedCosts.Count)
                         {
-                            assetsUsed.Add(sortedCosts.Keys.ToList()[index]);
-                            if (sortedCosts.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
+                            ProductionAsset currentAsset = sortedCosts.Keys.ToList()[index];
+                            assetsUsed.Add(currentAsset);
+                            if (currentAsset.Heat > (hour.HeatDemand - producedHeat))
                             {
                                 assetDemands.Add(hour.HeatDemand.Value - producedHeat);
                                 producedHeat = hour.HeatDemand.Value;
                             }
                             else
                             {
-                                assetDemands.Add(sortedCosts.Keys.ToList()[index].Heat!.Value);
-                                producedHeat += sortedCosts.Keys.ToList()[index].Heat!.Value;
+                                assetDemands.Add(currentAsset.Heat!.Value);
+                                producedHeat += currentAsset.Heat!.Value;
                             }
                             index += 1;
                         }
@@ -129,7 +135,7 @@ namespace HeatOptimiser
                 
                 else if (optimisationChoice == OptimisationChoice.Emissions)
                 {
-                    Dictionary<ProductionAsset, double?> emissions = new();
+                    Dictionary<ProductionAsset, double?> emissions = [];
 
                     for (int i = 0; i < assets.Count; i++)
                     {

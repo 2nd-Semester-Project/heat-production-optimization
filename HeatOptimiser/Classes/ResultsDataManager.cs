@@ -12,7 +12,31 @@ namespace HeatOptimiser
 {
     public class ResultsDataManager
     {
-        private static string filePath = "data/resultdata.csv";
+        public static readonly string filePath = "data/resultdata.csv";
+        private static Schedule? _resultsSchedule;
+        public static Schedule ResultsSchedule
+        {
+            get
+            {
+                if (_resultsSchedule == null)
+                {
+                    _resultsSchedule = Load();
+                }
+                else
+                {
+                    Schedule AnotherSchedule = Load();
+                    
+                    if (_resultsSchedule != AnotherSchedule && AnotherSchedule.schedule.Count > 0)
+                    {
+                        _resultsSchedule = AnotherSchedule;
+                    }
+                }
+                return _resultsSchedule;
+            }
+            set {
+                _resultsSchedule = value;
+            }
+        }
         public static void Save(Schedule schedule)
         {
             var csv = new StringBuilder();
@@ -78,8 +102,52 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
-        public static Schedule Load(DateOnly dateFrom, DateOnly dateTo)
+        public static Schedule Load()
         {
+            List<ScheduleHour> schedule = [];
+
+            CultureInfo provider = CultureInfo.InvariantCulture;
+
+            foreach (string line in File.ReadAllLines(filePath))
+            {
+                List<string> assetIDs = line.Split(", ")[1].Split("/").ToList();
+                ObservableCollection<ProductionAsset> assets = [];
+                foreach (string assetIDString in assetIDs)
+                {
+                    Guid assetID = Guid.Parse(assetIDString);
+                    Console.WriteLine(AssetManager.GetAllUnits().Count);
+                    assets.Add(AssetManager.SearchUnits(assetID)[0]);
+                }
+
+                List<string> demandStrings = line.Split(", ")[2].Split("/").ToList();
+                ObservableCollection<double> demands = [];
+                foreach (string demandString in demandStrings)
+                {
+                    demands.Add(double.Parse(demandString));
+                }
+
+                schedule.Add(
+                    new()
+                    {
+                        Hour = DateTime.ParseExact(line.Split(", ")[0], "dd/MM/yyyy HH:mm", provider),
+                        Assets = assets,
+                        Demands = demands
+                    }
+                );
+            }
+            
+            Schedule loadedSchedule = new Schedule((DateTime)schedule[0].Hour!, (DateTime)schedule[^1].Hour!);
+        
+            foreach(ScheduleHour hour in schedule)
+            {
+                loadedSchedule.AddHour(hour.Hour, hour.Assets!, hour.Demands!);
+            }
+
+            return loadedSchedule;
+        }
+        public static Schedule Load2()
+        {
+
             var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 HasHeaderRecord = false
@@ -88,18 +156,24 @@ namespace HeatOptimiser
             using var streamReader = File.OpenText(filePath);
             using var csvReader = new CsvReader(streamReader, csvConfig);
 
+            var lines = File.ReadLines(filePath).Skip(1);
+            var dates = lines.Select(line => DateTime.Parse(line.Split(',')[0]));
+
+            DateTime dateFrom = dates.Min();
+            DateTime dateTo = dates.Max();
+
             bool reading = false;
-            Schedule schedule = new Schedule(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
+            Schedule schedule = new(dateFrom, dateTo);
 
         
             while (csvReader.Read())
             {
-                List<string> line = new List<string>();
+                List<string> line = [];
                 for (int i = 0; csvReader.TryGetField<string>(i, out string value); i++)
                 {
                     line.Add(value);
                 }
-                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
+                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo))
                     reading = !reading;
                 if(reading)
                 {
@@ -124,41 +198,6 @@ namespace HeatOptimiser
             }
                 
             return schedule;
-        }
-    
-        public static Schedule LoadAll()
-        {
-            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
-            {
-                HasHeaderRecord = false
-            };
-
-            using var streamReader = File.OpenText(filePath);
-            using var csvReader = new CsvReader(streamReader, csvConfig);
-            
-            DateTime minDate = DateTime.MaxValue;
-            DateTime maxDate = DateTime.MinValue;
-
-            while (csvReader.Read())
-            {
-                string dateString = csvReader.GetField<string>(0);
-                DateTime date = DateTime.ParseExact(dateString, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-                
-                if (date < minDate)
-                {
-                    minDate = date;
-                }
-                
-                if (date > maxDate)
-                {
-                    maxDate = date;
-                }
-            }
-
-            DateOnly minDateOnly = new DateOnly(minDate.Year, minDate.Month, minDate.Day);
-            DateOnly maxDateOnly = new DateOnly(maxDate.Year, maxDate.Month, maxDate.Day);
-
-            return Load(minDateOnly, maxDateOnly);
         }
     }
 }

@@ -156,9 +156,8 @@ namespace HeatOptimiser
         public static ObservableCollection<ProductionAsset> GetSelectedUnits()
         {
             var assets = _productionAssets.Where(x => x.OptimiseSelected == true).ToList();
-            ObservableCollection<ProductionAsset> selectedAssets = new ObservableCollection<ProductionAsset>(assets);
+            ObservableCollection<ProductionAsset> selectedAssets = new(assets);
             return selectedAssets;
-            
         }
         public static ObservableCollection<ProductionAsset> LoadUnits()
         {
@@ -172,6 +171,12 @@ namespace HeatOptimiser
         public static ObservableCollection<ProductionAsset> SearchUnits(string name)
         {
             var selection = _productionAssets.Where(x => x.Name!.ToLower().Contains(name.ToLower())).ToList();
+            ObservableCollection<ProductionAsset> selected = [.. selection];
+            return selected;
+        }
+        public static ObservableCollection<ProductionAsset> SearchUnits(Guid searchID)
+        {
+            var selection = _productionAssets.Where(x => x.ID == searchID).ToList();
             ObservableCollection<ProductionAsset> selected = [.. selection];
             return selected;
         }

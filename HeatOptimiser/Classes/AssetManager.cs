@@ -65,13 +65,13 @@ namespace HeatOptimiser
             get { return _carbonDioxide; }
             set { _carbonDioxide = value; }
         }
-        public bool _isSelected;
+        private bool _isSelected;
         public bool IsSelected
         {
             get => _isSelected;
             set => this.RaiseAndSetIfChanged(ref _isSelected, value);
         }
-        public bool _optimiseSelected;
+        private bool _optimiseSelected;
         public bool OptimiseSelected
         {
             get => _optimiseSelected;
@@ -155,7 +155,7 @@ namespace HeatOptimiser
         }
         public static ObservableCollection<ProductionAsset> GetSelectedUnits()
         {
-            var assets = _productionAssets.Where(x => x._optimiseSelected == true).ToList();
+            var assets = _productionAssets.Where(x => x.OptimiseSelected == true).ToList();
             ObservableCollection<ProductionAsset> selectedAssets = new ObservableCollection<ProductionAsset>(assets);
             return selectedAssets;
             

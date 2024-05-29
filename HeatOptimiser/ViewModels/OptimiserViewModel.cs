@@ -25,25 +25,14 @@ public class OptimiserViewModel : ViewModelBase
     }
     public ObservableCollection<ProductionAsset> ProductionAssets{get; set;} = new();
     public ReactiveCommand<Unit, Unit> OptimiseCommand { get; }
-    public ReactiveCommand<Unit, Unit> TestSelectedList { get; }
     private int _selectedCategoryIndex;
     public int SelectedCategoryIndex
     {
         get =>  _selectedCategoryIndex;
         set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
     }
-
-    public void TestingSelectedList()
-    {
-        ObservableCollection<ProductionAsset> testList = AssetManager.GetSelectedUnits();
-        foreach(ProductionAsset asset in testList)
-        {
-            Console.WriteLine(asset.Name);
-        }
-    }
     public void Optimise(DateTime start, DateTime end, int categoryIndex)
     {
-        TestingSelectedList();
         Console.WriteLine($"Testing {categoryIndex} optimisation.");
 
         OptimisationChoice choice;
@@ -72,8 +61,23 @@ public class OptimiserViewModel : ViewModelBase
            
     public OptimiserViewModel()
     {
-        Console.WriteLine("OptimiserViewModel created");
-        ProductionAssets=AssetManager.LoadUnits();
+        ProductionAssets = AssetManager.GetSelectedUnits();
+        if (ProductionAssets.Count == 0)
+        {
+            ProductionAssets = AssetManager.LoadUnits();
+        }
+        else if (ProductionAssets.Count != AssetManager.LoadUnits().Count)
+        {
+            var ProductionAssetsTwo = AssetManager.LoadUnits();
+            foreach (var asset in ProductionAssetsTwo)
+            {
+                if (!ProductionAssets.Contains(asset))
+                {
+                    ProductionAssets.Add(asset);
+                }
+            }
+        }
+
         OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex)); 
         
     }

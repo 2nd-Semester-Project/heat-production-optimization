@@ -102,9 +102,16 @@ namespace HeatOptimiser
                     foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
                     {
                         Dictionary<ProductionAsset, double?> costs = new(netCosts);
+                        Console.WriteLine($"Hour: {hour.TimeFrom} Before Electricity:");
                         foreach(ProductionAsset asset in costs.Keys)
                         {
+                            Console.WriteLine($"{asset.Name} {costs[asset]}");
                             costs[asset] -= asset.Electricity / asset.Heat * hour.ElectricityPrice;
+                        }
+                        Console.WriteLine($"Hour: {hour.TimeFrom} After Electricity:");
+                        foreach(ProductionAsset asset in costs.Keys)
+                        {
+                            Console.WriteLine($"{asset.Name} {costs[asset]}");
                         }
 
                         Dictionary<ProductionAsset, double?> sortedCosts = costs.OrderBy(x => x.Value).ToDictionary();
@@ -168,8 +175,12 @@ namespace HeatOptimiser
                     }
                 }
                 return schedule;
-                }
-            return schedule;
             }
+            else
+            {
+                Console.WriteLine("No units selected!");
+            }
+            return schedule;
+        }
     }
 }

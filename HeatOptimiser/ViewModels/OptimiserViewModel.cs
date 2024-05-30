@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using System.Reactive;
 using System.Data.SqlTypes;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace UserInterface.ViewModels;
 
@@ -61,6 +62,10 @@ public class OptimiserViewModel : ViewModelBase
            
     public OptimiserViewModel()
     {
+        List<DateTime> StartEndDates = SourceDataManager.GetDates();
+        StartingDate = StartEndDates[0];
+        EndingDate = StartEndDates[1];
+        
         ProductionAssets = AssetManager.GetSelectedUnits();
         if (ProductionAssets.Count == 0)
         {

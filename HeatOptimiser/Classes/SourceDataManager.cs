@@ -41,6 +41,7 @@ namespace HeatOptimiser
                 SettingsManager.SaveSetting("DataLoaded", "True");
                 
                 // Automatically write the CSV files
+                Console.WriteLine("Writing to CSV");
                 WriteToCSV(LoadedData, defaultSavePath);
             }
         }
@@ -156,6 +157,7 @@ namespace HeatOptimiser
                 foreach (var point in data)
                 {
                     var line = $"{point.TimeFrom},{point.TimeTo},{point.HeatDemand},{point.ElectricityPrice}";
+                    writer.WriteLine(line);
                 }
             }
         }
@@ -177,6 +179,17 @@ namespace HeatOptimiser
             List<List<DateTimePoint>> data = [_heatDemandData, _electricityPriceData];
             List<string> names = ["Heat Deamand (MWh)", "Electricity Price (€/MWh)"];
             DataVisualizer.VisualiseSourceData(data, names);
+        }
+
+        public static List<DateTime> GetDates()
+        {
+            List<DateTime> dates = [];
+            foreach (string line in File.ReadAllLines(defaultSavePath))
+            {
+                dates.Add(DateTime.ParseExact(line.Split(",")[0], "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture));
+            }
+            
+            return [dates[0], dates[^1]];
         }
     }
 }

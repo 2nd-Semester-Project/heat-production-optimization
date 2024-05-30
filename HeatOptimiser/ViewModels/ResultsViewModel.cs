@@ -41,24 +41,24 @@ public class ResultsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _XAxes, value);
     }
     public ReactiveCommand<Unit, Unit> SelectUsageChart {get;}
-    public ReactiveCommand<Unit, Unit> SelectProfitChart {get;}
+    public ReactiveCommand<Unit, Unit> SelectCostsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectEmissionsChart {get;}
     public ReactiveCommand<Unit, Unit> SelectElectricityChart {get;}
-    public ReactiveCommand<Unit, Unit> SelectProfitByOptimisationChart {get;}
+    public ReactiveCommand<Unit, Unit> SelectCostByOptimisationChart {get;}
     public ReactiveCommand<Unit, Unit> SelectEmissionsByOptimisationChart {get;}
     public ResultsViewModel()
     {
         SelectUsageChart = ReactiveCommand.Create(UsageChart);
-        SelectProfitChart = ReactiveCommand.Create(ProfitChart);
+        SelectCostsChart = ReactiveCommand.Create(CostsChart);
         SelectEmissionsChart = ReactiveCommand.Create(EmissionsChart);
         SelectElectricityChart = ReactiveCommand.Create(ElectricityChart);
-        SelectProfitByOptimisationChart = ReactiveCommand.Create(ProfitByOptimisationChart);
+        SelectCostByOptimisationChart = ReactiveCommand.Create(CostByOptimisationChart);
         SelectEmissionsByOptimisationChart = ReactiveCommand.Create(EmissionsByOptimisationChart);
         UsageChart();
     }
     public void UsageChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
+        Schedule results = ResultsDataManager.Load();
         List<List<double>> demandsList = [];
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
         
@@ -135,9 +135,9 @@ public class ResultsViewModel : ViewModelBase
             }
         ];
     }
-    public void ProfitChart()
+    public void CostsChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
+        Schedule results = ResultsDataManager.Load();
         List<List<double>> costList = [[], [], []]; //Asset, Electricity, Total
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
         foreach (ScheduleHour hour in results.schedule)
@@ -147,15 +147,15 @@ public class ResultsViewModel : ViewModelBase
             {
                 if (hour.Assets!.Contains(asset))
                 {
-                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
-                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                 }
             }
             costList[0].Add(hourlyCosts[0]);
             costList[1].Add(hourlyCosts[1]);
             costList[2].Add(hourlyCosts[0]+hourlyCosts[1]);
         }
-        List<string> CostNames = ["Assets", "Electricity", "Total Profit"];
+        List<string> CostNames = ["Assets", "Electricity", "Total Cost"];
 
         Series = [];
         foreach(List<double> costs in costList)
@@ -173,7 +173,7 @@ public class ResultsViewModel : ViewModelBase
         YAxes = [
             new()
             {
-                Name = "Profit (€)",
+                Name = "Cost (€)",
                 TextSize = 16,
                 NameTextSize = 18
             }
@@ -195,7 +195,7 @@ public class ResultsViewModel : ViewModelBase
     }
     public void EmissionsChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
+        Schedule results = ResultsDataManager.Load();
         List<double> emissions = [];
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
         foreach (ScheduleHour hour in results.schedule)
@@ -243,7 +243,7 @@ public class ResultsViewModel : ViewModelBase
     }
     public void ElectricityChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
+        Schedule results = ResultsDataManager.Load();
         List<double> usage = [];
         List<double> price = [];
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
@@ -254,7 +254,7 @@ public class ResultsViewModel : ViewModelBase
             {
                 if (hour.Assets!.Contains(asset))
                 {
-                    hourlyUsage += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!;
+                    hourlyUsage += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!;
                 }
             }
             usage.Add(hourlyUsage);
@@ -313,16 +313,15 @@ public class ResultsViewModel : ViewModelBase
 
 
     }
-    public void ProfitByOptimisationChart()
+    public void CostByOptimisationChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
-        Console.WriteLine(results.schedule.Count);
+        Schedule results = ResultsDataManager.Load();
         List<List<double>> costList = [[], [], []]; //NetCost, Cost, Emissions
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
         Schedule NetOptimised = Optimiser.NetOptimise(results.startDate, results.endDate);
         Schedule CostOptimised = Optimiser.Optimise(results.startDate, results.endDate, OptimisationChoice.Cost);
         Schedule EmissionOptimised = Optimiser.Optimise(results.startDate, results.endDate, OptimisationChoice.Emissions);
-        for (int i = 0; i < NetOptimised.schedule.Count; i++)
+        for (int i = 0; i < results.schedule.Count; i++)
         {
             List<double> hourlyCosts = [0, 0, 0];
             foreach (ProductionAsset asset in assets)
@@ -330,20 +329,20 @@ public class ResultsViewModel : ViewModelBase
                 if (NetOptimised.schedule[i].Assets!.Contains(asset))
                 {
                     ScheduleHour hour = NetOptimised.schedule[i];
-                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
-                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                    hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                 }
                 if (CostOptimised.schedule[i].Assets!.Contains(asset))
                 {
                     ScheduleHour hour = CostOptimised.schedule[i];
-                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
-                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                    hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                 }
                 if (EmissionOptimised.schedule[i].Assets!.Contains(asset))
                 {
                     ScheduleHour hour = EmissionOptimised.schedule[i];
-                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Cost!;
-                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Electricity!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
+                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                    hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                 }
             }
             for (int j = 0; j < costList.Count; j++)
@@ -351,7 +350,7 @@ public class ResultsViewModel : ViewModelBase
                 costList[j].Add(hourlyCosts[j]);
             }
         }
-        List<string> CostNames = ["Net Cost", "Cost", "Emissions"];
+        List<string> CostNames = ["Net Cost", "Total Cost", "Emissions"];
 
         Series = [];
         int colorIndex = 0;
@@ -380,7 +379,7 @@ public class ResultsViewModel : ViewModelBase
         YAxes = [
             new()
             {
-                Name = "Profit (€)",
+                Name = "Cost (€)",
                 TextSize = 16,
                 NameTextSize = 18
             }
@@ -402,7 +401,7 @@ public class ResultsViewModel : ViewModelBase
     }
     public void EmissionsByOptimisationChart()
     {
-        Schedule results = ResultsDataManager.ResultsSchedule;
+        Schedule results = ResultsDataManager.Load();
         List<List<double>> emissionList = [[], [], []]; //NetCost, Cost, Emissions
         List<ProductionAsset> assets = AssetManager.GetAllUnits().ToList();
         Schedule NetOptimised = Optimiser.NetOptimise(results.startDate, results.endDate);

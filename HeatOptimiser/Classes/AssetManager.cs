@@ -153,6 +153,13 @@ namespace HeatOptimiser
         {
             return _productionAssets;
         }
+        public static void SetSelectedUnits(ObservableCollection<ProductionAsset> productionAssets)
+        {
+            foreach (var asset in productionAssets)
+            {
+                _productionAssets.FirstOrDefault(x => x.ID == asset.ID)!.OptimiseSelected = asset.OptimiseSelected;
+            }
+        }
         public static ObservableCollection<ProductionAsset> GetSelectedUnits()
         {
             var assets = _productionAssets.Where(x => x.OptimiseSelected == true).ToList();
@@ -161,8 +168,10 @@ namespace HeatOptimiser
         }
         public static ObservableCollection<ProductionAsset> LoadUnits()
         {
-            _productionAssets = _jsonAssetStorage.LoadUnits();
+            if (_productionAssets.Count == 0 || _productionAssets == null)
+                _productionAssets = _jsonAssetStorage.LoadUnits();
             return _productionAssets;
+
         }
         public static void SaveUnits(ObservableCollection<ProductionAsset> AllAssets)
         {

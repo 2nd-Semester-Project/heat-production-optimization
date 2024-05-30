@@ -66,22 +66,7 @@ public class OptimiserViewModel : ViewModelBase
         StartingDate = StartEndDates[0];
         EndingDate = StartEndDates[1];
         
-        ProductionAssets = AssetManager.GetSelectedUnits();
-        if (ProductionAssets.Count == 0)
-        {
-            ProductionAssets = AssetManager.LoadUnits();
-        }
-        else if (ProductionAssets.Count != AssetManager.LoadUnits().Count)
-        {
-            var ProductionAssetsTwo = AssetManager.LoadUnits();
-            foreach (var asset in ProductionAssetsTwo)
-            {
-                if (!ProductionAssets.Contains(asset))
-                {
-                    ProductionAssets.Add(asset);
-                }
-            }
-        }
+        ProductionAssets = AssetManager.LoadUnits();
         OptimiseCommand=ReactiveCommand.Create(()=> Optimise(_startingDate, _endingDate, _selectedCategoryIndex));
     }
 }

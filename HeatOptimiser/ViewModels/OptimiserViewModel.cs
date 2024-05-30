@@ -34,8 +34,7 @@ public class OptimiserViewModel : ViewModelBase
     }
     public void Optimise(DateTime start, DateTime end, int categoryIndex)
     {
-        Console.WriteLine($"Testing {categoryIndex} optimisation.");
-
+        ResultsDataManager.AssetsSelected = AssetManager.GetSelectedUnits().Count > 0;
         OptimisationChoice choice;
         if (categoryIndex == 0)
         {

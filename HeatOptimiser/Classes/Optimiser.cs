@@ -156,7 +156,7 @@ namespace HeatOptimiser
                         int index = 0;
                         ObservableCollection<ProductionAsset> assetsUsed = [];
                         ObservableCollection<double> assetDemands = [];
-                        while (producedHeat < hour.HeatDemand)
+                        while (producedHeat < hour.HeatDemand && index < sortedEmissions.Count)
                         {
                             assetsUsed.Add(sortedEmissions.Keys.ToList()[index]);
                             if (sortedEmissions.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))

@@ -115,7 +115,13 @@ public class ResultsViewModel : ViewModelBase
             Values = demandValues,
             Name = "Total demand",
             LineSmoothness = 1,
-            Stroke = null
+            Fill =null,
+            GeometryStroke = null,
+            GeometryFill = null,
+            Stroke = new SolidColorPaint(new SKColor(0, 0, 0))
+            {
+                StrokeThickness = 3
+            }
         };
         Series.Add(demandSeries);
         

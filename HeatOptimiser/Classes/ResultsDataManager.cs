@@ -123,7 +123,8 @@ namespace HeatOptimiser
             else
             {
                 // TODO: return empty schedule
-                return new Schedule((DateTime)schedule[0].Hour!, (DateTime)schedule[^1].Hour!); // just a placeholder, this has to be changed to return empty schedule
+                return new Schedule(DateTime.Now, DateTime.Now);
+                //return new Schedule((DateTime)schedule[0].Hour!, (DateTime)schedule[^1].Hour!); // just a placeholder, this has to be changed to return empty schedule
             }
         }
     }

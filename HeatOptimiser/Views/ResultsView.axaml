@@ -33,11 +33,13 @@
             <Button Content="Profit by Optimisation" Command="{Binding SelectCostByOptimisationChart}"
                     Margin="5" 
                     Background="#a11d33"
-                    Width="150"/>
+                    Width="150"
+                    IsEnabled="{Binding AssetsSelected}"/>
             <Button Content="Emissions by Optimisation" Command="{Binding SelectEmissionsByOptimisationChart}"
                     Margin="5" 
                     Background="#a11d33"
-                    Width="150"/>
+                    Width="150"
+                    IsEnabled="{Binding AssetsSelected}"/>
         </StackPanel>
         
         <lvc:CartesianChart 

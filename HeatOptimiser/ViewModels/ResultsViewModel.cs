@@ -46,6 +46,12 @@ public class ResultsViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> SelectElectricityChart {get;}
     public ReactiveCommand<Unit, Unit> SelectCostByOptimisationChart {get;}
     public ReactiveCommand<Unit, Unit> SelectEmissionsByOptimisationChart {get;}
+    private bool _assetsSelected;
+    public bool AssetsSelected
+    {
+        get =>  _assetsSelected;
+        set =>  this.RaiseAndSetIfChanged(ref _assetsSelected, value);
+    }
     public ResultsViewModel()
     {
         SelectUsageChart = ReactiveCommand.Create(UsageChart);
@@ -55,6 +61,7 @@ public class ResultsViewModel : ViewModelBase
         SelectCostByOptimisationChart = ReactiveCommand.Create(CostByOptimisationChart);
         SelectEmissionsByOptimisationChart = ReactiveCommand.Create(EmissionsByOptimisationChart);
         UsageChart();
+        AssetsSelected = ResultsDataManager.AssetsSelected;
     }
     public void UsageChart()
     {

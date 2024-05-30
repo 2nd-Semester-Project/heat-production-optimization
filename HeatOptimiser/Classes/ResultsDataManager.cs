@@ -12,6 +12,7 @@ namespace HeatOptimiser
 {
     public class ResultsDataManager
     {
+        public static bool AssetsSelected = false;
         public static readonly string filePath = "data/resultdata.csv";
         public static void Save(Schedule schedule)
         {

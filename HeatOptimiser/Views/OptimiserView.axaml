@@ -29,8 +29,9 @@
       <ComboBoxItem>Optimize by Costs</ComboBoxItem>
       <ComboBoxItem>Optimize by CarbonDioxide</ComboBoxItem>
       </ComboBox>
-    <Button Content="Optimize" Command="{Binding OptimiseCommand}"
+    <Button Content="Optimise" Command="{Binding OptimiseCommand}"
             Margin="5" 
+            Foreground="Beige" 
             Background="#a11d33"
             Width="150"/>
       </StackPanel>
@@ -40,7 +41,7 @@
               <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="5">
                   <CheckBox IsChecked="{Binding OptimiseSelected}"/>
-                  <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                  <TextBlock Text="{Binding Name}" Foreground="Beige" VerticalAlignment="Center"/>
                 </StackPanel>
               </StackPanel>
             </DataTemplate>

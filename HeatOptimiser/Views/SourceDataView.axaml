@@ -55,7 +55,7 @@
               VerticalAlignment="Bottom"
               Margin="5"
               Background="#a11d33"
-              Foreground="White"
+              Foreground="Beige"
               Width="150"
               Height="35">
         <TextBlock Text="Load" HorizontalAlignment="Center"/>

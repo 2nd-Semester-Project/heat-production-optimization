@@ -27,32 +27,32 @@
                         Width="50" 
                         Command="{Binding PaneCommand}" 
                         Background="#85182a">
-                    <PathIcon Data="{StaticResource line_horizontal_3_regular}"/>
+                    <PathIcon Data="{StaticResource line_horizontal_3_regular}" Foreground="Beige"/>
                 </Button>
                 <Button Height="40" 
                         Width="{Binding ButtonWidth}" 
                         Command="{Binding OpenHomepageCommand}">  
-                    <TextBlock Text="Home" Opacity="{Binding ButtonTextOpacity}"/>
+                    <TextBlock Foreground="Beige" Text="Home" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
                 <Button Command="{Binding OpenAssetManagerCommand}" 
                         Height="40" 
                         Width="{Binding ButtonWidth}">
-                    <TextBlock Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
+                    <TextBlock Foreground="Beige" Text="Assets" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
                 <Button Height="40" 
                         Width="{Binding ButtonWidth}" 
                         Command="{Binding OpenSourceDataCommand}">  
-                    <TextBlock Text="Source Data" Opacity="{Binding ButtonTextOpacity}"/>
+                    <TextBlock Foreground="Beige" Text="Source Data" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
                 <Button Command="{Binding OpenOptimiserCommand}" 
                         Height="40" 
                         Width="{Binding ButtonWidth}">
-                    <TextBlock Text="Optimiser" Opacity="{Binding ButtonTextOpacity}"/>
+                    <TextBlock Foreground="Beige" Text="Optimiser" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
                 <Button Command="{Binding OpenResultsCommand}"
                         Height="40" 
                         Width="{Binding ButtonWidth}">  <!--Command Binding is still missing, no view yet-->
-                    <TextBlock Text="Results" Opacity="{Binding ButtonTextOpacity}"/>
+                    <TextBlock Foreground="Beige" Text="Results" Opacity="{Binding ButtonTextOpacity}"/>
                 </Button>
             </StackPanel>
 

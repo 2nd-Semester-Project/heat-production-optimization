@@ -22,18 +22,18 @@
                HorizontalAlignment="Center" Height="80" Margin="0,0,0,20" Grid.Row="0"/>
 
         <!-- Title -->
-        <TextBlock Text="Heat Production Optimization" FontSize="32" FontWeight="Bold" Foreground="#a11d33" 
+        <TextBlock Text="Heat Production Optimisation" FontSize="32" FontWeight="Bold" Foreground="#a11d33" 
                    HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="1"/>
 
         <!-- Subtitle -->
-        <TextBlock Text="Optimizing Heat and Electricity Production for Cost Efficiency" FontSize="20" Foreground="Gray" 
+        <TextBlock Text="Optimising Heat and Electricity Production for Cost Efficiency" FontSize="20" Foreground="Gray" 
                    HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2"/>
 
         <!-- Project Description -->
         <StackPanel Grid.Row="3" Margin="0,0,0,20" HorizontalAlignment="Center" Width="800">
             <TextBlock Text="HeatItOn User Guide" FontSize="24" FontWeight="Bold" Foreground="Black" Margin="0,0,0,10"/>
             <TextBlock FontSize="18" TextWrapping="Wrap" Foreground="Black">
-                <Run Text="HeatItOn is tasked with optimizing heat delivery to 1600 buildings in Heatington through a district heating network. The goal is to cost-effectively schedule heat production using various units, including traditional boilers. The project involves defining heat schedules for all available production units, aiming for the lowest expenses and highest profit on the electricity market."/>
+                <Run Text="HeatItOn is tasked with optimising heat delivery to 1600 buildings in Heatington through a district heating network. The goal is to cost-effectively schedule heat production using various units, including traditional boilers. The project involves defining heat schedules for all available production units, aiming for the lowest expenses and highest profit on the electricity market."/>
                 <LineBreak/>
                 <LineBreak/>
                 <Run Text="You are presented with a menu on the left side of the window where you can navigate to different sections of the application. The main sections are:"/>
@@ -44,9 +44,9 @@
                 <LineBreak/>
                 <Run Text="• Source Data: A page where you can load and view the source data."/>
                 <LineBreak/>
-                <Run Text="• Optimiser: The main page where you can run the optimization algorithm."/>
+                <Run Text="• Optimiser: The main page where you can run the optimisation algorithm."/>
                 <LineBreak/>
-                <Run Text="• Results: A page where you can view the results of the optimization."/>
+                <Run Text="• Results: A page where you can view the results of the optimisation."/>
                 <LineBreak/>
                 
             </TextBlock>

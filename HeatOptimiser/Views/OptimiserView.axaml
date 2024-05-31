@@ -9,7 +9,7 @@
              x:DataType="views:OptimiserViewModel">
   
   
-  <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*" ShowGridLines="true">
+  <Grid Margin="30" RowDefinitions="*,*" ColumnDefinitions="*,*">
     <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" Spacing="10">
       <StackPanel VerticalAlignment="Bottom">
         <TextBlock Text="Enter Starting Date" Foreground="White" FontSize="16" FontWeight="Bold"/>

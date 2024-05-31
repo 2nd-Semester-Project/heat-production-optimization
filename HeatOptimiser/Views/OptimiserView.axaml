@@ -32,10 +32,10 @@
     <Button Content="Optimise" Command="{Binding OptimiseCommand}"
             Margin="5" 
             Foreground="Beige" 
-            Background="#a11d33"
+            Background="#cc0a02"
             Width="150"/>
       </StackPanel>
-      <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding ProductionAssets}" Background="#a11d33" Margin="10">
+      <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding ProductionAssets}" Background="#cc0a02" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
               <StackPanel Orientation="Vertical">

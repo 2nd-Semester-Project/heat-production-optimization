@@ -17,33 +17,33 @@
             <Button Content="Schedule" Command="{Binding SelectUsageChart}"
                     Margin="5" 
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"/>
             <Button Content="Costs" Command="{Binding SelectCostsChart}"
                     Margin="5"
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"/>
             <Button Content="Emissions" Command="{Binding SelectEmissionsChart}"
                     Margin="5" 
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"/>
             <Button Content="Electricity" Command="{Binding SelectElectricityChart}"
                     Margin="5" 
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"/>
             <Button Content="Cost by Optimisation" Command="{Binding SelectCostByOptimisationChart}"
                     Margin="5" 
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"
                     IsEnabled="{Binding AssetsSelected}"/>
             <Button Content="Emissions by Optimisation" Command="{Binding SelectEmissionsByOptimisationChart}"
                     Margin="5" 
                     Foreground="Beige" 
-                    Background="#a11d33"
+                    Background="#cc0a02"
                     Width="150"
                     IsEnabled="{Binding AssetsSelected}"/>
         </StackPanel>

@@ -22,7 +22,7 @@
                HorizontalAlignment="Center" Height="80" Margin="0,0,0,20" Grid.Row="0"/>
 
         <!-- Title -->
-        <TextBlock Text="Heat Production Optimisation" FontSize="32" FontWeight="Bold" Foreground="#a11d33" 
+        <TextBlock Text="Heat Production Optimisation" FontSize="32" FontWeight="Bold" Foreground="#cc0a02" 
                    HorizontalAlignment="Center" Margin="0,0,0,10" Grid.Row="1"/>
 
         <!-- Subtitle -->

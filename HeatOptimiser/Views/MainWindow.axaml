@@ -19,14 +19,14 @@
     </Design.DataContext>
 
     <SplitView IsPaneOpen="{Binding PaneStatus, Mode=TwoWay}" OpenPaneLength="270" CompactPaneLength="90" DisplayMode="CompactInline"
-                PaneBackground="#a11d33"
+                PaneBackground="#ee1c24"
                 Background="#cccccc">
         <SplitView.Pane>
             <StackPanel Spacing="15" Margin="20">
                 <Button Height="40" 
                         Width="50" 
                         Command="{Binding PaneCommand}" 
-                        Background="#85182a">
+                        Background="#cc0a02">
                     <PathIcon Data="{StaticResource line_horizontal_3_regular}" Foreground="Beige"/>
                 </Button>
                 <Button Height="40" 

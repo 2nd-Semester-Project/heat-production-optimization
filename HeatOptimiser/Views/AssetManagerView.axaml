@@ -10,7 +10,7 @@
   
   <UserControl.Styles>
         <Style Selector="TextBox#Type1Textbox:hover /template/ ContentPresenter#PART_ContentPresenter:focus">
-            <Setter Property="Background" Value="#a11d33" />
+            <Setter Property="Background" Value="#cc0a02" />
         </Style>
     </UserControl.Styles>
   
@@ -19,7 +19,7 @@
     <TextBlock  Text="Asset Manager" 
                 HorizontalAlignment="Left" 
                 Margin="0,0,0,20" FontSize="30" 
-                Foreground="#a11d33"/>
+                Foreground="#cc0a02"/>
       <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="170"/>
@@ -54,13 +54,13 @@
               <TextBox Text="{Binding AssetCarbonNew}" Watermark="Enter CarbonDioxide"/>
               <TextBlock Text="{Binding ErrorText6}" Foreground="Red"/>
             </StackPanel>
-              <Button Content="Add Unit" CornerRadius="50" Background="#a11d33" Foreground="White" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
+              <Button Content="Add Unit" CornerRadius="50" Background="#cc0a02" Foreground="White" HorizontalAlignment="Center" Command="{Binding AddAssetCommand}" Margin="5"/>
         </StackPanel>
       
       <ListBox Grid.Column="1" ItemsSource="{Binding ProductionAssets}" CornerRadius="5" VerticalAlignment="Top" Height="420" HorizontalAlignment="Stretch" Margin="10">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                  <StackPanel Margin="5" Orientation="Horizontal" Background="#a11d33" Spacing="5">
+                  <StackPanel Margin="5" Orientation="Horizontal" Background="#cc0a02" Spacing="5">
                       <CheckBox   HorizontalAlignment="Left" 
                                   VerticalAlignment="Center"
                                   IsChecked="{Binding IsSelected}"/>
@@ -106,7 +106,7 @@
         <Button Content="Update Units" 
                 CornerRadius="25" 
                 Foreground="White" 
-                Background="#a11d33" 
+                Background="#cc0a02" 
                 Width="130" 
                 HorizontalAlignment="Left" 
                 Margin="0,0,20,0"
@@ -114,7 +114,7 @@
         <Button Content="Delete Units" 
                 CornerRadius="25" 
                 Foreground="White" 
-                Background="#a11d33" 
+                Background="#cc0a02" 
                 Width="130" 
                 Command="{Binding DeleteAssetCommand}"/>
     </StackPanel>

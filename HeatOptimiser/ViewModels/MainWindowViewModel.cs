@@ -6,7 +6,6 @@ namespace UserInterface.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    //Colors and Backgrounds maybe store them here?
     public string paneBackground{get=>"#85182a";}
     public string background{get=>"#cccccc";}
     public string showButtons;

@@ -13,7 +13,6 @@ namespace HeatOptimiser.Tests
             string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
-            Console.WriteLine(file);
 
             // Act
             var result = SourceDataManager.LoadXLSXFile(file, 2, 4);

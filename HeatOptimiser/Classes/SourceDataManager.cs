@@ -1,4 +1,4 @@
-using OfficeOpenXml; // dotnet add package EPPlus
+using OfficeOpenXml;
 using System.Globalization;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,6 @@ namespace HeatOptimiser
                 SettingsManager.SaveSetting("DataLoaded", "True");
                 
                 // Automatically write the CSV files
-                Console.WriteLine("Writing to CSV");
                 WriteToCSV(LoadedData, defaultSavePath);
             }
         }

@@ -29,7 +29,7 @@ public class OptimiserViewModel : ViewModelBase
         get =>  _selectedCategoryIndex;
         set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
     }
-    // Optimizes the schedule by use of Optimiser module, given the start and end dates as well as a category index.
+    // Optimises the schedule by use of Optimiser module, given the start and end dates as well as a category index.
     public static void Optimise(DateTime start, DateTime end, int categoryIndex)
     {
         ResultsDataManager.AssetsSelected = AssetManager.GetSelectedUnits().Count > 0;

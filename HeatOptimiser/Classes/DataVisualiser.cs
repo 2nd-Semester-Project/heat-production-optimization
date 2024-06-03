@@ -39,7 +39,6 @@ namespace HeatOptimiser
             SourceDataManager.YAxes = new Axis[names.Count];
             if (data.Count != names.Count)
             {
-                Console.WriteLine("Invalid arguments!");
                 return;
             }
             for(int index = 0; index < data.Count; index++)

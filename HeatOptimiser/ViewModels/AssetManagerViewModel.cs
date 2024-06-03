@@ -52,8 +52,6 @@ public class NewAsset : ViewModelBase
 public class AssetManagerViewModel : ViewModelBase
 {
     public JsonAssetStorage jsonAssetStorage;
-    
-    //public ProductionAsset productionAsset;
     public string _errorText1;
     public string _errorText2;
     public string _errorText3;

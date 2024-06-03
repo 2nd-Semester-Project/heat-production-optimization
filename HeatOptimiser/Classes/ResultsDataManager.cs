@@ -1,8 +1,6 @@
 using System.Text;
 using System.IO;
 using System.Globalization;
-using CsvHelper;
-using CsvHelper.Configuration;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -12,7 +10,9 @@ namespace HeatOptimiser
 {
     public class ResultsDataManager
     {
-        private static string filePath = "data/resultdata.csv";
+        public static bool AssetsSelected = false;
+        public static readonly string filePath = "data/resultdata.csv";
+        // Saves the schedule data to the results CSV file.
         public static void Save(Schedule schedule)
         {
             var csv = new StringBuilder();
@@ -29,7 +29,7 @@ namespace HeatOptimiser
                 
                 for (int i = 0; i < hour.Assets!.Count; i++)
                 {
-                    newLine += $"{hour.Assets[i].ID}/";
+                    newLine += $"{hour.Assets[i].Name}/";
                     producedHeat += hour.Assets[i].Heat * hour.Demands![i];
                     if (hour.Assets[i].Electricity > 0)
                         producedElectricity += hour.Assets[i].Electricity * hour.Demands[i];
@@ -53,6 +53,7 @@ namespace HeatOptimiser
 
             File.WriteAllText(filePath, csv.ToString());
         }
+        // Removes given date data from results file.
         public static void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
             List<string> lines = File.ReadAllLines(filePath).ToList();
@@ -67,7 +68,7 @@ namespace HeatOptimiser
                 }
                 counter++;
             }
-            List<string> newLines = new List<string>();
+            List<string> newLines = [];
             for (int i = 0; i < lines.Count; i++)
             {
                 if (!removableIndexes.Contains(i))
@@ -78,87 +79,53 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
-        public static Schedule Load(DateOnly dateFrom, DateOnly dateTo)
+        // Loads result data from a CSV file into a Schedule object.
+        public static Schedule Load()
         {
-            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+            List<ScheduleHour> schedule = [];
+
+            CultureInfo provider = CultureInfo.InvariantCulture;
+
+            foreach (string line in File.ReadAllLines(filePath))
             {
-                HasHeaderRecord = false
-            };
-
-            using var streamReader = File.OpenText(filePath);
-            using var csvReader = new CsvReader(streamReader, csvConfig);
-
-            bool reading = false;
-            Schedule schedule = new Schedule(dateFrom.ToDateTime(TimeOnly.Parse("00:00")), dateTo.ToDateTime(TimeOnly.Parse("00:00")));
-
-        
-            while (csvReader.Read())
-            {
-                List<string> line = new List<string>();
-                for (int i = 0; csvReader.TryGetField<string>(i, out string value); i++)
+                List<string> assetNames = line.Split(", ")[1].Split("/").ToList();
+                ObservableCollection<ProductionAsset> assets = [];
+                foreach (string assetName in assetNames)
                 {
-                    line.Add(value);
+                    assets.Add(AssetManager.SearchUnits(assetName)[0]);
                 }
-                if((DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateFrom.ToDateTime(TimeOnly.Parse("00:00"))) || (DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture) == dateTo.ToDateTime(TimeOnly.Parse("00:00"))))
-                    reading = !reading;
-                if(reading)
+
+                List<string> demandStrings = line.Split(", ")[2].Split("/").ToList();
+                ObservableCollection<double> demands = [];
+                foreach (string demandString in demandStrings)
                 {
-                    DateTime hour = DateTime.ParseExact(line[0], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-                
-                    ObservableCollection<ProductionAsset> assets = [];
-                    ObservableCollection<double> demands = [];
-                    foreach(string assetID in line[1].Trim().Split('/'))
-                    {
-                        var unit = AssetManager.GetAllUnits().FirstOrDefault(x => x.ID.ToString() == assetID);
-                        if (unit != null)
-                        {
-                            assets.Add(unit);
-                        }
-                    }
-                    foreach(string demand in line[2].Split('/'))
-                    {
-                        demands.Add(Convert.ToDouble(demand));
-                    }
-                    schedule.AddHour(hour, assets, demands);
+                    demands.Add(double.Parse(demandString));
                 }
+
+                schedule.Add(
+                    new()
+                    {
+                        Hour = DateTime.ParseExact(line.Split(", ")[0], "dd/MM/yyyy HH:mm", provider),
+                        Assets = assets,
+                        Demands = demands
+                    }
+                );
             }
-                
-            return schedule;
-        }
-    
-        public static Schedule LoadAll()
-        {
-            var csvConfig = new CsvConfiguration(CultureInfo.CurrentCulture)
+            if (schedule.Count != 0)
             {
-                HasHeaderRecord = false
-            };
-
-            using var streamReader = File.OpenText(filePath);
-            using var csvReader = new CsvReader(streamReader, csvConfig);
+                Schedule loadedSchedule = new Schedule((DateTime)schedule[0].Hour!, (DateTime)schedule[^1].Hour!);
             
-            DateTime minDate = DateTime.MaxValue;
-            DateTime maxDate = DateTime.MinValue;
+                foreach(ScheduleHour hour in schedule)
+                {
+                    loadedSchedule.AddHour(hour.Hour, hour.Assets!, hour.Demands!);
+                }
 
-            while (csvReader.Read())
-            {
-                string dateString = csvReader.GetField<string>(0);
-                DateTime date = DateTime.ParseExact(dateString, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-                
-                if (date < minDate)
-                {
-                    minDate = date;
-                }
-                
-                if (date > maxDate)
-                {
-                    maxDate = date;
-                }
+                return loadedSchedule;
             }
-
-            DateOnly minDateOnly = new DateOnly(minDate.Year, minDate.Month, minDate.Day);
-            DateOnly maxDateOnly = new DateOnly(maxDate.Year, maxDate.Month, maxDate.Day);
-
-            return Load(minDateOnly, maxDateOnly);
+            else
+            {
+                return new Schedule(DateTime.Now, DateTime.Now);
+            }
         }
     }
 }

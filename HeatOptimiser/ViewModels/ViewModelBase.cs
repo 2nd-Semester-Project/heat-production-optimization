@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using ReactiveUI;
-using System.Reactive;
+﻿using ReactiveUI;
 
 namespace UserInterface.ViewModels;
 

@@ -1,8 +1,5 @@
-using System.Security.Cryptography;
 using System;
-using System.Text.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 
@@ -13,17 +10,13 @@ namespace HeatOptimiser
         Cost,
         Emissions
     }
-    public class Schedule
+    public class Schedule(DateTime start, DateTime end)
     {
-        public DateTime startDate;
-        public DateTime endDate;
-        public List<ScheduleHour> schedule;
-        public Schedule(DateTime start, DateTime end)
-        {
-            startDate = start;
-            endDate = end;
-            schedule = [];
-        }
+        public DateTime startDate = start;
+        public DateTime endDate = end;
+        public List<ScheduleHour> schedule = [];
+
+        // Adds a new hour to the schedule with the specified assets and demands.
         public void AddHour(DateTime? dateTime, ObservableCollection<ProductionAsset> assets, ObservableCollection<double> demands)
         {
             schedule.Add(new ScheduleHour
@@ -32,6 +25,14 @@ namespace HeatOptimiser
                 Assets = assets,
                 Demands = demands
             });
+            if (dateTime > endDate)
+            {
+                endDate = (DateTime)dateTime;
+            }
+            if (dateTime < startDate)
+            {
+                startDate = (DateTime)dateTime;
+            }
         }
     }
     public class ScheduleHour
@@ -42,28 +43,58 @@ namespace HeatOptimiser
     }
     public static class Optimiser
     {
+        // Optimises the schedule by only looking at net cost of each production asset.
+        public static Schedule NetOptimise(DateTime startDate, DateTime endDate)
+        {
+            Schedule schedule = new(startDate, endDate);
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits();
+
+            List<ProductionAsset> orderedAssets = assets.OrderBy(x => x.Cost).ToList();
+
+            foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
+            {
+                double producedHeat = 0;
+                int index = 0;
+                ObservableCollection<ProductionAsset> assetsUsed = [];
+                ObservableCollection<double> assetDemands = [];
+                while (producedHeat < hour.HeatDemand && index < orderedAssets.Count)
+                {
+                    assetsUsed.Add(orderedAssets[index]);
+                    double assetUsed;
+                    if ((double)orderedAssets[index].Heat! > (hour.HeatDemand - producedHeat))
+                    {
+                        assetUsed = (double)hour.HeatDemand-producedHeat;
+                    }
+                    else
+                    {
+                        assetUsed = (double)orderedAssets[index].Heat!;
+                    }
+                    assetDemands.Add(assetUsed);
+                    producedHeat += assetUsed;
+                    index += 1;
+                }
+                schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
+            }
+            return schedule;
+        }
+        // Optimises the schedule based on the specified criteria (total cost/CO2 emissions)
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
-            SourceData data = new();
-            if (data.LoadedData == null)
-            {
-                data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
-            }
             Schedule schedule = new(startDate, endDate);
 
-            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits(); // this is the change to selected assets
+            ObservableCollection<ProductionAsset> assets = AssetManager.GetSelectedUnits();
             if(assets.Count != 0)
             {
                 if (optimisationChoice == OptimisationChoice.Cost)
                 {
-                    Dictionary<ProductionAsset, double?> netCosts = new();
+                    Dictionary<ProductionAsset, double?> netCosts = [];
 
                     for (int i = 0; i < assets.Count; i++)
                     {
                         netCosts.Add(assets[i], assets[i].Cost);
                     }
 
-                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
                     {
                         Dictionary<ProductionAsset, double?> costs = new(netCosts);
                         foreach(ProductionAsset asset in costs.Keys)
@@ -76,42 +107,44 @@ namespace HeatOptimiser
                         int index = 0;
                         ObservableCollection<ProductionAsset> assetsUsed = [];
                         ObservableCollection<double> assetDemands = [];
-                        while (producedHeat < hour.HeatDemand)
+                        while (producedHeat < hour.HeatDemand && index < sortedCosts.Count)
                         {
-                            assetsUsed.Add(sortedCosts.Keys.ToList()[index]);
-                            if (sortedCosts.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
+                            ProductionAsset currentAsset = sortedCosts.Keys.ToList()[index];
+                            assetsUsed.Add(currentAsset);
+                            if (currentAsset.Heat > (hour.HeatDemand - producedHeat))
                             {
                                 assetDemands.Add(hour.HeatDemand.Value - producedHeat);
                                 producedHeat = hour.HeatDemand.Value;
                             }
                             else
                             {
-                                assetDemands.Add(sortedCosts.Keys.ToList()[index].Heat!.Value);
-                                producedHeat += sortedCosts.Keys.ToList()[index].Heat!.Value;
+                                assetDemands.Add(currentAsset.Heat!.Value);
+                                producedHeat += currentAsset.Heat!.Value;
                             }
                             index += 1;
                         }
+                        //Check if enough heat has been produced
                         schedule.AddHour(hour.TimeFrom, assetsUsed, assetDemands);
                     }
                 }
                 
                 else if (optimisationChoice == OptimisationChoice.Emissions)
                 {
-                    Dictionary<ProductionAsset, double?> emissions = new();
+                    Dictionary<ProductionAsset, double?> emissions = [];
 
                     for (int i = 0; i < assets.Count; i++)
                     {
                         emissions.Add(assets[i], assets[i].CarbonDioxide);
                     }
 
-                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(data, startDate, endDate))
+                    foreach (SourceDataPoint hour in SourceDataManager.GetDataInRange(startDate, endDate))
                     {
                         Dictionary<ProductionAsset, double?> sortedEmissions = emissions.OrderBy(x => x.Value).ToDictionary();
                         double producedHeat = 0;
                         int index = 0;
                         ObservableCollection<ProductionAsset> assetsUsed = [];
                         ObservableCollection<double> assetDemands = [];
-                        while (producedHeat < hour.HeatDemand)
+                        while (producedHeat < hour.HeatDemand && index < sortedEmissions.Count)
                         {
                             assetsUsed.Add(sortedEmissions.Keys.ToList()[index]);
                             if (sortedEmissions.Keys.ToList()[index].Heat > (hour.HeatDemand - producedHeat))
@@ -130,8 +163,12 @@ namespace HeatOptimiser
                     }
                 }
                 return schedule;
-                }
-            return schedule;
             }
+            else
+            {
+                Console.WriteLine("No units selected!");
+            }
+            return schedule;
+        }
     }
 }

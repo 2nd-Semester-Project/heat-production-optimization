@@ -2,25 +2,9 @@ using System.Collections.ObjectModel;
 using ReactiveUI;
 using System.Reactive;
 using System.Linq;
-using DynamicData;
-using System.Runtime.Serialization;
-using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
 using HeatOptimiser;
-using System.Globalization;
-
-
-
-
-
 
 namespace UserInterface.ViewModels;
-
-
-
-    
-
 public class NewAsset : ViewModelBase
 {
     public string _assetName;
@@ -54,12 +38,12 @@ public class NewAsset : ViewModelBase
     public string AssetCarbon{get =>_assetCarbon;
     set=> this.RaiseAndSetIfChanged(ref _assetCarbon, value);
     }
-    public NewAsset(string n, string h, string elec, string ener, string cost, string carbon)
+    public NewAsset(string name, string heat, string electricity, string energy, string cost, string carbon)
     {
-        AssetName=n;
-        AssetHeat=h;
-        AssetElectricity=elec;
-        AssetEnergy=ener;
+        AssetName=name;
+        AssetHeat=heat;
+        AssetElectricity=electricity;
+        AssetEnergy=energy;
         AssetCost=cost;
         AssetCarbon=carbon;
         IsSelected=false;
@@ -68,8 +52,6 @@ public class NewAsset : ViewModelBase
 public class AssetManagerViewModel : ViewModelBase
 {
     public JsonAssetStorage jsonAssetStorage;
-    
-    //public ProductionAsset productionAsset;
     public string _errorText1;
     public string _errorText2;
     public string _errorText3;
@@ -179,6 +161,7 @@ public class AssetManagerViewModel : ViewModelBase
         get => _assetEdit;
         set => this.RaiseAndSetIfChanged(ref _assetEdit, value);
     }
+    // Adds a new asset with the provided details.
     public void AddAsset()
     {
         if (AssetNameNew!= null && double.TryParse(AssetHeatNew, out double AssetHeat)&&double.TryParse(AssetElectricityNew, out double AssetElectricity) &&double.TryParse(AssetEnergyNew, out double AssetEnergy) &&double.TryParse(AssetCostNew, out double AssetCost) &&double.TryParse(AssetCarbonNew, out double AssetCarbon))
@@ -192,9 +175,8 @@ public class AssetManagerViewModel : ViewModelBase
             AssetCarbonNew=string.Empty;
             AssetButton="Add Unit";
             }
-       
-        
     }
+    // Deletes selected assets from the production assets list.
     public void DeleteAsset()
     {
         var selectedAsset = ProductionAssets.Where(x => x.IsSelected == true).ToList(); 
@@ -203,11 +185,12 @@ public class AssetManagerViewModel : ViewModelBase
             AssetManager.DeleteUnit(asset.ID);
         }
     }
+    // Edits information about the asset by saving the observable collection to the asset manager.
     public void EditAsset()
     {   
         AssetManager.SaveUnits(ProductionAssets);
-
     }
+    // Validates the input to ensure it is a valid double.
     public void ValidateInput(string input)
     {   if (!double.TryParse(input, out _) && input!= string.Empty)
         {   ErrorText = "Input must be a valid double.";}
@@ -215,11 +198,9 @@ public class AssetManagerViewModel : ViewModelBase
         {   ErrorText = string.Empty;}}
     public AssetManagerViewModel()
     {
-        //Assets = new ObservableCollection<ProductionAsset>(assetManager.LoadUnits("ProductionAssets.json"));
         AddAssetCommand=ReactiveCommand.Create(AddAsset);
         DeleteAssetCommand=ReactiveCommand.Create(DeleteAsset);
         UpdateAssetCommand=ReactiveCommand.Create(EditAsset);
-        //assetManager.SaveUnits(ProductionAssets, assetManager.saveFileName);
         ProductionAssets=AssetManager.LoadUnits();
     }
 

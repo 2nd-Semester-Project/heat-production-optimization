@@ -1,15 +1,11 @@
 ﻿using System.Reactive;
-using System.Reflection;
 using ReactiveUI;
-using System.Collections.ObjectModel;
-using Avalonia.Controls;
 
 
 namespace UserInterface.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    //Colors and Backgrounds maybe store them here?
     public string paneBackground{get=>"#85182a";}
     public string background{get=>"#cccccc";}
     public string showButtons;
@@ -63,10 +59,5 @@ public class MainWindowViewModel : ViewModelBase
         OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
         OpenResultsCommand=ReactiveCommand.Create(()=> CurrentView= new ResultsViewModel());
         OpenSourceDataCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataViewModel());
-    }
-
-    public void ChangeView()
-    {
-        this.CurrentView=new SourceDataViewModel();
     }
 }

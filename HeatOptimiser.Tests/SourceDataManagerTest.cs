@@ -13,7 +13,6 @@ namespace HeatOptimiser.Tests
             string projectDirectory =  Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             string file = Path.Combine(projectDirectory, "SourceDataTest.xlsx");
-            Console.WriteLine(file);
 
             // Act
             var result = SourceDataManager.LoadXLSXFile(file, 2, 4);
@@ -27,13 +26,11 @@ namespace HeatOptimiser.Tests
         public void TestGetDataInRange()
         {
             // Arrange
-            SourceData data = new SourceData();
-            data.LoadedData = new ObservableCollection<SourceDataPoint>(); // Initialize LoadedData
             DateTime startDate = new DateTime(2023, 1, 1);
             DateTime endDate = new DateTime(2023, 1, 31);
 
             // Act
-            var result = SourceDataManager.GetDataInRange(data, startDate, endDate);
+            var result = SourceDataManager.GetDataInRange(startDate, endDate);
 
             // Assert
             Assert.NotNull(result);

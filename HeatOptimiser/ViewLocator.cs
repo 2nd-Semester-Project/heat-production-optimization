@@ -8,6 +8,7 @@ namespace UserInterface;
 public class ViewLocator : IDataTemplate
 {
 
+    // Builds a control based on the provided data object.
     public Control? Build(object? data)
     {
         if (data is null)
@@ -26,6 +27,7 @@ public class ViewLocator : IDataTemplate
         return new TextBlock { Text = "Not Found: " + name };
     }
 
+    // Determines if the provided data is of type ViewModelBase.
     public bool Match(object? data)
     {
         return data is ViewModelBase;

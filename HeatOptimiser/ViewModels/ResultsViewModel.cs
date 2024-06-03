@@ -1,15 +1,9 @@
-using System;
-using System.Linq;
 using ReactiveUI;
 using System.Reactive;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using HeatOptimiser;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using SkiaSharp;
-using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace UserInterface.ViewModels;
 
@@ -53,40 +47,48 @@ public class ResultsViewModel : ViewModelBase
         UsageChart();
         AssetsSelected = ResultsDataManager.AssetsSelected;
     }
+    // Synchronizes the variables from DataVisualiser module
     public void SyncWithVisualiser()
     {
-        Series = DataVisualizer.Series;
-        XAxes = DataVisualizer.XAxes;
-        YAxes = DataVisualizer.YAxes;
+        Series = DataVisualiser.Series;
+        XAxes = DataVisualiser.XAxes;
+        YAxes = DataVisualiser.YAxes;
     }
+
+    // Generates a chart displaying the usage of assets throughout the schedule
     public void UsageChart()
     {
-        DataVisualizer.VisualiseUsageData();
+        DataVisualiser.VisualiseUsageData();
         SyncWithVisualiser();
     }
+    // Generates a chart displaying the different costs throughout the schedule
     public void CostsChart()
     {
-        DataVisualizer.VisualiseCostsData();
+        DataVisualiser.VisualiseCostsData();
         SyncWithVisualiser();
     }
+    // Generates a chart displaying the emissions throughout the schedule
     public void EmissionsChart()
     {
-        DataVisualizer.VisualiseEmissionsData();
+        DataVisualiser.VisualiseEmissionsData();
         SyncWithVisualiser();
     }
+    // Generates a chart displaying the usage and price of electricity throughout the schedule
     public void ElectricityChart()
     {
-        DataVisualizer.VisualiseElectricityData();
+        DataVisualiser.VisualiseElectricityData();
         SyncWithVisualiser();
     }
+    // Generates a chart displaying the total cost throughout the schedule for different optimisation scenarios
     public void CostByOptimisationChart()
     {
-        DataVisualizer.VisualiseCostByOptimisationData();
+        DataVisualiser.VisualiseCostByOptimisationData();
         SyncWithVisualiser();
     }
+    // Generates a chart displaying the emissions throughout the schedule for different optimisation scenarios
     public void EmissionsByOptimisationChart()
     {
-        DataVisualizer.VisualiseEmissionsByOptimisationData();
+        DataVisualiser.VisualiseEmissionsByOptimisationData();
         SyncWithVisualiser();
     }
 }

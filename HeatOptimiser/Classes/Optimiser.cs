@@ -1,8 +1,5 @@
-using System.Security.Cryptography;
 using System;
-using System.Text.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 
@@ -13,17 +10,13 @@ namespace HeatOptimiser
         Cost,
         Emissions
     }
-    public class Schedule
+    public class Schedule(DateTime start, DateTime end)
     {
-        public DateTime startDate;
-        public DateTime endDate;
-        public List<ScheduleHour> schedule;
-        public Schedule(DateTime start, DateTime end)
-        {
-            startDate = start;
-            endDate = end;
-            schedule = [];
-        }
+        public DateTime startDate = start;
+        public DateTime endDate = end;
+        public List<ScheduleHour> schedule = [];
+
+        // Adds a new hour to the schedule with the specified assets and demands.
         public void AddHour(DateTime? dateTime, ObservableCollection<ProductionAsset> assets, ObservableCollection<double> demands)
         {
             schedule.Add(new ScheduleHour
@@ -50,6 +43,7 @@ namespace HeatOptimiser
     }
     public static class Optimiser
     {
+        // Optimises the schedule by only looking at net cost of each production asset.
         public static Schedule NetOptimise(DateTime startDate, DateTime endDate)
         {
             Schedule schedule = new(startDate, endDate);
@@ -83,6 +77,7 @@ namespace HeatOptimiser
             }
             return schedule;
         }
+        // Optimises the schedule based on the specified criteria (total cost/CO2 emissions)
         public static Schedule Optimise(DateTime startDate, DateTime endDate, OptimisationChoice optimisationChoice)
         {
             Schedule schedule = new(startDate, endDate);

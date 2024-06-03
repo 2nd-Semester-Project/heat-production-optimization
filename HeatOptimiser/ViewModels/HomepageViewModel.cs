@@ -19,6 +19,7 @@ namespace UserInterface.ViewModels
             string columnstring = SettingsManager.GetSetting("Column");
             string rowstring = SettingsManager.GetSetting("Row");
 
+            // Checks if the XLSX file path is empty, the file does not exist, or the column and row strings are empty.
             if (XLSXFilePath == string.Empty || !File.Exists(XLSXFilePath) || columnstring == string.Empty || rowstring == string.Empty)
             {
                 SettingsManager.SaveSetting("DataLoaded", "False");
@@ -36,7 +37,6 @@ namespace UserInterface.ViewModels
                 }
             }
             _assetCount = AssetManager.LoadUnits().Count;
-
         }
     }
 }

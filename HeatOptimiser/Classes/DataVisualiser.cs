@@ -12,7 +12,7 @@ using System.Reactive.Linq;
 namespace HeatOptimiser
 {
 
-    public static class DataVisualizer
+    public static class DataVisualiser
     {
         readonly static List<SKColor> colors = [
             new SKColor(194, 36, 62),
@@ -24,9 +24,10 @@ namespace HeatOptimiser
             new SKColor(0, 92, 230, 40),
             new SKColor(100, 87, 195, 40)
         ];
-        public static ObservableCollection<ISeries> Series = new();
+        public static ObservableCollection<ISeries> Series = [];
         public static Axis[] XAxes = [];
         public static Axis[] YAxes = [];
+        // Generates chart data for source data (heat demand and electricity price)
         public static void VisualiseSourceData(List<List<DateTimePoint>> data, List<string> names)
         {
             List<SKColor> colors = [
@@ -77,6 +78,7 @@ namespace HeatOptimiser
                 new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("MMMM dd HH:mm"))
             ];
         }
+        // Generates chart data for production asset usage throughout the schedule.
         public static void VisualiseUsageData()
         {
             Schedule results = ResultsDataManager.Load();
@@ -162,6 +164,7 @@ namespace HeatOptimiser
                 }
             ];
         }
+        // Generates chart data for different costs throughout the schedule.
         public static void VisualiseCostsData()
         { 
             Schedule results = ResultsDataManager.Load();
@@ -220,6 +223,7 @@ namespace HeatOptimiser
                 }
             ];
         }
+        // Generates chart data for emission amount throughout the schedule.
         public static void VisualiseEmissionsData()
         {
             Schedule results = ResultsDataManager.Load();
@@ -268,6 +272,7 @@ namespace HeatOptimiser
                 }
             ];
         }
+        // Generates chart data for electricity usage and price throughout the schedule.
         public static void VisualiseElectricityData()
         {
             Schedule results = ResultsDataManager.Load();
@@ -338,6 +343,7 @@ namespace HeatOptimiser
                 }
             ];
         }
+        // Generates chart data for total cost by different optimisation scenarios.
         public static void VisualiseCostByOptimisationData()
         {
             Schedule results = ResultsDataManager.Load();
@@ -354,19 +360,19 @@ namespace HeatOptimiser
                     if (NetOptimised.schedule[i].Assets!.Contains(asset))
                     {
                         ScheduleHour hour = NetOptimised.schedule[i];
-                        hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                        hourlyCosts[0] += hour.Demands![hour.Assets!.IndexOf(asset)]*(double)asset.Cost!;
                         hourlyCosts[0] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                     }
                     if (CostOptimised.schedule[i].Assets!.Contains(asset))
                     {
                         ScheduleHour hour = CostOptimised.schedule[i];
-                        hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                        hourlyCosts[1] += hour.Demands![hour.Assets!.IndexOf(asset)]*(double)asset.Cost!;
                         hourlyCosts[1] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                     }
                     if (EmissionOptimised.schedule[i].Assets!.Contains(asset))
                     {
                         ScheduleHour hour = EmissionOptimised.schedule[i];
-                        hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*(double)asset.Cost!;
+                        hourlyCosts[2] += hour.Demands![hour.Assets!.IndexOf(asset)]*(double)asset.Cost!;
                         hourlyCosts[2] += hour.Demands![hour.Assets.IndexOf(asset)]*-(double)asset.Electricity!/(double)asset.Heat!*(double)SourceDataManager.GetDataByDateTime((DateTime)hour.Hour!)!.ElectricityPrice!;
                     }
                 }
@@ -424,6 +430,7 @@ namespace HeatOptimiser
                 }
             ];
         }
+        // Generates chart data for emissions by different optimisation scenarios.
         public static void VisualiseEmissionsByOptimisationData()
         {
             Schedule results = ResultsDataManager.Load();

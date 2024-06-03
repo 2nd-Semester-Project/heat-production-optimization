@@ -130,9 +130,9 @@ namespace UserInterface.ViewModels
             }
         }
 
+        // Loads source data and handles errors
         private void LoadSourceData()
         {
-            // Implement the logic to load the source data and handle errors
             bool hasError = false;
 
             if (string.IsNullOrWhiteSpace(SelectedFilePath))

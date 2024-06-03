@@ -1,9 +1,7 @@
 using HeatOptimiser;
 using ReactiveUI;
 using System;
-using Avalonia.Controls;
 using System.Reactive;
-using System.Data.SqlTypes;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
@@ -13,7 +11,6 @@ public class OptimiserViewModel : ViewModelBase
 {
     public DateTime _startingDate = new DateTime(2023,7,12,0,0,0);
     public DateTime _endingDate = new DateTime(2023,7,13,0,0,0);
-    //public var optimisationCategory = this.Find<ComboBox>("OptimisationCategory")
     public DateTime StartingDate
     {
         get => _startingDate;
@@ -32,7 +29,8 @@ public class OptimiserViewModel : ViewModelBase
         get =>  _selectedCategoryIndex;
         set =>  this.RaiseAndSetIfChanged(ref _selectedCategoryIndex, value);
     }
-    public void Optimise(DateTime start, DateTime end, int categoryIndex)
+    // Optimizes the schedule by use of Optimiser module, given the start and end dates as well as a category index.
+    public static void Optimise(DateTime start, DateTime end, int categoryIndex)
     {
         ResultsDataManager.AssetsSelected = AssetManager.GetSelectedUnits().Count > 0;
         OptimisationChoice choice;
@@ -46,19 +44,7 @@ public class OptimiserViewModel : ViewModelBase
         }
         Schedule optimisedData = Optimiser.Optimise(start, end, choice);
         ResultsDataManager.Save(optimisedData);
-        
-        Console.WriteLine(StartingDate);
-        Console.WriteLine("Optimised Schedule:");
-        foreach (var hour in optimisedData.schedule)
-        {
-            Console.WriteLine($"Hour: {hour.Hour}, Assets: {string.Join(",", hour.Assets!)}, Demands: {string.Join(",", hour.Demands!)}");
-            foreach (var asset in hour.Assets!)
-            {
-                Console.WriteLine($"Asset: {asset.Name}, Heat: {asset.Heat}, Demand {hour.Demands![hour.Assets!.IndexOf(asset)]}");
-            }
-        }
     }
-           
     public OptimiserViewModel()
     {
         List<DateTime> StartEndDates = SourceDataManager.GetDates();

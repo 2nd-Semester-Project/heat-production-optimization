@@ -7,8 +7,6 @@ using System.Collections.ObjectModel;
 using LiveChartsCore.Defaults;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeatOptimiser
 {
@@ -45,12 +43,12 @@ namespace HeatOptimiser
                 WriteToCSV(LoadedData, defaultSavePath);
             }
         }
-        private static List<DateTimePoint> _heatDemandData;
-        private static List<DateTimePoint> _electricityPriceData;
-        public static ObservableCollection<ISeries> Series { get; set; }
+        private static List<DateTimePoint>? _heatDemandData;
+        private static List<DateTimePoint>? _electricityPriceData;
+        public static ObservableCollection<ISeries>? Series { get; set; }
 
-        public static Axis[] XAxes { get; set; }
-        public static Axis[] YAxes { get; set; }
+        public static Axis[]? XAxes { get; set; }
+        public static Axis[]? YAxes { get; set; }
         public static ObservableCollection<SourceDataPoint> LoadXLSXFile(string file, int columnStart, int rowStart, int workSheetNumber = 0)
         {
             var sourceObservableCollection = new ObservableCollection<SourceDataPoint>();
@@ -66,7 +64,7 @@ namespace HeatOptimiser
                     worksheet = null ?? package.Workbook.Worksheets[0];
                     worksheet = package.Workbook.Worksheets[workSheetNumber];
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return sourceObservableCollection;
                 }
@@ -91,7 +89,7 @@ namespace HeatOptimiser
                             };
                             sourceObservableCollection.Add(sourceData);
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
                     }
@@ -178,7 +176,7 @@ namespace HeatOptimiser
 
             List<List<DateTimePoint>> data = [_heatDemandData, _electricityPriceData];
             List<string> names = ["Heat Deamand (MWh)", "Electricity Price (€/MWh)"];
-            DataVisualizer.VisualiseSourceData(data, names);
+            DataVisualiser.VisualiseSourceData(data, names);
         }
 
         public static List<DateTime> GetDates()

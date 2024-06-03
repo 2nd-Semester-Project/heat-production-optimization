@@ -1,8 +1,6 @@
 using System.Text;
 using System.IO;
 using System.Globalization;
-using CsvHelper;
-using CsvHelper.Configuration;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -14,6 +12,7 @@ namespace HeatOptimiser
     {
         public static bool AssetsSelected = false;
         public static readonly string filePath = "data/resultdata.csv";
+        // Saves the schedule data to the results CSV file.
         public static void Save(Schedule schedule)
         {
             var csv = new StringBuilder();
@@ -54,6 +53,7 @@ namespace HeatOptimiser
 
             File.WriteAllText(filePath, csv.ToString());
         }
+        // Removes given date data from results file.
         public static void Remove(DateOnly dateFrom, DateOnly dateTo)
         {
             List<string> lines = File.ReadAllLines(filePath).ToList();
@@ -79,6 +79,7 @@ namespace HeatOptimiser
 
             File.WriteAllLines(filePath, newLines);
         }
+        // Loads result data from a CSV file into a Schedule object.
         public static Schedule Load()
         {
             List<ScheduleHour> schedule = [];

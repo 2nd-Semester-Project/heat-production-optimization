@@ -1,8 +1,5 @@
 ﻿using System.Reactive;
-using System.Reflection;
 using ReactiveUI;
-using System.Collections.ObjectModel;
-using Avalonia.Controls;
 
 
 namespace UserInterface.ViewModels;
@@ -63,10 +60,5 @@ public class MainWindowViewModel : ViewModelBase
         OpenOptimiserCommand=ReactiveCommand.Create(()=> CurrentView= new OptimiserViewModel());
         OpenResultsCommand=ReactiveCommand.Create(()=> CurrentView= new ResultsViewModel());
         OpenSourceDataCommand=ReactiveCommand.Create(()=> CurrentView=new SourceDataViewModel());
-    }
-
-    public void ChangeView()
-    {
-        this.CurrentView=new SourceDataViewModel();
     }
 }

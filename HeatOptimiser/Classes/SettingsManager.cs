@@ -16,7 +16,7 @@ namespace HeatOptimiser
         }
         public static IConfiguration InitializeBuilder()
         {
-            var builder = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder() // creates a new configuration builder object, which is basically a json file reader/writer, aka a json file handler
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("data/appsettings.json", optional: true, reloadOnChange: true);
 
